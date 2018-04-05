@@ -8,6 +8,5 @@ Found under libraries/ are the classes utilized in the main .ino section. Some o
 Helpful link for installing libraries: https://www.arduino.cc/en/hacking/libraries
 
 Summary:
-	Copy the contents of the 'libraries' folder into Documents\Arduino\libraries
-	
+	Copy the contents of the 'libraries' folder into Documents\Arduino\libraries. 
 	The RAPTOR.ino file should then happily compile in the Arduino IDE.
