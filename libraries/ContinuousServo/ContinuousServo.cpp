@@ -64,16 +64,19 @@ void ContinuousServo::manualAdjustment(int dir){
 	_servo.write(SERVO_STOP);				// Stop the servos just in-case they're running already.
 	if(_currentdef == HIGH){				// Check deflection setting set by timeToTurn
 		if(dir == RIGHT)					
-			_servo.write(_hspeed);			// If it is a right turn, just use the deflection setting speed.
+			_servo.write(0);				// If it is a right turn, just use the deflection setting speed.
 		else
-			_servo.write(_hspeed + 90);		// Otherwise, add 90 to the speed to reverse the direction.
+			_servo.write(180);				// Otherwise, add 90 to the speed to reverse the direction.
+		delay(500);
 	}
 	else{									// deflection is LOW
 		if(dir == RIGHT)
-			_servo.write(_lspeed);
+			_servo.write(0);
 		else
-			_servo.write(_lspeed + 90);
+			_servo.write(180);
 	}
-	delay(_ttr);				// Delay the set amount of time to get to the deflection setting.
+	if(dir == RIGHT)
+		delay(20); 							// *RAPTOR* account for difference in rotation speeds
+	delay(_ttr);							// Delay the set amount of time to get to the deflection setting.
 	_servo.write(SERVO_STOP);				// Stop the servos once we've reached the deflection setting.
 }
