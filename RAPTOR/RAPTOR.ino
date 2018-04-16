@@ -1,77 +1,42 @@
-#include <ContinuousServo.h>
-#include <Pathfinder.h>
+#include <Servo.h>
 
 #define SERVO_PIN 6
+#define SERVO_STOP 90
 
-ContinuousServo servo(SERVO_PIN);
-void environmentalUpdate();
-void dropTest();
-void basicFlightTest();
+#define SERVO_SWITCH 3
 
-struct environment{
-  int pressure;
-  int temperature;
-  int altitude;
-  int gps;
-  int imu;
-}
+Servo servo;
 
 void setup() {
-  // put your setup code here, to run once:
-  Coordinate current_lat;
-  Coordinate current_long;
-  Coordinate final_lat;
-  Coordinate final_long;
-  
-  Pathfinder target_pf(current_lat, current_long, final_lat, final_long);
+  servo.attach(6);
+  pinMode(SERVO_SWITCH, INPUT);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly
+  servoTest(1000);
+  delay(5000);
+}
 
-  environmentalUpdate();
-  runSkynet();
-  Pathfinder();
-  Navigation();
-  saveData();
+
+void servoTest(int duration){
+  int milli = 0;
+  boolean switch_hit = false;
   
-//  
-//  Coordinate current_lat;
-//  Coordinate current_long;
-//  Coordinate final_lat;
-//  Coordinate final_long;
-//  
-//  Pathfinder target_pf(current_lat, current_long, final_lat, final_long);
-//  
-//  servo.servoAdjustment(100.0, 50);
-//  Pathfinder current_pf = target_pf;
-}
-
-void environmentalUpdate(){
-  environment.pressure = getPressure();
-  environment.temperature = getTemperature();
-  environment.altitude = getAltitude();
-  environment.gps.getGPS();
-  environment.imu.getIMU();
-}
-
-void dropTest(){
+  servo.write(SERVO_STOP);
+  servo.write(180);                                   // Start the servo
   
-}
-
-void basicFlightTest(){
-  while(1){
-    delay(5000);
-    servo.servoAdjustment(100.0, 50);
-    solenoid.release();
-    delay(5000);
-    solenoid.open();
-    
-    saveData(clock);
+  while(!switch_hit && milli < duration){             // Until the limit switch for the servo is hit, or we have waited for duration in milliseconds.
+    switch_hit = digitalRead(SERVO_SWITCH);           // Read in the digital value of the SERVO_SWITCH pins
+    delay(1);
+    i++;                                              // Increment i every 1 millisecond
   }
-}
+  servo.write(SERVO_STOP);
 
-void dropTest(){
-  
+  if(switch_hit){                                     // If the switch has been hit
+    Serial.write("Motor switch hit, took %d milliseconds.\n", milli);
+  }
+  else{
+    Serial.write("!!!MOTOR SWITCH NOT HIT!!!!\n");
+  }
 }
 
