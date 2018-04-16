@@ -1,4 +1,5 @@
 #include <Servo.h>
+#include <SFE_BMP180.h>
 
 #define SERVO_PIN 6
 #define SERVO_STOP 90
@@ -10,11 +11,16 @@
 #define TEMP_PIN 4
 
 Servo servo;
+SFE_BMP180 pressure;
+
+double baseline;
 
 void setup() {
   servo.attach(6);
   pinMode(SERVO_SWITCH, INPUT);
   pinMode(SOLENOID_PIN, OUTPUT);
+  pressure.begin();
+  baseline = getPressure();
   Serial.begin(9600);
 }
 
@@ -22,6 +28,9 @@ void loop() {
   getTemperature();
   servoTest(1000);
   solenoidTest(200);
+  P = getPressure();
+  Serial.write("Pressure = %d", P);
+  Serial.write("Altitude = %d", pressure.altitude(P, baseline));
   delay(5000);
 }
 
@@ -54,7 +63,7 @@ void servoTest(int duration){
   while(!switch_hit && milli < duration){                   // Until the limit switch for the servo is hit, or we have waited for duration in milliseconds.
     switch_hit = digitalRead(SERVO_SWITCH);                 // Read in the digital value of the SERVO_SWITCH pins
     delay(1);
-    i++;                                                    // Increment i every 1 millisecond
+    milli++;                                                    // Increment i every 1 millisecond
   }
   servo.write(SERVO_STOP);
 
@@ -79,7 +88,7 @@ void solenoidTest(int duration){
   while(!switch_hit && milli < duration){                  // Until the limit switch for the solenoid is hit, or we have waited for duration in milliseconds.
     switch_hit = digitalRead(SOLENOID_SWITCH);             // Read in the digital value of the SERVO_SWITCH pins
     delay(1);
-    i++;                                                   // Increment i every 1 millisecond
+    milli++;                                                   // Increment i every 1 millisecond
   }
   digitalWrite(SOLENOID_PIN, LOW);
 
