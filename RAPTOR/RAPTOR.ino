@@ -43,12 +43,15 @@ void loop() {
   double P = getPressure();
   file.print(P);
   file.print(",");
-  file.print(pressure.altitude(P, baseline));
+  double a = pressure.altitude(P, baseline);
+  file.print(a);
   file.print(",");
-  
-//  servoTest(1000);
-//  solenoidTest(200);
 
+  if(a > 150){
+    servoTest(1000);
+    solenoidTest(200);
+  }
+  
   file.println(" ");
   file.close();
   delay(5000);
