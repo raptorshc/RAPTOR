@@ -19,7 +19,7 @@ float baseline;
 void setup() {
   Serial.begin(9600);
   servo.attach(6);
-  pinMode(SERVO_SWITCH, INPUT);
+  pinMode(SERVO_SWITCH, OUTPUT);
   pinMode(SOLENOID_PIN, OUTPUT);
 
   /* Pressure */
@@ -39,12 +39,12 @@ void setup() {
 }
 
 void loop() {
-  file = SD.open("data.txt", FILE_WRITE);
+  file = SD.open("data.csv", FILE_WRITE);
   double P = getPressure();
   file.print(P);
-  file.print("        ");
-  file.print(pressure.altitude(baseline, P));
-  file.print("      ");
+  file.print(",");
+  file.print(pressure.altitude(P, baseline));
+  file.print(",");
   
 //  servoTest(1000);
 //  solenoidTest(200);
@@ -101,7 +101,7 @@ double getPressure(){
         if (status != 0)
         {
           file.print(T);
-          file.print("          ");
+          file.print(",");
           return(P);
         }
         else file.println("error retrieving pressure measurement\n");
