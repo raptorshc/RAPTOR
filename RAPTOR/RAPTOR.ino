@@ -29,12 +29,6 @@ void setup() {
   /* SD Card */
   pinMode(10, OUTPUT);
   SD.begin(10);
-  file = SD.open("data.txt", FILE_WRITE);
-
-  file.print("Baseline = ");
-  file.println(baseline);
-  
-  file.println("TEMPERATURE | PRESSURE | ALTITUDE | SERVO 1 | SERVO 2 | SOLENOID 1 | SOLENOID 2");
   file.close();
 }
 
@@ -52,7 +46,7 @@ void loop() {
     solenoidTest(200);
   }
   
-  file.println(" ");
+  file.println("");
   file.close();
   delay(5000);
 }
