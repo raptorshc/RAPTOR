@@ -52,7 +52,7 @@ void setup() {
 void loop() {
   file = SD.open("data.csv", FILE_WRITE);  //FORMAT: time(sec), temperature(C), pressure(Pascal?), altitude(m), servo 1(bool), servo 2(bool), solenoid 1(bool), solenoid 2(bool) 
   
-  file.print(elapsedTime/1000);
+  file.print(timeElapsed/1000);
   file.print(",");
     
   double P = getPressure();
@@ -66,8 +66,7 @@ void loop() {
     servoTest(servo1, SERVO1_SWITCH, 1000);
     servoTest(servo2, SERVO2_SWITCH, 1000);
     
-    solenoidTest(SOLENOID1_PIN, SOLENOID1_SWITCH, 1000);
-    solenoidTest(SOLENOID2_PIN, SOLENOID2_SWITCH, 1000);
+    solenoidTest(500);
   }
   file.print("\n");
   file.close();
@@ -163,25 +162,25 @@ void servoTest(Servo servo, int s_switch, int duration) {
    solenoidTest will send a write to the servo to test it, upon which a physical switch will activate a pin if it is hit.
    The function will monitor this pin, and record to the SD card whether it is hit within the duration given.
 */
-void solenoidTest(int s_pin, int s_switch, int duration) {
+void solenoidTest(int duration) {
   int milli = 0;
   boolean switch_hit = false;
 
-  digitalWrite(s_pin, HIGH);                        // Start the solenoid
+  digitalWrite(SOLENOID1_PIN, HIGH);                        // Start the solenoid
 
-  while (milli < duration) {                // Until the limit switch for the solenoid is hit, or we have waited for duration in milliseconds.
-    switch_hit = digitalRead(s_switch);             // Read in the digital value of the SERVO_SWITCH pins
+  while (!switch_hit && milli < duration) {                // Until the limit switch for the solenoid is hit, or we have waited for duration in milliseconds.
+    switch_hit = digitalRead(SOLENOID1_SWITCH);             // Read in the digital value of the SERVO_SWITCH pins
     delay(1);
     milli++;                                                   // Increment i every 1 millisecond
   }
-//  if(s_pin == SOLENOID1_PIN)
-    digitalWrite(s_pin, LOW);
+  digitalWrite(SOLENOID1_PIN, LOW);
 
   if (switch_hit) {                                        // If the switch has been hit
-    Serial.print("TRUE,");
+    file.print("TRUE,");
   }
   else {
-    Serial.print("FALSE,");
+    file.print("FALSE,");
   }
+  file.print(digitalRead(SOLENOID2_SWITCH));
 }
 
