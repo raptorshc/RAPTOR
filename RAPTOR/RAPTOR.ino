@@ -2,26 +2,43 @@
 #include <Wire.h>
 #include <Servo.h>
 #include <SD.h>
+#include <elapsedMillis.h>
 
-#define SERVO_PIN 6
 #define SERVO_STOP 90
-#define SERVO_SWITCH 3
+#define SERVO1_SWITCH 1
+#define SERVO2_SWITCH 4
 
-#define SOLENOID_PIN 5
-#define SOLENOID_SWITCH 6
+#define SOLENOID1_PIN 9
+#define SOLENOID1_SWITCH 2
 
-Servo servo;
+#define SOLENOID2_PIN 8
+#define SOLENOID2_SWITCH 3
+
+
+Servo servo1;
+Servo servo2;
 SFE_BMP180 pressure;
 File file;
+elapsedMillis timeElapsed;
 
 float baseline;
 
 void setup() {
   Serial.begin(9600);
-  servo.attach(6);
-  pinMode(SERVO_SWITCH, OUTPUT);
-  pinMode(SOLENOID_PIN, OUTPUT);
 
+  timeElapsed = 0;
+
+  servo1.attach(6);
+  servo2.attach(5);
+  
+  pinMode(SERVO1_SWITCH, OUTPUT);
+  pinMode(SERVO2_SWITCH, OUTPUT);
+  
+  pinMode(SOLENOID1_PIN, OUTPUT);
+  pinMode(SOLENOID2_PIN, OUTPUT);
+
+  pinMode(SOLENOID1_SWITCH, OUTPUT);
+  pinMode(SOLENOID2_SWITCH, OUTPUT);
   /* Pressure */
   pressure.begin();
   baseline = getPressure();
@@ -33,7 +50,11 @@ void setup() {
 }
 
 void loop() {
-  file = SD.open("data.csv", FILE_WRITE);
+  file = SD.open("data.csv", FILE_WRITE);  //FORMAT: time(sec), temperature(C), pressure(Pascal?), altitude(m), servo 1(bool), servo 2(bool), solenoid 1(bool), solenoid 2(bool) 
+  
+  file.print(elapsedTime/1000);
+  file.print(",");
+    
   double P = getPressure();
   file.print(P);
   file.print(",");
@@ -42,11 +63,13 @@ void loop() {
   file.print(",");
 
   if(a > 150){
-    servoTest(1000);
-    solenoidTest(200);
+    servoTest(servo1, SERVO1_SWITCH, 1000);
+    servoTest(servo2, SERVO2_SWITCH, 1000);
+    
+    solenoidTest(SOLENOID1_PIN, SOLENOID1_SWITCH, 1000);
+    solenoidTest(SOLENOID2_PIN, SOLENOID2_SWITCH, 1000);
   }
-  
-  file.println("");
+  file.print("\n");
   file.close();
   delay(5000);
 }
@@ -114,25 +137,25 @@ double getPressure(){
    servoTest will send a write to the servo to test it, upon which a physical switch will activate a pin if it is hit.
    The function will monitor this pin, and record to the SD card whether it is hit within the duration given.
 */
-void servoTest(int duration) {
+void servoTest(Servo servo, int s_switch, int duration) {
   int milli = 0;
   boolean switch_hit = false;
 
   servo.write(SERVO_STOP);
-  servo.write(180);                                         // Start the servo
+  servo.write(180);                                         // COUNTER-CLOCKWISE
 
   while (!switch_hit && milli < duration) {                 // Until the limit switch for the servo is hit, or we have waited for duration in milliseconds.
-    switch_hit = digitalRead(SERVO_SWITCH);                 // Read in the digital value of the SERVO_SWITCH pins
+    switch_hit = digitalRead(s_switch);                 // Read in the digital value of the SERVO_SWITCH pins
     delay(1);
     milli++;                                                    // Increment i every 1 millisecond
   }
   servo.write(SERVO_STOP);
 
   if (switch_hit) {                                         // If the switch has been hit
-    file.print("TRUE");
+    file.print("TRUE,");
   }
   else {
-    file.print("FALSE");
+    file.print("FALSE,");
   }
 }
 
@@ -140,24 +163,25 @@ void servoTest(int duration) {
    solenoidTest will send a write to the servo to test it, upon which a physical switch will activate a pin if it is hit.
    The function will monitor this pin, and record to the SD card whether it is hit within the duration given.
 */
-void solenoidTest(int duration) {
+void solenoidTest(int s_pin, int s_switch, int duration) {
   int milli = 0;
   boolean switch_hit = false;
 
-  digitalWrite(SOLENOID_PIN, HIGH);                        // Start the solenoid
+  digitalWrite(s_pin, HIGH);                        // Start the solenoid
 
-  while (!switch_hit && milli < duration) {                // Until the limit switch for the solenoid is hit, or we have waited for duration in milliseconds.
-    switch_hit = digitalRead(SOLENOID_SWITCH);             // Read in the digital value of the SERVO_SWITCH pins
+  while (milli < duration) {                // Until the limit switch for the solenoid is hit, or we have waited for duration in milliseconds.
+    switch_hit = digitalRead(s_switch);             // Read in the digital value of the SERVO_SWITCH pins
     delay(1);
     milli++;                                                   // Increment i every 1 millisecond
   }
-  digitalWrite(SOLENOID_PIN, LOW);
+//  if(s_pin == SOLENOID1_PIN)
+    digitalWrite(s_pin, LOW);
 
   if (switch_hit) {                                        // If the switch has been hit
-    file.print("TRUE");
+    Serial.print("TRUE,");
   }
   else {
-    file.print("FALSE");
+    Serial.print("FALSE,");
   }
 }
 
