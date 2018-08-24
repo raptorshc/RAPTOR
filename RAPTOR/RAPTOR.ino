@@ -5,6 +5,9 @@
 #include <elapsedMillis.h>
 
 #define SERVO_STOP 90
+
+#define SERVO1_PIN 6
+#define SERVO2_PIN 5
 #define SERVO1_SWITCH 4
 #define SERVO2_SWITCH 1
 
@@ -26,8 +29,8 @@ float baseline;
 void setup() {
   timeElapsed = 0;
 
-  servo1.attach(6);
-  servo2.attach(5);
+  servo1.attach(SERVO1_PIN);
+  servo2.attach(SERVO2_PIN);
   
   pinMode(SERVO1_SWITCH, OUTPUT);
   pinMode(SERVO2_SWITCH, OUTPUT);
