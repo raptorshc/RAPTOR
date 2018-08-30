@@ -20,8 +20,8 @@
 
 Servo servo1;
 Servo servo2;
-SFE_BMP180 pressure;
-File file;
+SFE_BMP180 pressure; //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-the-bmp085
+File file;           //CLK -> 13, DO -> 12, DI -> 11, CS -> 10 https://learn.adafruit.com/adafruit-micro-sd-breakout-board-card-tutorial/arduino-wiring
 elapsedMillis timeElapsed;
 
 float baseline;
@@ -67,11 +67,11 @@ void loop() {
   file.print(a);
   file.print(",");
 
-  if(a > 150){
+  //if(a > 150){
     servoTest(1000);
     
     solenoidTest(500);
-  }
+  //}
   file.print("\n");
   file.close();
   delay(5000);
