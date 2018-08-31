@@ -67,11 +67,11 @@ void loop() {
   file.print(a);
   file.print(",");
 
-  //if(a > 150){
+  if(a > 150){
     servoTest(1000);
     
     solenoidTest(500);
-  //}
+  }
   file.print("\n");
   file.close();
   delay(5000);
