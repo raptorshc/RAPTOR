@@ -1,7 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
 
-csvfile = open('DATA2.csv', encoding='latin1')
+csvfile = open('8-31_DATA.csv', encoding='latin1')
 raw = csv.reader(csvfile, delimiter=',')
 
 time = []
@@ -17,7 +17,10 @@ for row in raw:
     time.append(float(row[0]))
     temperature.append(float(row[1]))
     pressure.append(float(row[2]))
-    altitude.append(float(row[3]))
+    if float(row[3]) < 0:
+        altitude.append(22941.48-float(row[3]))
+    else:
+        altitude.append(float(row[3]))
     servo1.append(row[4])
     servo2.append(row[5])
     solenoid1.append(row[6])
@@ -33,7 +36,7 @@ ax1.set_ylabel('temperature (c)',color='b')
 ax1.tick_params('y', colors='b')
 
 #Keep track of what data is present for the legend
-present = ['Temperature']
+present = ['Temperature', 'Pressure', 'Altitude']
 #Insert failures as scatter dots
 for x in range(0,len(time)-1):
     if servo1[x] == "FALSE": #If there was a failure
@@ -53,8 +56,8 @@ for x in range(0,len(time)-1):
         if 'Solenoid 1 Failure' not in present:
             present.append('Solenoid 1 Failure')
             
-    if solenoid2[x] == "TRUE": #For the first flight data, change to FALSE
-        ax1.scatter(time[x],temperature[x], c='p')
+    if solenoid2[x] == "FALSE": #For the first flight data, change to FALSE
+        ax1.scatter(time[x],temperature[x], c='m')
         if 'Solenoid 2 Failure' not in present:
             present.append('Solenoid 2 Failure')
 
@@ -66,12 +69,12 @@ for x in range(0,len(time)-1):
 ##ax2.tick_params('y', colors='g')
 
 #AXIS 3, ALTITUDE
-##ax3 = ax1.twinx()
-##ax3.plot(time, altitude, 'r')
-##
-##ax3.set_ylabel('altitude (m)',color='r')
-##ax3.tick_params('y', colors='r')
+ax3 = ax1.twinx()
+ax3.plot(time, altitude, 'r')
 
-ax1.legend(present)
+ax3.set_ylabel('altitude (m)',color='r')
+ax3.tick_params('y', colors='r')
+
+##ax1.legend(present)
 fig.tight_layout()
 plt.show() 
