@@ -173,6 +173,27 @@ boolean bmpUpdate(){
 }
 
 double correctAlt(void){
-  // to write, check both bmp alt and gps alt
+  if(bmp_data.altitude > GPS.altitude)
+  {
+    if(bmp_data.altitude - GPS.altitude < 50)
+    {
+      return (bmp_data.altitude + GPS.altitude) / 2;
+    }
+    else
+    {
+      return GPS.altitude;
+    }
+  }
+  else
+  {
+    if(GPS.altitude - bmp_data.altitude < 50)
+    {
+      return (bmp_data.altitude + GPS.altitude) / 2;
+    }
+    else
+    {
+      return GPS.altitude;
+    }
+  }
+  
 }
-
