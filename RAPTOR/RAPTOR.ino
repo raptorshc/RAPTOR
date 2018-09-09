@@ -29,10 +29,14 @@
 
 #define SD_GRN 4      // OpenLog Reset pin
 
+struct BmpData {
+  double baseline, pressure, temperature, altitude;  // since the BMP object doesn't store data for us
+} bmp_data;
+
 Servo servoL;
 Servo servoR;
 
-SFE_BMP180 pressure; //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-the-bmp085
+SFE_BMP180 bmp; //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-the-bmp085
 
 elapsedMillis timeElapsed;
 
@@ -41,10 +45,8 @@ volatile Adafruit_GPS GPS(&mySerial);
 
 boolean flying = false;
 
-float baseline;
-
-double getPressure(void); // provide prototypes for the ISR
-double correctAlt(double bmpressure, double gpspressure);
+boolean bmpUpdate(void); // provide prototypes for the ISR
+double correctAlt(void);
 
 void setup() {
   timeElapsed = 0;
@@ -71,9 +73,11 @@ void setup() {
   digitalWrite(SOLC_DTA, HIGH); // Engage Cutdown solenoid
   
   /* BMP180 */
-  pressure.begin();             // Begin pressure measurements
-  baseline = getPressure();     // Grab a baseline pressure
-
+  bmp.begin();             // Begin bmp measurements
+  while(!bmpUpdate); // until we can get a good pressure reading
+  bmp_data.baseline = bmp_data.pressure; // grab a baseline pressure
+    
+  
   /* IMU */
   
 
@@ -101,23 +105,28 @@ void setup() {
   digitalWrite(SD_GRN, HIGH);
 
   delay(10);
-  Serial.print(F("TIME, TEMPERATURE, PRESSURE, ALTITUDE, \n")); // data header
+  Serial.print(F("TIME, TEMPERATURE, bmp, ALTITUDE, \n")); // data header
   
 }
 
 void loop() {
-  
-    if(correctAlt(pressure.altitude(getPressure(),baseline), GPS.altitude) > CUTDOWN_ALT && !flying){ // we have liftoff, or liftdown I guess
+  if(!flying){
+    // just poll altitude calculations
+    if(!bmpUpdate())
+      bmp_data.pressure = bmp_data.temperature = bmp_data.altitude = 0; // if the bmp doesn't work set them to zero
+
+    if (correctAlt() > CUTDOWN_ALT){ // we have liftoff, or liftdown I guess
       // may want to do some falling checks here
       // also may want to deploy our parafoil
       // and then check the parafoil
-      
+    
       //pilot.wake();
       flying = true;
     }
-    
-    // collect IMU data
-    // write everything to SD card
+  }
+  
+  // collect IMU data
+  // write everything to SD card
 }
 
 /* Timer0 used for millis(), interrupt in the middle */
@@ -133,72 +142,37 @@ SIGNAL(TIMER0_COMPA_vect) {
   if(GPS.newNMEAreceived()){
     if (GPS.parse(GPS.lastNMEA())){   // this also sets the newNMEAreceived() flag to false
 
-      if(flying)
-        ;//pilot.fly(correctAlt(pressure.altitude(getPressure(),baseline), GPS.altitude), GPS.angle); // the pilot needs altitude and angle to do his calculations
-    }
-  }
-}
-
-double getPressure(void){
-  char status;
-  double T,P,p0,a,b;
-
-  // You must first get a temperature measurement to perform a pressure reading.
-  
-  // Start a temperature measurement:
-  // If request is successful, the number of ms to wait is returned.
-  // If request is unsuccessful, 0 is returned.
-
-  status = pressure.startTemperature();
-  if (status != 0)
-  {
-    // Wait for the measurement to complete:
-
-    delay(status);
-
-    // Retrieve the completed temperature measurement:
-    // Note that the measurement is stored in the variable T.
-    // Use '&T' to provide the address of T to the function.
-    // Function returns 1 if successful, 0 if failure.
-
-    status = pressure.getTemperature(T);
-    if (status != 0)
-    {
-      // Start a pressure measurement:
-      // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
-      // If request is successful, the number of ms to wait is returned.
-      // If request is unsuccessful, 0 is returned.
-
-      status = pressure.startPressure(3);
-      if (status != 0)
-      {
-        // Wait for the measurement to complete:
-        delay(status);
-
-        // Retrieve the completed pressure measurement:
-        // Note that the measurement is stored in the variable P.
-        // Use '&P' to provide the address of P.
-        // Note also that the function requires the previous temperature measurement (T).
-        // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
-        // Function returns 1 if successful, 0 if failure.
-
-        status = pressure.getPressure(P,T);
-        if (status != 0)
-        {
-//          Serial.print(T);
-//          Serial.print(",");
-          return(P);
-        }
-//        else Serial.println("error retrieving pressure measurement\n");
+      if(flying){
+        if(!bmpUpdate())
+          bmp_data.pressure = bmp_data.temperature = bmp_data.altitude = 0; // if it doesn't work set them to zero
+        ;//pilot.fly(correctAlt(altitude, GPS.altitude), GPS.angle); // the pilot needs altitude and angle to do his calculations
       }
-//      else Serial.println("error starting pressure measurement\n");
     }
-//    else Serial.println("error retrieving temperature measurement\n");
   }
-//  else Serial.println("error starting temperature measurement\n");
 }
 
-double correctAlt(double bmpressure, double gpspressure){
-  // to write
+boolean bmpUpdate(){
+  // Temperature measurement
+  char status = bmp.startTemperature();
+  delay(status);
+  status = bmp.getTemperature(bmp_data.temperature);
+
+  // If temperature succeeded, pressure measurement
+  if(status){
+    status = bmp.startPressure(3);
+    delay(status);
+    status = bmp.getPressure(bmp_data.pressure, bmp_data.temperature);
+
+    // If pressure succeeded, calculate altitude
+    if(status){
+      bmp_data.altitude = bmp.altitude(bmp_data.pressure, bmp_data.baseline);
+    }
+    else return false;
+  }
+  else return false;
+}
+
+double correctAlt(void){
+  // to write, check both bmp alt and gps alt
 }
 
