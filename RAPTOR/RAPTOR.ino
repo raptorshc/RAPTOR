@@ -140,13 +140,11 @@ SIGNAL(TIMER0_COMPA_vect) {
   GPS.read(); // Check to see if we have new data
   
   if(GPS.newNMEAreceived()){
-    if (GPS.parse(GPS.lastNMEA())){   // this also sets the newNMEAreceived() flag to false
-
-      if(flying){
-        if(!bmpUpdate())
-          bmp_data.pressure = bmp_data.temperature = bmp_data.altitude = 0; // if it doesn't work set them to zero
-        ;//pilot.fly(correctAlt(altitude, GPS.altitude), GPS.angle); // the pilot needs altitude and angle to do his calculations
-      }
+    if (GPS.parse(GPS.lastNMEA()) && flying){   // this also sets the newNMEAreceived() flag to false
+      if(!bmpUpdate())
+        bmp_data.pressure = bmp_data.temperature = bmp_data.altitude = 0; // if it doesn't work set them to zero
+      
+      //pilot.fly(correctAlt(), GPS.angle); // the pilot needs altitude and angle to do his calculations
     }
   }
 }
