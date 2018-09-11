@@ -7,19 +7,8 @@
 #define Pathfinder_h
 
 #include <math.h>
+#include "Paths.h"
 #define pi 3.141592
-
-typedef struct Coordinate{
-    int degrees, minutes, seconds;
-    float decimal;
-} Coordinate;
-
-typedef struct Path{
-	Coordinate lat_initial, long_initial;
-	Coordinate lat_final, long_final;
-	float lat_vec, long_vec;
-	double angle;
-} Path;
 
 class Pathfinder{
 public:

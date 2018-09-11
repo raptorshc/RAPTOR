@@ -6,7 +6,8 @@
 #ifndef PILOT_h
 #define PILOT_h
 
-#include <Pathfinder.h>
+#include "Pathfinder.h"
+#include "Paths.h"
 
 class Pilot{
 public:
