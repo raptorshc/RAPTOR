@@ -6,7 +6,7 @@
 #include <Adafruit_GPS.h>
 #include <SoftwareSerial.h>
 #include <elapsedMillis.h>
-//#include <Pilot.h>
+// #include <Pilot.h> // to be completed
 
 #define CUTDOWN_ALT 1000 // altitude to cutdown at
 
@@ -175,5 +175,5 @@ double correctAlt(void){
     return bmp_data.altitude;
   else if(GPS.altitude - bmp_data.altitude > 50)
     return GPS.altitude;
-  else return (bmp_data.altitude+GPS.altitude)/2
+  else return (bmp_data.altitude+GPS.altitude)/2;
 }

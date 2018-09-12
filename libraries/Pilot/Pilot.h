@@ -7,17 +7,16 @@
 #define PILOT_h
 
 #include "Pathfinder.h"
-#include "Paths.h"
 
 class Pilot{
 public:
     Pilot();
     
-	void wake(Coordinate &launch);
-	void fly(altitude, angle);
+	void wake(Coordinate &target);
+	void fly(float altitude, float angle);
     
 private:
-	Coordinate &launch;
+	Coordinate _target;
 	float current_heading, desired_heading;
 	int is_turning;
 	

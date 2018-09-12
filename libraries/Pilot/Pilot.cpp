@@ -11,9 +11,9 @@
 Pilot::Pilot(){}
 
 /*
- *  Constructor for Pilot 
+ *  Method to wake the pilot, giving it the target coordinate.
  */
-void Pilot::wake(Coordinate &launch){
+void Pilot::wake(Coordinate &target){
 	
 }
 

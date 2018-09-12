@@ -9,10 +9,10 @@
  *  Constructor for Pathfinder 
  */
 Pathfinder::Pathfinder(Coordinate& current_lat, Coordinate& current_long, Coordinate& final_lat, Coordinate& final_long){
-    this->lat_initial = current_lat;
-    this->lat_final = final_lat;
-    this->long_initial = current_long;
-    this->long_final = final_long;
+    this->_Path.lat_initial = current_lat;
+    this->_Path.lat_final = final_lat;
+    this->_Path.long_initial = current_long;
+    this->_Path.long_final = final_long;
 }
 
 /*
@@ -50,4 +50,23 @@ void Pathfinder::path_dmsToDec(){
     coord_dmsToDec(this->long_initial);
     coord_dmsToDec(this->lat_final);
     coord_dmsToDec(this->long_final);
+}
+
+/* 
+ * adjustPath will take in the current and optimal paths and 
+ * calculate which way to turn and by how much. 
+ */
+void Pathfinder::adjustPath(Path path_target, Path path_current, PathAdjustment *adjustment){
+    float alpha_angle, beta_angle;
+        
+    alpha_angle = path_target.angle + 90;  //Alpha angle is in the quadrant to the left of our target angle
+    beta_angle = path_target.angle + 270;   //Beta angle is in the quadrant to the right
+    
+    /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
+    if(abs(alpha_angle - path_current.angle) > abs(beta_angle - path_current.angle))
+        adjustment->rotation = 0;   //left if we are to the right of the target
+    else
+        adjustment->rotation = 1;   //right if we are to the left, if current = -target, we will be turning right
+    
+    adjustment->degrees = abs(path_target.angle - path_current.angle); //The amount of degrees we need to adjust by.
 }
