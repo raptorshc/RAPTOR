@@ -48,6 +48,10 @@ boolean flying = false;
 boolean bmpUpdate(void); // provide prototypes for the ISR
 double correctAlt(void);
 
+/* 
+ *
+ *  
+ */
 void setup() {
   timeElapsed = 0;
 
@@ -109,6 +113,10 @@ void setup() {
   
 }
 
+/* 
+ *
+ *  
+ */
 void loop() {
   if(!flying){
     // just poll altitude calculations
@@ -129,13 +137,19 @@ void loop() {
   // write everything to SD card
 }
 
-/* Timer0 used for millis(), interrupt in the middle */
+/*
+ *
+ *  Timer0 used for millis(), interrupt in the middle 
+ */
 void interrupt_init(void){
   OCR0A = 0xAF;
   TIMSK0 |= _BV(OCIE0A);
 }
 
-/* Interrupt on millisecond */
+/* 
+ *
+ *  Interrupt on millisecond
+ */
 SIGNAL(TIMER0_COMPA_vect) {
   GPS.read(); // Check to see if we have new data
   
@@ -149,6 +163,10 @@ SIGNAL(TIMER0_COMPA_vect) {
   }
 }
 
+/* 
+ *
+ *  
+ */
 boolean bmpUpdate(){
   // Temperature measurement
   char status = bmp.startTemperature();
@@ -170,6 +188,9 @@ boolean bmpUpdate(){
   else return false;
 }
 
+/* 
+ *  
+ */
 double correctAlt(void){
   if(bmp_data.altitude - GPS.altitude > 50)
     return bmp_data.altitude;
