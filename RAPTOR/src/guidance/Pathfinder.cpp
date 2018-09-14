@@ -9,7 +9,7 @@
 /*
  *  Constructor for Pathfinder 
  */
-Pathfinder::Pathfinder(Coordinate* current_lat, Coordinate* current_long, Coordinate* final_lat, Coordinate* final_long){
+Pathfinder::Pathfinder(Coordinate current_lat, Coordinate current_long, Coordinate final_lat, Coordinate final_long){
     this->_Path->lat_initial = current_lat;
     this->_Path->lat_final = final_lat;
     this->_Path->long_initial = current_long;
@@ -34,6 +34,9 @@ void Pathfinder::findPath(){
 		this->_Path->angle += 360; 													//ensure positive bearing
 }
 
+/*
+ *	getAngle returns the angle in the Path struct.
+ */
 double Pathfinder::getAngle()
 {
     return this->_Path->angle;
@@ -44,8 +47,8 @@ double Pathfinder::getAngle()
 /*
  *	coord_dmsToDec calculates a decimal value from the current degrees/minutes/seconds of a coordinate.
  */
-void Pathfinder::coord_dmsToDec(Coordinate *c1){
-    c1->decimal = c1->degrees + c1->minutes/60 + c1->seconds/3600;
+void Pathfinder::coord_dmsToDec(Coordinate &c1){
+    c1.decimal = c1.degrees + c1.minutes/60 + c1.seconds/3600;
 }
 
 /*
@@ -57,4 +60,3 @@ void Pathfinder::path_dmsToDec(){
     coord_dmsToDec(this->_Path->lat_final);
     coord_dmsToDec(this->_Path->long_final);
 }
-

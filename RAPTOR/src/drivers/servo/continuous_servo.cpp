@@ -6,9 +6,7 @@
 
 #define RIGHT 1 // Direction of the turn
 #define LEFT 0  //Direction of the turn
-
 #define SERVO_STOP 90
-
 #define TTR 100
 
 /* Public Methods */

@@ -12,15 +12,9 @@
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
 
-#define SRVOL_DTA 6 // Left servo
-#define SRVOR_DTA 5 // Right servo
-
 #define SD_GRN 4 // OpenLog Reset pin
 
 elapsedMillis timeElapsed;
-
-ContinuousServo servoR;
-ContinuousServo servoL;
 
 boolean flying = false;
 double correctAlt(void);
@@ -35,10 +29,6 @@ void setup()
   /* Buzzer and LEDs */
   pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
   pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
-
-  /* Servos */
-  servoR.attach(SRVOR_DTA); // Attach right servo
-  servoL.attach(SRVOL_DTA); // Attach left servo
 
   /* BMP180 */
   bmp_init();

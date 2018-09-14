@@ -3,6 +3,9 @@
 */
 #include "Pilot.h"
 
+#define SRVOL_DTA 6 // Left servo
+#define SRVOR_DTA 5 // Right servo
+
 /* PUBLIC METHODS */
 
 /*
@@ -10,8 +13,7 @@
  */
 Pilot::Pilot()
 {
-    is_turning = FALSE;
-    
+    is_turning = false;
 }
 
 /*
@@ -19,6 +21,9 @@ Pilot::Pilot()
  */
 void Pilot::wake(Coordinate *target_lat, Coordinate *target_long, Coordinate *curr_lat, Coordinate *curr_long)
 {
+    servoR.attach(SRVOR_DTA);
+    servoL.attach(SRVOL_DTA);
+
     p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
     p.findPath();
     desired_heading = p.getAngle();
@@ -84,7 +89,7 @@ void Pilot::straight()
  */
 bool Pilot::shouldTurn(bool &dirTurn, double curr_angle)
 {
-     float alpha_angle, beta_angle;
+    float alpha_angle, beta_angle;
 
     alpha_angle = desired_heading + 90; //Alpha angle is in the quadrant to the left of our target angle
     beta_angle = desired_heading + 270; //Beta angle is in the quadrant to the right
