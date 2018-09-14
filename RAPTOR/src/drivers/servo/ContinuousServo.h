@@ -3,8 +3,8 @@
   Library written for use with continuous rotation servos.
   Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
-#ifndef Adjustment_h
-#define Adjustment_h
+#ifndef CONTINUOUSSERVO_H_
+#define CONTINUOUSSERVO_H_
 
 #include "Arduino.h"
 #include <Servo.h>
