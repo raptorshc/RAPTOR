@@ -84,17 +84,17 @@ void Pilot::straight()
  */
 bool Pilot::shouldTurn(bool &dirTurn, double curr_angle)
 {
-    float alpha_angle, beta_angle;
+     float alpha_angle, beta_angle;
 
     alpha_angle = desired_heading + 90; //Alpha angle is in the quadrant to the left of our target angle
     beta_angle = desired_heading + 270; //Beta angle is in the quadrant to the right
 
     /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
     if (abs(alpha_angle - curr_angle) > abs(beta_angle - curr_angle))
-        dirTurn = false; //left if we are to the right of the target
+        dirTurn = true; //right turn
     else
-        dirTurn = true; //right if we are to the left, if current = -target, we will be turning right
-    if (abs(alpha_angle < 15) || abs(beta_angle < 15)
+        dirTurn = false; //left turn
+    if (abs(curr_angle - desired_heading - 360) < 15 || abs(desired_heading - curr_angle) < 15)
         return false; //The amount of degrees we need to adjust by.
     else
         return true;
