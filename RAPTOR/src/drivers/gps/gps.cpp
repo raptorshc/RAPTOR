@@ -1,13 +1,16 @@
 /*
-
+ * gps.cpp - 
+ * Contains implementation for functions in gps.h.
+ * Utilizes Adafruit Ultimate GPS library, details: https://learn.adafruit.com/adafruit-ultimate-gps
+ * Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
 #include "gps.h"
 
 #include "Arduino.h"
 
 /*
- *
- *  Timer0 used for millis(), interrupt in the middle 
+ * gps_init begins the GPS readings, sets up the timer counter used for the
+ *  millisecond interrupt, which will query and parse the GPS data 
  */
 void gps_init(void){
     GPS.begin(9600);

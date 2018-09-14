@@ -7,7 +7,7 @@
 #define PILOT_h
 
 #include "Pathfinder.h"
-#include "continuous_servo.h"
+#include "../drivers/servo/continuous_servo.h"
 
 class Pilot{
 public:
