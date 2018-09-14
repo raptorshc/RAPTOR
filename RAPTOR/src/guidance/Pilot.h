@@ -26,6 +26,7 @@ private:
 	void rightTurn();
 	void leftTurn();
 	void straight();
+	bool shouldTurn(bool &dirTurn, double curr_angle)
     
 };
 
