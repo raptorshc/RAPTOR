@@ -13,8 +13,8 @@ class Pilot{
 public:
     Pilot();
     
-	void wake(Coordinate *target_lat, Coordinate *target_long, Coordinate *curr_lat, Coordinate *curr_long);
-	void fly(float angle);
+	void wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long);
+	void fly(double curr_angle);
 	double getAngle();
     
 private:
@@ -22,7 +22,7 @@ private:
 	double desired_heading;
 	bool is_turning;
 	ContinuousServo servoR, servoL;
-	Pathfinder p;
+	Pathfinder *p;
 
 	void rightTurn();
 	void leftTurn();

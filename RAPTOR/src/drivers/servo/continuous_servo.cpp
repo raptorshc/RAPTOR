@@ -20,15 +20,17 @@ ContinuousServo::ContinuousServo() {}
  *	servoAdjustment acts as the wrapper for the rest of the methods,
  *   accepting inputs of how much you want to turn in degrees (deg) and in what dir (dir).
  */
-void ContinuousServo::servoAdjustment(float deg, int dir)
+void ContinuousServo::servoAdjustment(int dir)
 {
-	int duration = timeToTurn(deg);
-
-	manualAdjustment(dir);
-	delay(duration); // run a delay for the required duration in milliseconds
-	//busyDelay(duration); *******TODO
-	// Did it work
-	resetServos(dir);
+	this->write(SERVO_STOP); // Stop the servos just in-case they're running already.
+	if (dir == RIGHT)
+		this->write(0); // If it is a right turn, just use the deflection setting speed.
+	else
+		this->write(180); // Otherwise, add 90 to the speed to reverse the direction.
+	delay(500);
+	
+	delay(_ttr);			 // Delay the set amount of time to get to the deflection setting.
+	this->write(SERVO_STOP); // Stop the servos once we've reached the deflection setting.
 }
 
 /* Private Methods */
@@ -52,41 +54,13 @@ int ContinuousServo::timeToTurn(float degree)
 }
 
 /*
- *	resetServos will reset the servos to the default position after a turn.
+ *	resetServo will reset the servos to the default position after a turn.
  *   Must be called before timeToTurn is used, as it relies on the previous turn's deflection setting.
  */
-void ContinuousServo::resetServos(int dir)
+void ContinuousServo::resetServo(int dir)
 {
 	if (dir == RIGHT)
-		manualAdjustment(LEFT);
+		servoAdjustment(LEFT);
 	else
-		manualAdjustment(RIGHT);
-}
-
-/*
- *	manualAdjustment adjusts the servos so that they achieve the necessary deflection setting
- *   for the input direction.
- */
-void ContinuousServo::manualAdjustment(int dir)
-{
-	this->write(SERVO_STOP); // Stop the servos just in-case they're running already.
-	if (_currentdef == HIGH)
-	{ // Check deflection setting set by timeToTurn
-		if (dir == RIGHT)
-			this->write(0); // If it is a right turn, just use the deflection setting speed.
-		else
-			this->write(180); // Otherwise, add 90 to the speed to reverse the direction.
-		delay(500);
-	}
-	else
-	{ // deflection is LOW
-		if (dir == RIGHT)
-			this->write(0);
-		else
-			this->write(180);
-	}
-	if (dir == RIGHT)
-		delay(20);			 // *RAPTOR* account for difference in rotation speeds
-	delay(_ttr);			 // Delay the set amount of time to get to the deflection setting.
-	this->write(SERVO_STOP); // Stop the servos once we've reached the deflection setting.
+		servoAdjustment(RIGHT);
 }

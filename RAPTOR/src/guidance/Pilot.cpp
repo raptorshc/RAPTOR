@@ -6,8 +6,9 @@
 #define SRVOL_DTA 6 // Left servo
 #define SRVOR_DTA 5 // Right servo
 
-#define LEFT 0;
-#define RIGHT 1;
+#define RIGHT 1
+#define LEFT 0
+
 /* PUBLIC METHODS */
 
 /*
@@ -21,36 +22,36 @@ Pilot::Pilot()
 /*
  *  Method to wake the pilot, giving it the target coordinate.
  */
-void Pilot::wake(Coordinate *target_lat, Coordinate *target_long, Coordinate *curr_lat, Coordinate *curr_long)
+void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long)
 {
     servoR.attach(SRVOR_DTA);
     servoL.attach(SRVOL_DTA);
 
-    p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
-    p.findPath();
-    desired_heading = p.getAngle();
+    this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
+    this->p->findPath();
+    desired_heading = p->getAngle();
 }
 
 /*
- *  Constructor for Pilot 
+ *  fly will .. 
  */
 void Pilot::fly(double curr_angle)
 {
     bool dirTurn = false;
-    bool should_turn = shouldTurn(&dirTurn, curr_angle);
+    bool should_turn = shouldTurn(dirTurn, curr_angle);
     if (!is_turning)
     {
         if (should_turn)
-         {
-             if(dirTurn)
-             {
-                 leftTurn();
-             }
-             else 
-             {
-                 rightTurn();
-             }
-         }  
+        {
+            if (dirTurn)
+            {
+                leftTurn();
+            }
+            else
+            {
+                rightTurn();
+            }
+        }
     }
     else
     {
@@ -65,7 +66,7 @@ void Pilot::fly(double curr_angle)
 void Pilot::rightTurn()
 {
     is_turning = true;
-    r_Servo.servoAdjustment(RIGHT)
+    servoR.servoAdjustment(RIGHT);
 }
 /*
 * Makes the box take a left turn
@@ -73,14 +74,12 @@ void Pilot::rightTurn()
 void Pilot::leftTurn()
 {
     is_turning = true;
-    l_Servo.servoAdjustment(LEFT);
+    servoL.servoAdjustment(LEFT);
 }
 
 void Pilot::straight()
 {
-    is_turning = false
-    l_Servo.resetServos(LEFT);
-    r_Servo.resetServos(RIGHT); // THis may be backwards im not sure
+    is_turning = false;
 }
 
 /* 

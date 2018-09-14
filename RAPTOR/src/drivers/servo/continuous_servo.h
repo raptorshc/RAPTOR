@@ -14,11 +14,11 @@ class ContinuousServo : public Servo
 public:
   ContinuousServo();
 
-  void servoAdjustment(float deg, int dir);
+  void servoAdjustment(int dir);
 
 private:
   int timeToTurn(float deg);
-  void resetServos(int dir);
+  void resetServo(int dir);
   void manualAdjustment(int dir);
 
   int _currentdef; // current deflection setting

@@ -33,6 +33,8 @@ public:
     void findPath();
 
     void adjustPath(Path path_target, Path path_current, PathAdjustment *adjustment);
+
+    double getAngle(void);
     
 private:
     void coord_dmsToDec(Coordinate& c1);
