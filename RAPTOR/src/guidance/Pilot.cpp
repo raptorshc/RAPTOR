@@ -2,7 +2,8 @@
 
 */
 #include "Pilot.h"
-
+#define LEFT 0;
+#define RIGHT 1;
 /* PUBLIC METHODS */
 
 /*
@@ -58,7 +59,7 @@ void Pilot::fly(double curr_angle)
 void Pilot::rightTurn()
 {
     is_turning = true;
-    r_Servo.servoAdjustment(1)
+    r_Servo.servoAdjustment(RIGHT)
 }
 /*
 * Makes the box take a left turn
@@ -66,14 +67,14 @@ void Pilot::rightTurn()
 void Pilot::leftTurn()
 {
     is_turning = true;
-    l_Servo.servoAdjustment(0);
+    l_Servo.servoAdjustment(LEFT);
 }
 
 void Pilot::straight()
 {
     is_turning = false
-    l_Servo.resetServos(0);
-    r_Servo.resetServos(1); // THis may be backwards im not sure
+    l_Servo.resetServos(LEFT);
+    r_Servo.resetServos(RIGHT); // THis may be backwards im not sure
 }
 
 /* 
@@ -91,9 +92,9 @@ bool Pilot::shouldTurn(bool &dirTurn, double curr_angle)
 
     /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
     if (abs(alpha_angle - curr_angle) > abs(beta_angle - curr_angle))
-        dirTurn = true; //right turn
+        dirTurn = RIGHT; //right turn
     else
-        dirTurn = false; //left turn
+        dirTurn = LEFT; //left turn
     if (abs(curr_angle - desired_heading - 360) < 15 || abs(desired_heading - curr_angle) < 15)
         return false; //The amount of degrees we need to adjust by.
     else
