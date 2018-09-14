@@ -5,7 +5,21 @@
 
 SFE_BMP180 bmp; //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-the-bmp085
 
-bool bmpUpdate(void){
+/*
+ *	bmp_init begins the BMP measurements and 
+ *   grabs a baseline pressure for alt calculations.
+ */
+void bmp_init(void){
+  bmp.begin();             // Begin bmp measurements
+  while(!bmp_update); // until we can get a good pressure reading
+  bmp_data.baseline = bmp_data.pressure; // grab a baseline pressure
+}
+
+/*
+ *	bmp_update will update the temperature, pressure, then altitude,
+ *   if temperature fails, pressure will not be read, if pressure fails altitude will not be calculated.
+ */
+bool bmp_update(void){
   // Temperature measurement
   char status = bmp.startTemperature();
   delay(status);
