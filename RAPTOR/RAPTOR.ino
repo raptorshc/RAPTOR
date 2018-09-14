@@ -12,7 +12,7 @@
 
 #define SERVO_STOP 90
 
-#define BZZ_DTA 13    // Buzzer
+#define BZZ_DTA 11    // Buzzer
 #define LEDS_DTA 12   // External flight LEDs;
 
 #define SRVOL_DTA 6   // Left servo
