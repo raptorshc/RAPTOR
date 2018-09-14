@@ -6,7 +6,9 @@
 #include <Adafruit_GPS.h>
 #include <SoftwareSerial.h>
 #include <elapsedMillis.h>
-// #include <Pilot.h> // to be completed
+#include "src/guidance/Pilot.h" // to be completed
+#include "src/drivers/ContinuousServo.h" // to be completed
+#include "src/drivers/bmp/bmp.h" // to be completed
 
 #define CUTDOWN_ALT 1000 // altitude to cutdown at
 
@@ -29,10 +31,6 @@
 
 #define SD_GRN 4      // OpenLog Reset pin
 
-struct BmpData {
-  double baseline, pressure, temperature, altitude;  // since the BMP object doesn't store data for us
-} bmp_data;
-
 Servo servoL;
 Servo servoR;
 
@@ -44,8 +42,6 @@ SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 volatile Adafruit_GPS GPS(&mySerial);
 
 boolean flying = false;
-
-boolean bmpUpdate(void); // provide prototypes for the ISR
 double correctAlt(void);
 
 void setup() {
@@ -147,27 +143,6 @@ SIGNAL(TIMER0_COMPA_vect) {
       //pilot.fly(correctAlt(), GPS.angle); // the pilot needs altitude and angle to do his calculations
     }
   }
-}
-
-boolean bmpUpdate(){
-  // Temperature measurement
-  char status = bmp.startTemperature();
-  delay(status);
-  status = bmp.getTemperature(bmp_data.temperature);
-
-  // If temperature succeeded, pressure measurement
-  if(status){
-    status = bmp.startPressure(3);
-    delay(status);
-    status = bmp.getPressure(bmp_data.pressure, bmp_data.temperature);
-
-    // If pressure succeeded, calculate altitude
-    if(status){
-      bmp_data.altitude = bmp.altitude(bmp_data.pressure, bmp_data.baseline);
-    }
-    else return false;
-  }
-  else return false;
 }
 
 double correctAlt(void){

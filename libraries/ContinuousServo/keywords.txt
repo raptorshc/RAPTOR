@@ -1,2 +1,0 @@
-ContinousServo	KEYWORD1
-servoAdjustment	KEYWORD2
