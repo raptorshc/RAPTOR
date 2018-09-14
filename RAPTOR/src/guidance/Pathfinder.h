@@ -30,7 +30,7 @@ class Pathfinder{
 public:
     Pathfinder(Coordinate* current_lat, Coordinate* current_long, Coordinate* final_lat, Coordinate* final_long);
     
-    void findPath(Coordinate current, Coordinate final);
+    void findPath(Path &_path);
 
     void adjustPath(Path path_target, Path path_current, PathAdjustment *adjustment);
     

@@ -21,7 +21,7 @@ Pathfinder::Pathfinder(Coordinate* current_lat, Coordinate* current_long, Coordi
  *   accepting inputs of current location and desired location.
  */
  
-void Pathfinder::findPath(Coordinate current, Coordinate final){
+void Pathfinder::findPath(){
     path_dmsToDec();                                                            //Convert the coordinates to decimal to make it easier to find the vector and angle.
     
     /* First find the vector between our coordinates */
@@ -32,6 +32,11 @@ void Pathfinder::findPath(Coordinate current, Coordinate final){
     this->_Path->angle = 90 - atan2(this->_Path->long_vec,this->_Path->lat_vec) * 180/pi;            //atan returns in radians, * 180/pi is converting radians to degrees, 90 - gives bearing.
 	if(this->_Path->angle < 0)
 		this->_Path->angle += 360; 													//ensure positive bearing
+}
+
+double Pathfinder::getAngle()
+{
+    return this->_Path->angle;
 }
 
 /* PRIVATE METHODS */
@@ -53,21 +58,3 @@ void Pathfinder::path_dmsToDec(){
     coord_dmsToDec(this->_Path->long_final);
 }
 
-/* 
- * adjustPath will take in the current and optimal paths and 
- * calculate which way to turn and by how much. 
- */
-void Pathfinder::adjustPath(Path path_target, Path path_current, PathAdjustment *adjustment){
-    float alpha_angle, beta_angle;
-        
-    alpha_angle = path_target.angle + 90;  //Alpha angle is in the quadrant to the left of our target angle
-    beta_angle = path_target.angle + 270;   //Beta angle is in the quadrant to the right
-    
-    /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
-    if(abs(alpha_angle - path_current.angle) > abs(beta_angle - path_current.angle))
-        adjustment->rotation = 0;   //left if we are to the right of the target
-    else
-        adjustment->rotation = 1;   //right if we are to the left, if current = -target, we will be turning right
-    
-    adjustment->degrees = abs(path_target.angle - path_current.angle); //The amount of degrees we need to adjust by.
-}

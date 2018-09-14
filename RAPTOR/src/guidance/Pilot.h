@@ -7,6 +7,7 @@
 #define PILOT_h
 
 #include "Pathfinder.h"
+#include "continuous_servo.h"
 
 class Pilot{
 public:
@@ -17,12 +18,14 @@ public:
     
 private:
 	Coordinate _target;
-	float current_heading, desired_heading;
+	double desired_heading;
 	int is_turning;
+	ContinuousServo l_Servo, r_Servo;
+	Pathfinder p;
 	
 	void rightTurn();
 	void leftTurn();
-	void shouldTurn();
+	void straight();
     
 };
 
