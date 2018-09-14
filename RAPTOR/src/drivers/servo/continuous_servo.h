@@ -9,38 +9,27 @@
 #include "Arduino.h"
 #include <Servo.h>
 
-#define SRVOL_DTA 6   // Left servo
-#define SRVOR_DTA 5   // Right servo
+class ContinuousServo : public Servo
+{
+public:
+  ContinuousServo();
 
-#define RIGHT 1     // Direction of the turn
-#define LEFT 0      //Direction of the turn
+  void servoAdjustment(float deg, int dir);
 
-#define SERVO_STOP 90
+private:
+  int timeToTurn(float deg);
+  void resetServos(int dir);
+  void manualAdjustment(int dir);
 
-#define TTR 100
+  int _currentdef; // current deflection setting
 
-class ContinuousServo{
-  public:
-    ContinuousServo(int pin);
-    void servoAdjustment(float deg, int dir);
-  private:
-    int timeToTurn(float deg);
-    void resetServos(int dir);
-    void manualAdjustment(int dir);
+  int _hspeed = 75; // default high speed is 75
+  int _lspeed = 30; // default low speed is 30
 
-    Servo servoL;
-    Servo servoR;
-	
-	int _currentdef;				// current deflection setting 
-	
-	int _hspeed = 75; 				// default high speed is 75
-	int _lspeed = 30; 				// default low speed is 30
-	
-	int _dPSH = 1; 					// number of degs per second that the high setting rotates with
-	int _dPSL = 2;					// number of degs per second that the low setting rotates with
-	
-	int _ttr = 100;					// default amount of time to rotate the servos to achieve either deflection setting is 100ms
+  int _dPSH = 1; // number of degs per second that the high setting rotates with
+  int _dPSL = 2; // number of degs per second that the low setting rotates with
+
+  int _ttr = 100; // default amount of time to rotate the servos to achieve either deflection setting is 100ms
 };
 
 #endif
-
