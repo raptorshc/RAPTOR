@@ -9,6 +9,9 @@
 #include "Arduino.h"
 #include <Servo.h>
 
+#define SRVOL_DTA 6   // Left servo
+#define SRVOR_DTA 5   // Right servo
+
 #define RIGHT 1     // Direction of the turn
 #define LEFT 0      //Direction of the turn
 
@@ -24,8 +27,9 @@ class ContinuousServo{
     int timeToTurn(float deg);
     void resetServos(int dir);
     void manualAdjustment(int dir);
-    
-    Servo _servo;
+
+    Servo servoL;
+    Servo servoR;
 	
 	int _currentdef;				// current deflection setting 
 	

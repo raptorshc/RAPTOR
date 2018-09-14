@@ -7,39 +7,20 @@
 #include <SoftwareSerial.h>
 #include <elapsedMillis.h>
 #include "src/guidance/Pilot.h" // to be completed
-#include "src/drivers/ContinuousServo.h" // to be completed
+#include "src/drivers/continuous_servo.h" // to be completed
 #include "src/drivers/bmp/bmp.h" // to be completed
 
 #define CUTDOWN_ALT 1000 // altitude to cutdown at
 
-#define SERVO_STOP 90
-
 #define BZZ_DTA 11    // Buzzer
 #define LEDS_DTA 12   // External flight LEDs;
-
-#define SRVOL_DTA 6   // Left servo
-#define SRVOR_DTA 5   // Right servo
-
-#define SOLP_DTA 9    // Parafoil solenoid
-#define SOLC_DTA 8    // Cutdown solenoid
-
-#define SWP_PIN A0    // Parafoil solenoid switch
-#define SWC_PIN A1    // Cutdown solenoid switch
 
 #define LEDP_DTA A2   // Parafoil solenoid indicator light
 #define LEDC_DTA A3   // Cutdown solenoid indicator light
 
 #define SD_GRN 4      // OpenLog Reset pin
 
-Servo servoL;
-Servo servoR;
-
-SFE_BMP180 bmp; //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-the-bmp085
-
 elapsedMillis timeElapsed;
-
-SoftwareSerial mySerial(3, 2); // GPS serial comm pins
-volatile Adafruit_GPS GPS(&mySerial);
 
 boolean flying = false;
 double correctAlt(void);

@@ -1,3 +1,10 @@
+#include "bmp.h"
+
+#include "Arduino.h"
+#include <SFE_BMP180.h>
+
+SFE_BMP180 bmp; //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-the-bmp085
+
 bool bmpUpdate(void){
   // Temperature measurement
   char status = bmp.startTemperature();

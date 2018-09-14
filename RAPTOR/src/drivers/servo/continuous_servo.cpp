@@ -1,7 +1,7 @@
 /*
 
 */
-#include "ContinuousServo.h"
+#include "continuous_servo.h"
 #include "Arduino.h"
 
 /* Public Methods */
