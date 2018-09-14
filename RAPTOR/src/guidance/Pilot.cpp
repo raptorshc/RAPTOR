@@ -10,6 +10,8 @@
  */
 Pilot::Pilot()
 {
+    is_turning = FALSE;
+    
 }
 
 /*
@@ -25,13 +27,13 @@ void Pilot::wake(Coordinate *target_lat, Coordinate *target_long, Coordinate *cu
 /*
  *  Constructor for Pilot 
  */
-void Pilot::fly(double altitude, double curr_angle)
+void Pilot::fly(double curr_angle)
 {
     bool dirTurn = false;
-    bool _turn = shouldTurn(&dirTurn, curr_angle);
+    bool should_turn = shouldTurn(&dirTurn, curr_angle);
     if (!is_turning)
     {
-        if (_turn)
+        if (should_turn)
          {
              if(dirTurn)
              {
@@ -45,7 +47,7 @@ void Pilot::fly(double altitude, double curr_angle)
     }
     else
     {
-        if (!(_turn))
+        if (!should_turn)
             straight();
     }
 }
@@ -56,6 +58,7 @@ void Pilot::fly(double altitude, double curr_angle)
 void Pilot::rightTurn()
 {
     is_turning = true;
+    r_Servo.servoAdjustment(1)
 }
 /*
 * Makes the box take a left turn
@@ -63,11 +66,14 @@ void Pilot::rightTurn()
 void Pilot::leftTurn()
 {
     is_turning = true;
+    l_Servo.servoAdjustment(0);
 }
 
 void Pilot::straight()
 {
     is_turning = false
+    l_Servo.resetServos(0);
+    r_Servo.resetServos(1); // THis may be backwards im not sure
 }
 
 /* 
@@ -85,9 +91,9 @@ bool Pilot::shouldTurn(bool &dirTurn, double curr_angle)
 
     /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
     if (abs(alpha_angle - curr_angle) > abs(beta_angle - curr_angle))
-        *dirTurn = false; //left if we are to the right of the target
+        dirTurn = false; //left if we are to the right of the target
     else
-        *dirTurn = true; //right if we are to the left, if current = -target, we will be turning right
+        dirTurn = true; //right if we are to the left, if current = -target, we will be turning right
     if (abs(alpha_angle < 15) || abs(beta_angle < 15)
         return false; //The amount of degrees we need to adjust by.
     else

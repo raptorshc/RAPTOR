@@ -14,19 +14,19 @@ public:
     Pilot();
     
 	void wake(Coordinate &target);
-	void fly(float altitude, float angle);
+	void fly(float angle);
     
 private:
 	Coordinate _target;
 	double desired_heading;
-	int is_turning;
+	bool is_turning;
 	ContinuousServo l_Servo, r_Servo;
 	Pathfinder p;
 	
 	void rightTurn();
 	void leftTurn();
 	void straight();
-	bool shouldTurn(bool &dirTurn, double curr_angle)
+	bool shouldTurn(bool &dirTurn, double curr_angle);
     
 };
 
