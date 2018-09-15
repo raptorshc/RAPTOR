@@ -9,12 +9,10 @@
 
 #include "Arduino.h"
 #include <Adafruit_GPS.h>
-#include <SoftwareSerial.h>
 
-SoftwareSerial mySerial(3, 2); // GPS serial comm pins
-Adafruit_GPS GPS(&mySerial);
+extern Adafruit_GPS gps;
 
 void gps_init(void);
+double correct_alt(void);
 
 #endif
-

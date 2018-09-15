@@ -9,8 +9,10 @@
 
 struct BmpData // since the BMP object doesn't store data for us
 {
-  double baseline, pressure, temperature, altitude;
-} bmp_data;
+  float baseline, pressure, temperature, altitude;
+};
+
+extern BmpData bmp_data;
 
 void bmp_init(void);
 bool bmp_update(void);

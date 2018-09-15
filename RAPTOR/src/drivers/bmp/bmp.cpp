@@ -7,9 +7,11 @@
 #include "bmp.h"
 
 #include "Arduino.h"
-#include <SFE_BMP180.h> // external adafruit library
+#include <Adafruit_BMP085_U.h> // external adafruit library
+#include <Adafruit_Sensor.h>
 
-SFE_BMP180 bmp; //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-the-bmp085
+BmpData bmp_data;
+Adafruit_BMP085_Unified bmp = Adafruit_BMP085_Unified(10085); //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-the-bmp085
 
 /*
  *	bmp_init begins the BMP measurements and 
@@ -17,8 +19,15 @@ SFE_BMP180 bmp; //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-
  */
 void bmp_init(void)
 {
-  bmp.begin(); // Begin bmp measurements
-  while (!bmp_update); // until we can get a good pressure reading
+  if(!bmp.begin()){ // Begin bmp measurements
+    Serial.print("No BMP detected!");
+  }
+
+  // gather a baseline
+  uint8_t counter = 0;
+  bmp_data.baseline = 1013.25; // put in a fake baseline for the initial calculation, which won't be used
+  
+  while (!bmp_update && counter++ < 50); // until we can get a good pressure reading or we've tried more than 50 times
   bmp_data.baseline = bmp_data.pressure; // grab a baseline pressure
 }
 
@@ -28,26 +37,18 @@ void bmp_init(void)
  */
 bool bmp_update(void)
 {
-  // Temperature measurement
-  char status = bmp.startTemperature();
-  delay(status);
-  status = bmp.getTemperature(bmp_data.temperature);
+  // get a new sensor event
+  sensors_event_t event;
+  bmp.getEvent(&event);
 
-  // If temperature succeeded, pressure measurement
-  if (status)
-  {
-    status = bmp.startPressure(3);
-    delay(status);
-    status = bmp.getPressure(bmp_data.pressure, bmp_data.temperature);
-
-    // If pressure succeeded, calculate altitude
-    if (status)
-    {
-      bmp_data.altitude = bmp.altitude(bmp_data.pressure, bmp_data.baseline);
-    }
-    else
-      return false;
+  // if pressure measurement succeeded, we can collect the data
+  if(event.pressure){
+    // pressure in hPa
+    bmp_data.pressure = event.pressure;
+    // temperature in celsius
+    bmp.getTemperature(&bmp_data.temperature);
+    // altitude in feet
+    bmp.pressureToAltitude(bmp_data.baseline, bmp_data.pressure);
   }
-  else
-    return false;
+  else return false; // collection failed
 }
