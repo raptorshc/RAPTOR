@@ -14,7 +14,7 @@ public:
     Pilot();
     
 	void wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long);
-	void fly(double curr_angle);
+	void fly(float curr_angle);
 	double getAngle();
     
 private:
@@ -27,7 +27,7 @@ private:
 	void rightTurn();
 	void leftTurn();
 	void straight();
-	bool shouldTurn(bool &dirTurn, double curr_angle);
+	bool shouldTurn(bool &dirTurn, float curr_angle);
     
 };
 

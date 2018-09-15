@@ -35,7 +35,7 @@ void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_
 /*
  *  fly will .. 
  */
-void Pilot::fly(double curr_angle)
+void Pilot::fly(float curr_angle)
 {
     bool dirTurn = false;
     bool should_turn = shouldTurn(dirTurn, curr_angle);
@@ -88,7 +88,7 @@ void Pilot::straight()
  * returns if we should turn
  * dirTurn is true for a right turn false for a left turn
  */
-bool Pilot::shouldTurn(bool &dirTurn, double curr_angle)
+bool Pilot::shouldTurn(bool &dirTurn, float curr_angle)
 {
     float alpha_angle, beta_angle;
 

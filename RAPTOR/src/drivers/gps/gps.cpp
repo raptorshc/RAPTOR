@@ -31,36 +31,3 @@ void gps_init(void){
     OCR0A = 0xAF;
     TIMSK0 |= _BV(OCIE0A);
 }
-
-/* 
- * Check our altitude measurements, grab the correct one 
- *  or return the average if they're both correct.
- */
-double correct_alt(void)
-{
-  if (bmp_data.altitude - gps.altitude > 50)
-    return bmp_data.altitude;
-  else if (gps.altitude - bmp_data.altitude > 50)
-    return gps.altitude;
-  else
-    return (bmp_data.altitude + gps.altitude) / 2;
-}
-
-/* 
- *  Interrupt on millisecond
- */
-SIGNAL(TIMER0_COMPA_vect)
-{
-  gps.read(); // Check to see if we have new data
-
-  if (gps.newNMEAreceived())
-  {
-    if (gps.parse(gps.lastNMEA()) && flying)
-    { // this also sets the newNMEAreceived() flag to false
-      if (!bmp_update())
-        bmp_data.pressure = bmp_data.temperature = bmp_data.altitude = 0; // if it doesn't work set them to zero
-
-      //pilot.fly(correctAlt(), gps.angle); // the pilot needs altitude and angle to do his calculations
-    }
-  }
-}

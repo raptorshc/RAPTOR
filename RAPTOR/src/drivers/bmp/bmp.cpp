@@ -20,7 +20,7 @@ Adafruit_BMP085_Unified bmp = Adafruit_BMP085_Unified(10085); //SDA -> A4, SCL -
 void bmp_init(void)
 {
   if(!bmp.begin()){ // Begin bmp measurements
-    Serial.print("No BMP detected!");
+    Serial.print(F("No BMP detected!"));
   }
 
   // gather a baseline

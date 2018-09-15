@@ -21,15 +21,15 @@ private:
   void resetServo(int dir);
   void manualAdjustment(int dir);
 
-  int _currentdef; // current deflection setting
+  uint8_t _currentdef; // current deflection setting
 
-  int _hspeed = 75; // default high speed is 75
-  int _lspeed = 30; // default low speed is 30
+  uint8_t _hspeed = 75; // default high speed is 75
+  uint8_t _lspeed = 30; // default low speed is 30
 
-  int _dPSH = 1; // number of degs per second that the high setting rotates with
-  int _dPSL = 2; // number of degs per second that the low setting rotates with
+  uint8_t _dPSH = 1; // number of degs per second that the high setting rotates with
+  uint8_t _dPSL = 2; // number of degs per second that the low setting rotates with
 
-  int _ttr = 100; // default amount of time to rotate the servos to achieve either deflection setting is 100ms
+  uint8_t _ttr = 100; // default amount of time to rotate the servos to achieve either deflection setting is 100ms
 };
 
 #endif

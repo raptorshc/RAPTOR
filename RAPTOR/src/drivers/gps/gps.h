@@ -13,6 +13,5 @@
 extern Adafruit_GPS gps;
 
 void gps_init(void);
-double correct_alt(void);
 
 #endif
