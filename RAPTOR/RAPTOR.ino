@@ -15,6 +15,7 @@
 #define SD_GRN 4 // OpenLog Reset pin
 
 elapsedMillis timeElapsed;
+Pilot pilot;
 
 boolean flying = false;
 double correctAlt(void);
@@ -40,9 +41,6 @@ void setup()
   gps_init();
 
   delay(1000);
-
-  /* Pilot */
-  //pilot.wake();
 
   /* SD */
   pinMode(SD_GRN, OUTPUT);
@@ -77,8 +75,7 @@ SIGNAL(TIMER0_COMPA_vect)
 }
 
 /* 
- *
- *  
+ * Arduino loop function, always runs.
  */
 void loop()
 {
@@ -94,7 +91,7 @@ void loop()
       // also may want to deploy our parafoil
       // and then check the parafoil
 
-      //pilot.wake();
+      // pilot.wake();
       flying = true;
     }
   }
@@ -103,6 +100,10 @@ void loop()
   // write everything to SD card
 }
 
+/* 
+ * Check our altitude measurements, grab the correct one 
+ *  or return the average if they're both correct.
+ */
 double correctAlt(void)
 {
   if (bmp_data.altitude - GPS.altitude > 50)
