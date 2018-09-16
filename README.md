@@ -1,8 +1,54 @@
 # RAPTOR
-Ram Air Parafoil Target Object Return (RAPTOR) is a system designed for automated return of high-altitude balloning payloads. 
+The Ram-Air Parafoil Targeted Object Return (RAPTOR) system is an autonomous payload designed for the simplification of high-altitude balloon payload recovery. 
+
+The project aims to alter final landing location by deflecting an attached parafoil. An Arduino Uno will control two servos that can trim the parafoil's brake lines to change course.  
+
+This repository contains all of the flight code used for the project, along with data collected and analyzed to gauge flight success.
+
+## 1. Payload Design Overview
+
+to be written
+
+## 2. Flight Software Design
+
+to be written
+
+## 3. Payload Iterations
+
+### **Kestrel**
 
 'Kestrel' is part of the naming convention chosen for RAPTOR as it goes through various design and developement stages. Kestrel is the smallest raptor in North America, and was chosen to represent RAPTOR's first iteration, or the '0.5' version of the project.
 
+Kestrel was designed and built to be a testing payload, where we could fly our environmental sensors, continuous servos and solenoids to test their reliability and power consumption on a high altitude flight.
+
+
+### **Falcon**
+
+'Falcon' is the '1.0' version of the project. Falcon began when we made a completely new payload, with the plan of making our first real guided flight in mind. This is the first iteration of the payload with the parafoil attached, where all of the major flight goals for the project will be achieved. These goals include cut down, parafoil deployment, and guided descent.
+
+## 4. Flight Reports
+
+### **April 21, 2018** (UAH Space Hardware Club BalloonSat Flight 75)
+
+to be written
+
+### **August 31, 2018** (UAH Space Hardware Club BalloonSat Flight 75)
+
+to be written
+
+### **September 29, 2018** (UAH Space Hardware Club BalloonSat Flight 75)
+
+to be written
+
+## 5. Project Progress
+
+to be written
+
+## 6. Members
+
+to be written
+
+## 7. Software Use
 Found under libraries/ are the classes utilized in the main .ino section. Some of these are completely custom written, some are adapted from other's code. Where applicable, the source has been noted.
 
 
