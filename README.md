@@ -1,5 +1,6 @@
 # RAPTOR
-The Ram-Air Parafoil Targeted Object Return (RAPTOR) system is an autonomous payload designed for the simplification of high-altitude balloon payload recovery. 
+
+The Ram-Air Parafoil Targeted Object Return (RAPTOR) system is an autonomous payload designed for the simplification of high-altitude balloon payload recovery.
 
 The project aims to alter final landing location by deflecting an attached parafoil. An Arduino Uno will control two servos that can trim the parafoil's brake lines to change course.  
 
@@ -20,7 +21,6 @@ to be written
 'Kestrel' is part of the naming convention chosen for RAPTOR as it goes through various design and developement stages. Kestrel is the smallest raptor in North America, and was chosen to represent RAPTOR's first iteration, or the '0.5' version of the project.
 
 Kestrel was designed and built to be a testing payload, where we could fly our environmental sensors, continuous servos and solenoids to test their reliability and power consumption on a high altitude flight.
-
 
 ### **Falcon**
 
@@ -49,11 +49,11 @@ to be written
 to be written
 
 ## 7. Software Use
+
 Found under libraries/ are the classes utilized in the main .ino section. Some of these are completely custom written, some are adapted from other's code. Where applicable, the source has been noted.
 
+Helpful link for installing libraries: <https://www.arduino.cc/en/hacking/libraries>
 
-Helpful link for installing libraries: https://www.arduino.cc/en/hacking/libraries
-
-Summary:
-	Copy the contents of the 'libraries' folder into Documents\Arduino\libraries. 
-	The RAPTOR.ino file should then happily compile in the Arduino IDE.
+**Summary:**
+Copy the contents of the 'libraries' folder into Documents\Arduino\libraries.
+The RAPTOR.ino file should then happily compile in the Arduino IDE.
