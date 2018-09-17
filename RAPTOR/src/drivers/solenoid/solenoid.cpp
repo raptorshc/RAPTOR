@@ -34,8 +34,12 @@ void sol_init(void)
 
 void cutdown(void)
 {
+    digitalWrite(SOLC_DTA, HIGH);
+    digitalWrite(SOLC_DTA, LOW);
 }
 
 void deploy_parafoil(void)
 {
+    digitalWrite(SOLC_DTA, HIGH);
+    digitalWrite(SOLP_DTA, LOW);
 }

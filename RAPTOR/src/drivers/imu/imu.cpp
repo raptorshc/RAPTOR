@@ -9,15 +9,15 @@
 #include "Arduino.h"
 #include <Adafruit_BNO055.h>
 
+Adafruit_BNO055 bno = Adafruit_BNO055(55);
+
 void bno_init(void){
     if(!bno.begin())
         Serial.print(F("No BNO055 detected!"));
     //calibrate?
 }
 
-bool bno_update(sensors_event_t *event){
+void bno_update(sensors_event_t *event){
     bno.getEvent(event);
-
-    if(event->orientation) return true;
-    else return false;
+    // might do some extra processing here?
 }

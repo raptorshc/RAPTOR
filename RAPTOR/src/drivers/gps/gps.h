@@ -10,6 +10,8 @@
 #include "Arduino.h"
 #include <Adafruit_GPS.h>
 
+#include "../../guidance/Pathfinder.h"
+
 extern Adafruit_GPS gps;
 
 void gps_init(void);

@@ -7,6 +7,7 @@
 #include "src/drivers/gps/gps.h"
 #include "src/drivers/imu/imu.h"
 #include "src/drivers/servo/continuous_servo.h"
+#include "src/drivers/solenoid/solenoid.h"
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
@@ -24,7 +25,7 @@ extern Adafruit_GPS gps;
 boolean flying = false;
 Coordinate initial_lat, initial_long;
 
-float correct_alt(void);
+float correct_alt_ascending(void);
 
 /* 
  * Arduino setup function, first function to be run.
@@ -48,7 +49,7 @@ void setup()
   delay(1000);
 
   // grab our launch location
-  read_gps(initial_lat, initial_long);
+  read_gps(&initial_lat, &initial_long);
 
   /* SD */
   pinMode(SD_GRN, OUTPUT);
@@ -60,7 +61,7 @@ void setup()
   digitalWrite(SD_GRN, HIGH);
 
   delay(10);
-  Serial.print(F("TIME, TEMPERATURE, bmp, ALTITUDE, \n")); // data header
+  Serial.print(F("TIME, TEMPERATURE, IMU, ALTITUDE, \n")); // data header
 }
 
 /* 
@@ -74,11 +75,22 @@ void loop()
     if (!bmp_update())
       bmp_data.pressure = bmp_data.temperature = bmp_data.altitude = 0; // if the bmp doesn't work set them to zero
 
-    if (correct_alt() > CUTDOWN_ALT)
-    { // we have liftoff, or liftdown I guess
-      // may want to do some falling checks here
-      // also may want to deploy our parafoil
-      // and then check the parafoil
+    if (correct_alt_ascending() > CUTDOWN_ALT)
+    {
+      uint8_t counter = 0;         // error check counter so we aren't stuck if we get some errant readings
+      cutdown(); // cutdown
+
+      while (!cutdown_check() && counter++ < 10)
+      { // we want to make sure that we have cut down and we are falling
+        cutdown(); // try cutdown again
+      }
+
+      counter = 0;                 // reset counter for parafoil
+      parafoil_deploy(); // deploy parafoil
+      while (!parafoil_deployed() && counter++ < 10)
+      { // make sure the parafoil has deployed
+        parafoil_deploy(); // try deploying parafoil again
+      }
 
       // pilot.wake();
       flying = true;
@@ -86,21 +98,34 @@ void loop()
   }
 
   sensors_event_t event;
-  if (!bno_update(&event))
-    event.orientation.x = event.orientation.y = event.orientation.z = 0;
+  bno_update(&event);
 
-  // write everything to SD card
+  Serial.print(// write everything to SD card
 }
 
 /* 
- * Check our altitude measurements, grab the correct one 
- *  or return the average if they're both correct.
+ * check our altitude measurements with the assumption we are ascending, 
+ *  grab the correct one or return the average if they're both correct.
  */
-float correct_alt(void)
+float correct_alt_ascending(void)
 {
   if (bmp_data.altitude - gps.altitude > 50)
     return bmp_data.altitude;
   else if (gps.altitude - bmp_data.altitude > 50)
+    return gps.altitude;
+  else
+    return (bmp_data.altitude + gps.altitude) / 2;
+}
+
+/* 
+ * check our altitude measurements with the assumption we are descending, 
+ *  grab the correct one or return the average if they're both correct.
+ */
+float correct_alt_descending(void)
+{
+  if (gps.altitude - bmp_data.altitude > 50)
+    return bmp_data.altitude;
+  else if (bmp_data.altitude - gps.altitude > 50)
     return gps.altitude;
   else
     return (bmp_data.altitude + gps.altitude) / 2;
@@ -123,18 +148,31 @@ SIGNAL(TIMER0_COMPA_vect)
   }
 }
 
-
-bool isFalling()                                //Boolean function to check if payload is descending
+/* 
+ *  cutdown_check checks 10 consecutive alitude measurements over 2 seconds, 
+ *    if all are decreasing return true, if not return false  
+ */
+bool cutdown_check(void)
 {
-   for(int i = 0; i < 10; i++)
-   {
-      prevAltitude = bmp_data.altitude;         //Update previous altitude
-      delay(200);                               //.2 second delay
-      if(bmp_update())
-        if(bmp_data.altitude > prevAltitude)    //Are we falling (is our current altitude higher or lower than our previous altitude)?
-        {
-          return false;                         //Ascending
-        }
-   }
-   return true;                                 //Falling
+  for (int i = 0; i < 10; i++)
+  {
+    uint16_t prevAltitude = correct_alt_descending(); //Update previous altitude
+    delay(200);                       //.2 second delay
+    if (bmp_update())
+      if (correct_alt_ascending() > prevAltitude) //Are we falling (is our current altitude higher or lower than our previous altitude)?
+      {
+        return false; //Ascending
+      }
+  }
+  return true; //Falling
+}
+
+/* 
+ *  cutdown_check checks 10 consecutive alitude measurements over 2 seconds, 
+ *    if all are decreasing return true, if not return false  
+ */
+bool parafoil_deployed(void)
+{
+  // probably do some fancy IMU stuff with glide angle to check this
+  return true; // deployed
 }

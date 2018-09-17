@@ -7,7 +7,9 @@
 #ifndef IMU_H_
 #define IMU_H_
 
+#include <Adafruit_Sensor.h>
+
 void bno_init(void);
-bool bno_update(void);
+void bno_update(sensors_event_t *event);
 
 #endif
