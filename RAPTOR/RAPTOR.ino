@@ -122,3 +122,19 @@ SIGNAL(TIMER0_COMPA_vect)
     }
   }
 }
+
+
+bool isFalling()                                //Boolean function to check if payload is descending
+{
+   for(int i = 0; i < 10; i++)
+   {
+      prevAltitude = bmp_data.altitude;         //Update previous altitude
+      delay(200);                               //.2 second delay
+      if(bmp_update())
+        if(bmp_data.altitude > prevAltitude)    //Are we falling (is our current altitude higher or lower than our previous altitude)?
+        {
+          return false;                         //Ascending
+        }
+   }
+   return true;                                 //Falling
+}
