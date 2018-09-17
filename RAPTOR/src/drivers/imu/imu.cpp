@@ -9,6 +9,15 @@
 #include "Arduino.h"
 #include <Adafruit_BNO055.h>
 
-void imu_init(void){
-    
+void bno_init(void){
+    if(!bno.begin())
+        Serial.print(F("No BNO055 detected!"));
+    //calibrate?
+}
+
+bool bno_update(sensors_event_t *event){
+    bno.getEvent(event);
+
+    if(event->orientation) return true;
+    else return false;
 }

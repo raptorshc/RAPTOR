@@ -15,11 +15,10 @@ public:
     
 	void wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long);
 	void fly(float curr_angle);
-	double getAngle();
     
 private:
 	Coordinate _target;
-	double desired_heading;
+	float desired_heading;
 	bool is_turning;
 	ContinuousServo servoR, servoL;
 	Pathfinder *p;

@@ -1,5 +1,6 @@
 #include <SD.h>
 #include <elapsedMillis.h>
+#include <Adafruit_Sensor.h>
 
 #include "src/guidance/Pilot.h"
 #include "src/drivers/bmp/bmp.h"
@@ -21,6 +22,8 @@ extern BmpData bmp_data;
 extern Adafruit_GPS gps;
 
 boolean flying = false;
+Coordinate initial_lat, initial_long;
+
 float correct_alt(void);
 
 /* 
@@ -38,12 +41,14 @@ void setup()
   bmp_init();
 
   /* IMU */
-  imu_init();
+  bno_init();
 
   /* GPS */
   gps_init();
-
   delay(1000);
+
+  // grab our launch location
+  read_gps(initial_lat, initial_long);
 
   /* SD */
   pinMode(SD_GRN, OUTPUT);
@@ -80,7 +85,10 @@ void loop()
     }
   }
 
-  // collect IMU data
+  sensors_event_t event;
+  if (!bno_update(&event))
+    event.orientation.x = event.orientation.y = event.orientation.z = 0;
+
   // write everything to SD card
 }
 
@@ -99,7 +107,8 @@ float correct_alt(void)
 }
 
 /* 
- *  Interrupt on millisecond
+ *  Interrupt on millisecond,
+ *    check if we have a new GPS NMEA string, if we do grab bmp data and 
  */
 SIGNAL(TIMER0_COMPA_vect)
 {
@@ -108,11 +117,8 @@ SIGNAL(TIMER0_COMPA_vect)
   if (gps.newNMEAreceived())
   {
     if (gps.parse(gps.lastNMEA()) && flying)
-    { // this also sets the newNMEAreceived() flag to false
-      if (!bmp_update())
-        bmp_data.pressure = bmp_data.temperature = bmp_data.altitude = 0; // if it doesn't work set them to zero
-
-      //pilot.fly(correctAlt(), gps.angle); // the pilot needs altitude and angle to do his calculations
+    {                       // this also sets the newNMEAreceived() flag to false
+      pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
     }
   }
 }

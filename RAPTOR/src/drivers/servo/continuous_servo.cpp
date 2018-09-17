@@ -28,7 +28,7 @@ void ContinuousServo::servoAdjustment(int dir)
 	else
 		this->write(180); // Otherwise, add 90 to the speed to reverse the direction.
 	delay(500);
-	
+
 	delay(_ttr);			 // Delay the set amount of time to get to the deflection setting.
 	this->write(SERVO_STOP); // Stop the servos once we've reached the deflection setting.
 }

@@ -13,5 +13,6 @@
 extern Adafruit_GPS gps;
 
 void gps_init(void);
+void read_gps(Coordinate *x, Coordinate *y);
 
 #endif

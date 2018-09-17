@@ -7,7 +7,7 @@
 #ifndef IMU_H_
 #define IMU_H_
 
-void imu_init(void);
+void bno_init(void);
+bool bno_update(void);
 
 #endif
-
