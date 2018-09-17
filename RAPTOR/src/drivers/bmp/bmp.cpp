@@ -28,8 +28,7 @@ void bmp_init(void)
   uint8_t counter = 0;
   bmp_data.baseline = 1013.25; // put in a fake baseline for the initial calculation, which won't be used
 
-  while (!bmp_update && counter++ < 50)
-    ;                                    // until we can get a good pressure reading or we've tried more than 50 times
+  while (!bmp_update && counter++ < 50); // until we can get a good pressure reading or we've tried more than 50 times
   bmp_data.baseline = bmp_data.pressure; // grab a baseline pressure
 }
 

@@ -11,6 +11,9 @@
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
+#define SWP_PIN A0 // Parafoil solenoid switch
+#define SWC_PIN A1 // Cutdown solenoid switch
+
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
 
@@ -61,7 +64,11 @@ void setup()
   digitalWrite(SD_GRN, HIGH);
 
   delay(10);
-  Serial.print(F("TIME, TEMPERATURE, IMU, ALTITUDE, \n")); // data header
+  Serial.print(F("TIME,") 
+  F("TEMPERATURE, PRESSURE, ALTITUDE,") 
+  F("LATITUDE, LONGITUDE, ANGLE,")
+  F("X, Y, Z,") 
+  F("SWC, SWP, FLYING\n")); // data header
 }
 
 /* 
@@ -100,7 +107,32 @@ void loop()
   sensors_event_t event;
   bno_update(&event);
 
-  Serial.print(// write everything to SD card
+  /* Let's spray the OpenLog with a hose of data */
+  Serial.print(timeElapsed);
+  Serial.print(",");
+  Serial.print(bmp_data.temperature);
+  Serial.print(",");
+  Serial.print(bmp_data.pressure);
+  Serial.print(",");
+  Serial.print(bmp_data.altitude);
+  Serial.print(",");
+  Serial.print(gps.latitude);
+  Serial.print(",");
+  Serial.print(gps.longitude);
+  Serial.print(",");
+  Serial.print(gps.angle); 
+  Serial.print(",");
+  Serial.print(event.orientation.x);
+  Serial.print(",");
+  Serial.print(event.orientation.y);
+  Serial.print(",");
+  Serial.print(event.orientation.z);
+  Serial.print(",");
+  Serial.print(digitalRead(SWC_PIN));
+  Serial.print(",");
+  Serial.print(digitalRead(SWP_PIN));
+  Serial.print(",");
+  Serial.print(flying); // write everything to SD card
 }
 
 /* 
