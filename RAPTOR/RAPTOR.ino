@@ -9,6 +9,8 @@
 #include "src/drivers/servo/continuous_servo.h"
 #include "src/drivers/solenoid/solenoid.h"
 
+template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; } // enable stream style output
+
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
 #define SWP_PIN A0 // Parafoil solenoid switch
@@ -52,7 +54,7 @@ void setup()
   delay(1000);
 
   // grab our launch location
-  read_gps(&initial_lat, &initial_long);
+  gps_read(&initial_lat, &initial_long);
 
   /* SD */
   pinMode(SD_GRN, OUTPUT);
@@ -64,11 +66,11 @@ void setup()
   digitalWrite(SD_GRN, HIGH);
 
   delay(10);
-  Serial.print(F("TIME,") 
-  F("TEMPERATURE, PRESSURE, ALTITUDE,") 
-  F("LATITUDE, LONGITUDE, ANGLE,")
-  F("X, Y, Z,") 
-  F("SWC, SWP, FLYING\n")); // data header
+  Serial.print(F("TIME," 
+  "TEMPERATURE, PRESSURE, ALTITUDE," 
+  "LATITUDE, LONGITUDE, ANGLE,"
+  "X, Y, Z,"
+  "SWC, SWP, FLYING\n")); // data header
 }
 
 /* 
@@ -108,31 +110,11 @@ void loop()
   bno_update(&event);
 
   /* Let's spray the OpenLog with a hose of data */
-  Serial.print(timeElapsed);
-  Serial.print(",");
-  Serial.print(bmp_data.temperature);
-  Serial.print(",");
-  Serial.print(bmp_data.pressure);
-  Serial.print(",");
-  Serial.print(bmp_data.altitude);
-  Serial.print(",");
-  Serial.print(gps.latitude);
-  Serial.print(",");
-  Serial.print(gps.longitude);
-  Serial.print(",");
-  Serial.print(gps.angle); 
-  Serial.print(",");
-  Serial.print(event.orientation.x);
-  Serial.print(",");
-  Serial.print(event.orientation.y);
-  Serial.print(",");
-  Serial.print(event.orientation.z);
-  Serial.print(",");
-  Serial.print(digitalRead(SWC_PIN));
-  Serial.print(",");
-  Serial.print(digitalRead(SWP_PIN));
-  Serial.print(",");
-  Serial.print(flying); // write everything to SD card
+  Serial << timeElapsed << ","
+  << bmp_data.temperature << "," << bmp_data.pressure << "," << bmp_data.altitude << ","
+  << gps.latitude << "," << gps.longitude << "," << gps.angle << ","
+  << event.orientation.x << "," << event.orientation.y << "," << event.orientation.z << ","
+  << digitalRead(SWC_PIN) << "," << digitalRead(SWP_PIN) << "," << flying << "\n"; // write everything to SD card
 }
 
 /* 
