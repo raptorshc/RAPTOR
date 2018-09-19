@@ -30,9 +30,6 @@ SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
 
 boolean flying = false;
-Coordinate initial_lat, initial_long;
-
-float correct_alt_ascending(void);
 
 /* 
  * Arduino setup function, first function to be run.
@@ -54,9 +51,6 @@ void setup()
   /* GPS */
   gps.init();
   delay(1000);
-
-  // grab our launch location
-  gps.update(&initial_lat, &initial_long);
 
   /* SD */
   pinMode(SD_GRN, OUTPUT);
@@ -88,18 +82,18 @@ void loop()
 
     if (correct_alt_ascending() > CUTDOWN_ALT)
     {
-      uint8_t counter = 0;         // error check counter so we aren't stuck if we get some errant readings
       cutdown(); // cutdown
 
-      while (!cutdown_check() && counter++ < 10)
+      if (!cutdown_check() || !digitalRead(SWC_PIN))
       { // we want to make sure that we have cut down and we are falling
+        Serial << "!!!! CUTDOWN ERROR !!!!" << "\n";
         cutdown(); // try cutdown again
       }
 
-      counter = 0;                 // reset counter for parafoil
       parafoil_deploy(); // deploy parafoil
-      while (!parafoil_deployed() && counter++ < 10)
+      if (!digitalRead(SWP_PIN))
       { // make sure the parafoil has deployed
+        Serial << "!!!! PARAFOIL DEPLOYMENT ERROR !!!!" << "\n";
         parafoil_deploy(); // try deploying parafoil again
       }
 
@@ -180,14 +174,4 @@ bool cutdown_check(void)
       }
   }
   return true; //Falling
-}
-
-/* 
- *  cutdown_check checks 10 consecutive alitude measurements over 2 seconds, 
- *    if all are decreasing return true, if not return false  
- */
-bool parafoil_deployed(void)
-{
-  // probably do some fancy IMU stuff with glide angle to check this
-  return true; // deployed
 }
