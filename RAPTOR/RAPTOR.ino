@@ -3,9 +3,9 @@
 ContinuousServo servo;
 
 void setup(){
-    servo.attach(8);
+    servo.attach(9);
 }
 
 void loop(){
-    servo.servoAdjustment(1);
+    servo.Adjustment(1);
 }

@@ -66,7 +66,7 @@ void Pilot::fly(float curr_angle)
 void Pilot::rightTurn()
 {
     is_turning = true;
-    servoR.servoAdjustment(RIGHT);
+    servoR.Adjustment(RIGHT);
 }
 /*
 * Makes the box take a left turn
@@ -74,7 +74,7 @@ void Pilot::rightTurn()
 void Pilot::leftTurn()
 {
     is_turning = true;
-    servoL.servoAdjustment(LEFT);
+    servoL.Adjustment(LEFT);
 }
 
 void Pilot::straight()

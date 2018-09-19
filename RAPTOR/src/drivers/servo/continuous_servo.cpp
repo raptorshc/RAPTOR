@@ -19,10 +19,10 @@ ContinuousServo::ContinuousServo() {
 }
 
 /*
- *	servoAdjustment acts as the wrapper for the rest of the methods,
+ *	Adjustment acts as the wrapper for the rest of the methods,
  *   accepting inputs of how much you want to turn in degrees (deg) and in what dir (dir).
  */
-void ContinuousServo::servoAdjustment(int dir)
+void ContinuousServo::Adjustment(int dir)
 {
 	//this->write(SERVO_STOP); // Stop the servos just in-case they're running already.
 	delay(10);
@@ -41,7 +41,7 @@ void ContinuousServo::servoAdjustment(int dir)
 /* Private Methods */
 
 /*
- *	timeToTurn calculates the duration of the turn in milliseconds based on the degrees given in servoAdjustment.
+ *	timeToTurn calculates the duration of the turn in milliseconds based on the degrees given in Adjustment.
  *	 The function will select a deflection setting for the user, based on if the turn will take more or less than a second to execute.
  */
 int ContinuousServo::timeToTurn(float degree)
@@ -65,7 +65,7 @@ int ContinuousServo::timeToTurn(float degree)
 void ContinuousServo::resetServo(int dir)
 {
 	if (dir == RIGHT)
-		servoAdjustment(LEFT);
+		Adjustment(LEFT);
 	else
-		servoAdjustment(RIGHT);
+		Adjustment(RIGHT);
 }
