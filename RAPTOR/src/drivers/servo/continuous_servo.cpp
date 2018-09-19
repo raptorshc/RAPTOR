@@ -38,7 +38,7 @@ void ContinuousServo::adjustment(uint8_t dir)
 }
 
 /*
- *	resetServo will reset the servos to the default position after a turn.
+ *	reset will reset the servos to the default position after a turn.
  *   Must be called before timeToTurn is used, as it relies on the previous turn's deflection setting.
  */
 void ContinuousServo::reset(int dir)

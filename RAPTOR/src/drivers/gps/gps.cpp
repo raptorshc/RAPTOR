@@ -1,32 +1,22 @@
 /*
- * gps.cpp - 
- * Contains implementation for functions in gps.h.
+ * this->cpp - 
+ * Contains implementation for functions in this->h.
  * Utilizes Adafruit Ultimate GPS library, details: https://learn.adafruit.com/adafruit-ultimate-gps
  * Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
 #include "gps.h"
 
-#include "Arduino.h"
-#include "../bmp/bmp.h"
-#include <SoftwareSerial.h>
-#include <Adafruit_GPS.h>
-
-SoftwareSerial mySerial(3, 2); // GPS serial comm pins
-Adafruit_GPS gps(&mySerial);
-
-extern bool flying;
-
 /*
- * gps_init begins the GPS readings, sets up the timer counter used for the
+ * init begins the GPS readings, sets up the timer counter used for the
  *  millisecond interrupt, which will query and parse the GPS data 
  */
-void gps_init(void)
+void GPS::init(void)
 {
-    gps.begin(9600);
+    this->begin(9600);
 
-    gps.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA); // RMC (recommended minimum), GGA (fix data) + altitude
-    gps.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);    // 1 Hz update rate
-    gps.sendCommand(PGCMD_ANTENNA);               // Request updates on antenna status
+    this->sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA); // RMC (recommended minimum), GGA (fix data) + altitude
+    this->sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);    // 1 Hz update rate
+    this->sendCommand(PGCMD_ANTENNA);               // Request updates on antenna status
 
     // set up timer counter for interrupt
     OCR0A = 0xAF;
@@ -34,8 +24,6 @@ void gps_init(void)
 }
 
 /*
- * gps_read fills out long and lat Coordinates using the current GPS values 
+ * read fills out long and lat Coordinates using the current GPS values 
  */
-void gps_read(Coordinate *x, Coordinate *y)
-{
-}
+void GPS::update(Coordinate *x, Coordinate *y) {}

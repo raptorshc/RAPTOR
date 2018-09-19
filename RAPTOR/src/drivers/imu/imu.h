@@ -9,7 +9,13 @@
 
 #include <Adafruit_Sensor.h>
 
-void bno_init(void);
-void bno_update(sensors_event_t *event);
+class BNO : public Adafruit_BNO055{
+    public:
+        BNO() : Adafruit_BNO055(55){}
+        void init(void);
+        void update(void);
+
+        sensors_event_t data;
+};
 
 #endif

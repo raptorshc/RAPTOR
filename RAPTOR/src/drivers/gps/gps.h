@@ -12,9 +12,14 @@
 
 #include "../../guidance/Pathfinder.h"
 
-extern Adafruit_GPS gps;
+class GPS
+    : public Adafruit_GPS
+{
+  public:
+    GPS(SoftwareSerial &mySerial) : Adafruit_GPS(&mySerial) {}
 
-void gps_init(void);
-void gps_read(Coordinate *x, Coordinate *y);
+    void init(void);
+    void update(Coordinate *x, Coordinate *y);
+};
 
 #endif

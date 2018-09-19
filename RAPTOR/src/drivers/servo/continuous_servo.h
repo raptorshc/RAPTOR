@@ -12,17 +12,19 @@
 class ContinuousServo : public Servo
 {
 public:
-  ContinuousServo();
+  ContinuousServo(){}
 
-  void adjustment(uint8_t dir);
+  void adjustment(int dir);
   void reset(int dir);
 
-  static const uint8_t RIGHT = 1;
-  static const uint8_t LEFT = 0;
+  static const int RIGHT = 1,
+                   LEFT = 0;
 
 private:
-  int timeToTurn(float deg);
-  void manualAdjustment(int dir);
+  static const int STOP = 1500,
+                   CCW = 1000,
+                   CW = 1900,
+                   TTR = 500;
 };
 
 #endif
