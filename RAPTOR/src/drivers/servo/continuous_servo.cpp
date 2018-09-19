@@ -7,7 +7,7 @@
 #define RIGHT 1 // Direction of the turn
 #define LEFT 0  //Direction of the turn
 #define SERVO_STOP 90
-#define TTR 100
+#define TTR 1000
 
 /* Public Methods */
 
@@ -24,18 +24,19 @@ ContinuousServo::ContinuousServo() {
  */
 void ContinuousServo::Adjustment(int dir)
 {
-	//this->write(SERVO_STOP); // Stop the servos just in-case they're running already.
+	this->write(SERVO_STOP); // Stop the servos just in-case they're running already.
 	delay(10);
-	if (dir == RIGHT)
+	if (dir == RIGHT){
 		this->write(0); // If it is a right turn, just use the deflection setting speed.
-	else
+	}
+	else{
 		this->write(180); // Otherwise, add 90 to the speed to reverse the direction.
-	delay(500);
+	}
+	delay(1500);
 
-	delay(_ttr);			 // Delay the set amount of time to get to the deflection setting.
-	//this->write(SERVO_STOP); // Stop the servos once we've reached the deflection setting.
+	Serial.print(this->read());
 
-	return;
+	this->write(SERVO_STOP); // Stop the servos once we've reached the deflection setting.
 }
 
 /* Private Methods */
