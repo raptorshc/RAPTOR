@@ -9,15 +9,13 @@
 #include "Arduino.h"
 #include <Adafruit_BNO055.h>
 
-Adafruit_BNO055 bno = Adafruit_BNO055(55);
-
-void bno_init(void){
-    if(!bno.begin())
+void BNO::init(void){
+    if(!this->begin())
         Serial.print(F("No BNO055 detected!"));
     //calibrate?
 }
 
-void bno_update(sensors_event_t *event){
-    bno.getEvent(event);
+void BNO::update(){
+    this->getEvent(&this->data);
     // might do some extra processing here?
 }

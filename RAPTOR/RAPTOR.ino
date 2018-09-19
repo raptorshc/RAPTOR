@@ -21,6 +21,7 @@ template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg);
 
 #define SD_GRN 4 // OpenLog Reset pin
 
+BNO bno;
 elapsedMillis timeElapsed;
 Pilot pilot;
 
@@ -47,7 +48,7 @@ void setup()
   bmp_init();
 
   /* IMU */
-  bno_init();
+  bno.init();
 
   /* GPS */
   gps_init();
@@ -106,14 +107,13 @@ void loop()
     }
   }
 
-  sensors_event_t event;
-  bno_update(&event);
+  bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << ","
   << bmp_data.temperature << "," << bmp_data.pressure << "," << bmp_data.altitude << ","
   << gps.latitude << "," << gps.longitude << "," << gps.angle << ","
-  << event.orientation.x << "," << event.orientation.y << "," << event.orientation.z << ","
+  << bno.data.orientation.x << "," << bno.data.orientation.y << "," << bno.data.orientation.z << ","
   << digitalRead(SWC_PIN) << "," << digitalRead(SWP_PIN) << "," << flying << "\n"; // write everything to SD card
 }
 

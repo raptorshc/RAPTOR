@@ -14,7 +14,7 @@ class ContinuousServo : public Servo
 public:
   ContinuousServo();
 
-  void servoAdjustment(int dir);
+  void adjustment(int dir);
 
 private:
   int timeToTurn(float deg);
