@@ -4,8 +4,8 @@ ContinuousServo servo;
 
 void setup(){
     servo.attach(9);
+    servo.Adjustment(1);
 }
 
 void loop(){
-    servo.Adjustment(1);
 }
