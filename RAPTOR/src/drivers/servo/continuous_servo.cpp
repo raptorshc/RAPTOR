@@ -23,6 +23,7 @@ ContinuousServo::ContinuousServo() {}
 void ContinuousServo::servoAdjustment(int dir)
 {
 	this->write(SERVO_STOP); // Stop the servos just in-case they're running already.
+	delay(10);
 	if (dir == RIGHT)
 		this->write(0); // If it is a right turn, just use the deflection setting speed.
 	else
