@@ -14,7 +14,9 @@
 /*
  *	Constructor for ContinuousServo
  */
-ContinuousServo::ContinuousServo() {}
+ContinuousServo::ContinuousServo() {
+
+}
 
 /*
  *	servoAdjustment acts as the wrapper for the rest of the methods,
@@ -32,6 +34,8 @@ void ContinuousServo::servoAdjustment(int dir)
 
 	delay(_ttr);			 // Delay the set amount of time to get to the deflection setting.
 	this->write(SERVO_STOP); // Stop the servos once we've reached the deflection setting.
+
+	return;
 }
 
 /* Private Methods */
