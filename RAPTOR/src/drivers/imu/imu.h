@@ -8,6 +8,7 @@
 #define IMU_H_
 
 #include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
 
 class BNO : public Adafruit_BNO055{
     public:
@@ -16,6 +17,9 @@ class BNO : public Adafruit_BNO055{
         void update(void);
 
         sensors_event_t data;
+
+    private:
+
 };
 
 #endif
