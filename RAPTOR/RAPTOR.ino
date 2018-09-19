@@ -22,11 +22,12 @@ template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg);
 #define SD_GRN 4 // OpenLog Reset pin
 
 BNO bno;
+BMP bmp;
 elapsedMillis timeElapsed;
 Pilot pilot;
 
-extern BmpData bmp_data;
-extern Adafruit_GPS gps;
+SoftwareSerial mySerial(3, 2); // GPS serial comm pins
+GPS gps(mySerial);
 
 boolean flying = false;
 Coordinate initial_lat, initial_long;
@@ -45,17 +46,17 @@ void setup()
   pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
 
   /* BMP180 */
-  bmp_init();
+  bmp.init();
 
   /* IMU */
   bno.init();
 
   /* GPS */
-  gps_init();
+  gps.init();
   delay(1000);
 
   // grab our launch location
-  gps_read(&initial_lat, &initial_long);
+  gps.update(&initial_lat, &initial_long);
 
   /* SD */
   pinMode(SD_GRN, OUTPUT);
@@ -82,8 +83,8 @@ void loop()
   if (!flying)
   {
     // just poll altitude calculations
-    if (!bmp_update())
-      bmp_data.pressure = bmp_data.temperature = bmp_data.altitude = 0; // if the bmp doesn't work set them to zero
+    if (!bmp.update())
+      bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
 
     if (correct_alt_ascending() > CUTDOWN_ALT)
     {
@@ -111,7 +112,7 @@ void loop()
 
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << ","
-  << bmp_data.temperature << "," << bmp_data.pressure << "," << bmp_data.altitude << ","
+  << bmp.temperature << "," << bmp.pressure << "," << bmp.altitude << ","
   << gps.latitude << "," << gps.longitude << "," << gps.angle << ","
   << bno.data.orientation.x << "," << bno.data.orientation.y << "," << bno.data.orientation.z << ","
   << digitalRead(SWC_PIN) << "," << digitalRead(SWP_PIN) << "," << flying << "\n"; // write everything to SD card
@@ -123,12 +124,12 @@ void loop()
  */
 float correct_alt_ascending(void)
 {
-  if (bmp_data.altitude - gps.altitude > 50)
-    return bmp_data.altitude;
-  else if (gps.altitude - bmp_data.altitude > 50)
+  if (bmp.altitude - gps.altitude > 50)
+    return bmp.altitude;
+  else if (gps.altitude - bmp.altitude > 50)
     return gps.altitude;
   else
-    return (bmp_data.altitude + gps.altitude) / 2;
+    return (bmp.altitude + gps.altitude) / 2;
 }
 
 /* 
@@ -137,17 +138,17 @@ float correct_alt_ascending(void)
  */
 float correct_alt_descending(void)
 {
-  if (gps.altitude - bmp_data.altitude > 50)
-    return bmp_data.altitude;
-  else if (bmp_data.altitude - gps.altitude > 50)
+  if (gps.altitude - bmp.altitude > 50)
+    return bmp.altitude;
+  else if (bmp.altitude - gps.altitude > 50)
     return gps.altitude;
   else
-    return (bmp_data.altitude + gps.altitude) / 2;
+    return (bmp.altitude + gps.altitude) / 2;
 }
 
 /* 
  *  Interrupt on millisecond,
- *    check if we have a new GPS NMEA string, if we do grab bmp data and 
+ *    check if we have a new GPS NMEA string, if we do grab bmp data and fly
  */
 SIGNAL(TIMER0_COMPA_vect)
 {
@@ -172,7 +173,7 @@ bool cutdown_check(void)
   {
     uint16_t prevAltitude = correct_alt_descending(); //Update previous altitude
     delay(200);                       //.2 second delay
-    if (bmp_update())
+    if (bmp.update())
       if (correct_alt_ascending() > prevAltitude) //Are we falling (is our current altitude higher or lower than our previous altitude)?
       {
         return false; //Ascending
