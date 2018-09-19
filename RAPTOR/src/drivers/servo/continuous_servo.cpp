@@ -24,7 +24,7 @@ ContinuousServo::ContinuousServo() {
  */
 void ContinuousServo::servoAdjustment(int dir)
 {
-	this->write(SERVO_STOP); // Stop the servos just in-case they're running already.
+	//this->write(SERVO_STOP); // Stop the servos just in-case they're running already.
 	delay(10);
 	if (dir == RIGHT)
 		this->write(0); // If it is a right turn, just use the deflection setting speed.
@@ -33,7 +33,7 @@ void ContinuousServo::servoAdjustment(int dir)
 	delay(500);
 
 	delay(_ttr);			 // Delay the set amount of time to get to the deflection setting.
-	this->write(SERVO_STOP); // Stop the servos once we've reached the deflection setting.
+	//this->write(SERVO_STOP); // Stop the servos once we've reached the deflection setting.
 
 	return;
 }
