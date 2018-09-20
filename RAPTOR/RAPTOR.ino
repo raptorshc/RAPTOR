@@ -1,6 +1,4 @@
-#include <SD.h>
 #include <elapsedMillis.h>
-#include <Adafruit_Sensor.h>
 
 #include "src/guidance/Pilot.h"
 #include "src/drivers/bmp/bmp.h"
