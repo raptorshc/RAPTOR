@@ -14,8 +14,8 @@ class ContinuousServo : public Servo
 public:
   ContinuousServo();
 
-  void Adjustment(uint8_t dir);
-  void resetServo(int dir);
+  void adjustment(uint8_t dir);
+  void reset(int dir);
 
   static const uint8_t RIGHT = 1;
   static const uint8_t LEFT = 0;

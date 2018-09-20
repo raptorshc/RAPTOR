@@ -22,7 +22,7 @@ ContinuousServo::ContinuousServo() {}
  *	Adjustment acts as the wrapper for the rest of the methods,
  *   accepting inputs of how much you want to turn in degrees (deg) and in what dir (dir).
  */
-void ContinuousServo::Adjustment(uint8_t dir)
+void ContinuousServo::adjustment(uint8_t dir)
 {
 	this->writeMicroseconds(STOP); // Stop the servos just in-case they're running already.
 	delay(10);
@@ -34,8 +34,6 @@ void ContinuousServo::Adjustment(uint8_t dir)
 	}
 	delay(TTR);
 
-	Serial.print(this->read());
-
 	this->writeMicroseconds(STOP); // Stop the servos once we've reached the deflection setting.
 }
 
@@ -43,10 +41,10 @@ void ContinuousServo::Adjustment(uint8_t dir)
  *	resetServo will reset the servos to the default position after a turn.
  *   Must be called before timeToTurn is used, as it relies on the previous turn's deflection setting.
  */
-void ContinuousServo::resetServo(int dir)
+void ContinuousServo::reset(int dir)
 {
 	if (dir == RIGHT)
-		Adjustment(LEFT);
+		adjustment(LEFT);
 	else
-		Adjustment(RIGHT);
+		adjustment(RIGHT);
 }
