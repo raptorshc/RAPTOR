@@ -67,6 +67,7 @@ void setup()
   "LATITUDE, LONGITUDE, ANGLE,"
   "X, Y, Z,"
   "SWC, SWP, FLYING\n")); // data header
+  delay(5000);
 }
 
 /* 
@@ -86,14 +87,14 @@ void loop()
 
       if (!cutdown_check() || !digitalRead(SWC_PIN))
       { // we want to make sure that we have cut down and we are falling
-        Serial << "!!!! CUTDOWN ERROR !!!!" << "\n";
+        Serial << F("!!!! CUTDOWN ERROR !!!!") << "\n";
         cutdown(); // try cutdown again
       }
 
       parafoil_deploy(); // deploy parafoil
       if (!digitalRead(SWP_PIN))
       { // make sure the parafoil has deployed
-        Serial << "!!!! PARAFOIL DEPLOYMENT ERROR !!!!" << "\n";
+        Serial << F("!!!! PARAFOIL DEPLOYMENT ERROR !!!!") << "\n";
         parafoil_deploy(); // try deploying parafoil again
       }
 
@@ -105,11 +106,11 @@ void loop()
   bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
-  Serial << timeElapsed << ","
-  << bmp.temperature << "," << bmp.pressure << "," << bmp.altitude << ","
-  << gps.latitude << "," << gps.longitude << "," << gps.angle << ","
-  << bno.data.orientation.x << "," << bno.data.orientation.y << "," << bno.data.orientation.z << ","
-  << digitalRead(SWC_PIN) << "," << digitalRead(SWP_PIN) << "," << flying << "\n"; // write everything to SD card
+  Serial << timeElapsed << F(",")
+  << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
+  << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
+  << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
+  << digitalRead(SWC_PIN) << F(",") << digitalRead(SWP_PIN) << F(",") << flying << "\n"; // write everything to SD card
 }
 
 /* 

@@ -11,25 +11,25 @@
 
 #define pi 3.141592
 
-typedef struct Coordinate
+struct Coordinate
 {
-    int degrees, minutes, seconds;
+    uint8_t degrees, minutes, seconds;
     float decimal;
-} Coordinate;
+};
 
-typedef struct Path
+struct Path
 {
     Coordinate lat_initial, long_initial;
     Coordinate lat_final, long_final;
     float lat_vec, long_vec;
     float angle;
-} Path;
+};
 
-typedef struct PathAdjustment
+struct PathAdjustment
 {
     double degrees;   //Amount to turn
     uint8_t rotation; //Which way to turn. 1 is right, 0 is left.
-} PathAdjustment;
+};
 
 class Pathfinder
 {
