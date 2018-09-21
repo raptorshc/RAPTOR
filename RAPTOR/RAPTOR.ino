@@ -1,5 +1,7 @@
 // debugs
 #define TESTPILOT
+// #define SENSORS_ENABLED
+// #define CUTDOWN
 
 #include <elapsedMillis.h>
 
@@ -96,11 +98,14 @@ void loop()
 {
   if (!flying)
   {
+#ifdef TESTPILOT
+    float altitude = custom_altitude();
+#endif /* TESTPILOT */
     // just poll altitude calculations
+#ifdef SENSORS_ENABLED
     if (!bmp.update())
       bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
 
-#ifdef SENSORS_ENABLED
     if (correct_alt_ascending() > CUTDOWN_ALT)
 #endif /* TESTPILOT */
 #ifdef TESTPILOT
@@ -123,7 +128,7 @@ void loop()
         parafoil_deploy(); // try deploying parafoil again
       }
 #endif /* CUTDOWN */
-      Serial << "Waking pilot. Input:(target_lat, target_long, current_lat, current_long)\n"
+      Serial << "Waking pilot. Input:(target_lat, target_long, current_lat, current_long)\n";
       pilot.wake(custom_coordinate(), custom_coordinate(), custom_coordinate(), custom_coordinate());
       flying = true;
     }
@@ -153,10 +158,8 @@ void loop()
 
   delay(500);
 
-  // Coordinate latitude = custom_coordinate();
-  // Coordinate longitude = custom_coordinate();
-  // float altitude = custom_altitude();
-  
+  angle = custom_altitude();
+
   bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
@@ -212,6 +215,7 @@ SIGNAL(TIMER0_COMPA_vect)
 #endif /* SENSORS_ENABLED */
 #ifdef TESTPILOT
       pilot.fly(angle);
+#endif /* TESTPILOT */
     }
   }
 }
@@ -258,13 +262,23 @@ Coordinate custom_coordinate(void){
 }
 
 /*
-* custom_coordinate constructs a coordinate from user input 
+* custom_coordinate returns an altitude parsed from user input 
 */
-float custom_altitude_angle(float &angle){
-  Serial << "\nPlease input an altitude and an angle (altitude,angle): ";
+float custom_altitude(void){
+  Serial << "\nPlease input an altitude: ";
   while(Serial.available() == 0);
-  float altitude = Serial.parseInt();
-  angle = Serial.parseInt();
-  Serial << "\nAltitude: " << altitude << " angle: " << angle << "\n";
+  float altitude = Serial.parseFloat();
+  Serial << "\nAltitude: " << altitude << "\n";
   return altitude;
+}
+
+/*
+* custom_angle returns an angle parsed from user input 
+*/
+float custom_angle(void){
+  Serial << "\nPlease input an angle: ";
+  while(Serial.available() == 0);
+  angle = Serial.parseFloat();
+  Serial << "\nAngle: " << angle << "\n";
+  return angle;
 }
