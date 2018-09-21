@@ -7,7 +7,7 @@
 #include "src/drivers/servo/continuous_servo.h"
 #include "src/drivers/solenoid/solenoid.h"
 
-template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; } // enable stream style output
+template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; } 
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
@@ -18,6 +18,9 @@ template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg);
 #define LEDS_DTA 12 // External flight LEDs
 
 #define SD_GRN 4 // OpenLog Reset pin
+
+#define SRVOR_DTA 5
+#define SRVOL_DTA 6
 
 BNO bno;
 BMP bmp;
@@ -40,6 +43,9 @@ void setup()
   pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
   pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
 
+  /* Solenoids */
+  sol_init();
+
   /* BMP180 */
   bmp.init();
 
@@ -60,12 +66,11 @@ void setup()
   digitalWrite(SD_GRN, HIGH);
 
   delay(10);
-  Serial.print(F("TIME," 
-  "TEMPERATURE, PRESSURE, ALTITUDE," 
-  "LATITUDE, LONGITUDE, ANGLE,"
-  "X, Y, Z,"
-  "SWC, SWP, FLYING\n")); // data header
-  delay(5000);
+  Serial.print(F("TIME,"
+                 "TEMPERATURE, PRESSURE, ALTITUDE,"
+                 "LATITUDE, LONGITUDE, ANGLE,"
+                 "X, Y, Z,"
+                 "SWC, SWP, FLYING\n")); // data header
 }
 
 /* 
@@ -105,10 +110,10 @@ void loop()
 
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << F(",")
-  << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
-  << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
-  << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
-  << digitalRead(SWC_PIN) << F(",") << digitalRead(SWP_PIN) << F(",") << flying << "\n"; // write everything to SD card
+         << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
+         << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
+         << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
+         << digitalRead(SWC_PIN) << F(",") << digitalRead(SWP_PIN) << F(",") << flying << "\n"; // write everything to SD card
 }
 
 /* 
@@ -165,7 +170,7 @@ bool cutdown_check(void)
   for (int i = 0; i < 10; i++)
   {
     uint16_t prevAltitude = correct_alt_descending(); //Update previous altitude
-    delay(200);                       //.2 second delay
+    delay(200);                                       //.2 second delay
     if (bmp.update())
       if (correct_alt_ascending() > prevAltitude) //Are we falling (is our current altitude higher or lower than our previous altitude)?
       {
