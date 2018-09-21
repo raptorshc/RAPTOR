@@ -105,21 +105,27 @@ bool Pilot::shouldTurn(bool &dirTurn, float curr_angle)
 
 void Pilot::test(void)
 {
-    servoR.adjustment(ContinuousServo::RIGHT);
-    servoL.adjustment(ContinuousServo::LEFT);
+//     digitalWrite(LEDC_DTA, LOW);
+//   servoL.adjustment(ContinuousServo::LEFT); // left servo should always turn left
+//   digitalWrite(LEDP_DTA, HIGH);
 
-    delay(1000);
+//   delay(5000);
 
-    servoR.reset(ContinuousServo::RIGHT);
-    servoR.reset(ContinuousServo::LEFT);
+//   digitalWrite(LEDP_DTA, LOW);
+//   servoL.reset(ContinuousServo::LEFT);
+//   digitalWrite(LEDC_DTA, HIGH);
 
-    delay(1000);
+//   delay(5000);
 
-    servoR.adjustment(ContinuousServo::LEFT);
-    servoL.adjustment(ContinuousServo::RIGHT);
+//   digitalWrite(LEDC_DTA, LOW);
+//   servoR.adjustment(ContinuousServo::RIGHT); // right servo should always turn right
+//   digitalWrite(LEDP_DTA, HIGH);
 
-    delay(1000);
+//   delay(5000);
 
-    servoR.reset(ContinuousServo::LEFT);
-    servoR.reset(ContinuousServo::RIGHT);
+//   digitalWrite(LEDP_DTA, LOW);
+//   servoR.reset(ContinuousServo::RIGHT);
+//   digitalWrite(LEDC_DTA, HIGH);
+
+//   delay(5000);
 }
