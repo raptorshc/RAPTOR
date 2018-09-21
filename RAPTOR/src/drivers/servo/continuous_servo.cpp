@@ -5,20 +5,27 @@
 #include <Arduino.h>
 
 /* Public Methods */
-
 /*
- *	adjustment acts as the wrapper for the rest of the methods,
- *   accepting inputs of how much you want to turn in degrees (deg) and in what dir (dir).
+ *	turn will rotate the servos to a certain configuration, based on the set time to rotate (TTR),
+ * 		if reset is given as true, the servo will rotate in the opposite direction for the same amount of time.
  */
-void ContinuousServo::adjustment(int dir)
+void ContinuousServo::turn(bool reset /*= false*/)
 {
 	this->writeMicroseconds(STOP); // Stop the servos just in-case they're running already.
 	delay(10);
-	if (dir == RIGHT){
-		this->writeMicroseconds(CW); // If it is a right turn, just use the deflection setting speed.
+	if (servo == RIGHT)
+	{
+		if (reset)
+			this->writeMicroseconds(CCW);
+		else
+			this->writeMicroseconds(CW); // based on the turn, we will rotate CW or CCW
 	}
-	else{
-		this->writeMicroseconds(CCW); // Otherwise, add 90 to the speed to reverse the direction.
+	else
+	{ // left servo
+		if (reset)
+			this->writeMicroseconds(CW); // reset will turn the servo the other way for the same amount of time
+		else
+			this->writeMicroseconds(CCW);
 	}
 	delay(TTR);
 
@@ -27,12 +34,8 @@ void ContinuousServo::adjustment(int dir)
 
 /*
  *	reset will reset the servos to the default position after a turn.
- *   Must be called before timeToTurn is used, as it relies on the previous turn's deflection setting.
  */
-void ContinuousServo::reset(int dir)
+void ContinuousServo::reset()
 {
-	if (dir == RIGHT)
-		adjustment(LEFT);
-	else
-		adjustment(RIGHT);
+	turn(true);
 }

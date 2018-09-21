@@ -6,6 +6,8 @@
 #define SRVOL_DTA 6 // Left servo
 #define SRVOR_DTA 5 // Right servo
 
+#define STRAIGHT 3
+
 /* PUBLIC METHODS */
 
 /*
@@ -13,7 +15,9 @@
  */
 Pilot::Pilot()
 {
-    is_turning = false;
+    this->servoR = new ContinuousServo(ContinuousServo::RIGHT);
+    this->servoL = new ContinuousServo(ContinuousServo::LEFT);
+    this->turning = STRAIGHT;
 }
 
 /*
@@ -21,8 +25,8 @@ Pilot::Pilot()
  */
 void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long)
 {
-    servoR.attach(SRVOR_DTA);
-    servoL.attach(SRVOL_DTA);
+    servoR->attach(SRVOR_DTA);
+    servoL->attach(SRVOL_DTA);
 
     this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
     this->p->findPath();
@@ -34,19 +38,19 @@ void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_
  */
 void Pilot::fly(float curr_angle)
 {
-    bool dirTurn = false;
+    uint8_t dirTurn = STRAIGHT;
     bool should_turn = shouldTurn(dirTurn, curr_angle);
-    if (!is_turning)
+    if (turning == STRAIGHT)
     {
         if (should_turn)
         {
             if (dirTurn)
             {
-                leftTurn();
+                turn_left();
             }
             else
             {
-                rightTurn();
+                turn_right();
             }
         }
     }
@@ -60,32 +64,36 @@ void Pilot::fly(float curr_angle)
 /*
  *  Makes the box take a right turn
  */
-void Pilot::rightTurn()
+void Pilot::turn_right()
 {
-    is_turning = true;
-    servoR.adjustment(ContinuousServo::RIGHT);
+    turning = ContinuousServo::RIGHT;
+    servoR->turn();
 }
 /*
 * Makes the box take a left turn
 */
-void Pilot::leftTurn()
+void Pilot::turn_left()
 {
-    is_turning = true;
-    servoL.adjustment(ContinuousServo::LEFT);
+    turning = ContinuousServo::LEFT;
+    servoL->turn();
 }
 
 void Pilot::straight()
 {
-    is_turning = false;
+    if (turning == ContinuousServo::RIGHT)
+        servoR->reset();
+    else
+        servoL->reset();
+
+    turning = STRAIGHT;
 }
 
 /* 
  * adjustPath will take in the current and optimal paths and 
  * calculate which way to turn and by how much. 
  * returns if we should turn
- * dirTurn is true for a right turn false for a left turn
  */
-bool Pilot::shouldTurn(bool &dirTurn, float curr_angle)
+bool Pilot::shouldTurn(uint8_t &dirTurn, float curr_angle)
 {
     float alpha_angle, beta_angle;
 
@@ -94,38 +102,18 @@ bool Pilot::shouldTurn(bool &dirTurn, float curr_angle)
 
     /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
     if (abs(alpha_angle - curr_angle) > abs(beta_angle - curr_angle))
-        dirTurn = ContinuousServo::RIGHT; //right turn
+        dirTurn = ContinuousServo::RIGHT;
     else
-        dirTurn = ContinuousServo::LEFT; //left turn
+        dirTurn = ContinuousServo::LEFT;
     if (abs(curr_angle - desired_heading - 360) < 15 || abs(desired_heading - curr_angle) < 15)
-        return false; //The amount of degrees we need to adjust by.
+        return false;
     else
         return true;
 }
 
+/* 
+ * test will turn the payload left, right, then straighten out
+ */
 void Pilot::test(void)
 {
-//     digitalWrite(LEDC_DTA, LOW);
-//   servoL.adjustment(ContinuousServo::LEFT); // left servo should always turn left
-//   digitalWrite(LEDP_DTA, HIGH);
-
-//   delay(5000);
-
-//   digitalWrite(LEDP_DTA, LOW);
-//   servoL.reset(ContinuousServo::LEFT);
-//   digitalWrite(LEDC_DTA, HIGH);
-
-//   delay(5000);
-
-//   digitalWrite(LEDC_DTA, LOW);
-//   servoR.adjustment(ContinuousServo::RIGHT); // right servo should always turn right
-//   digitalWrite(LEDP_DTA, HIGH);
-
-//   delay(5000);
-
-//   digitalWrite(LEDP_DTA, LOW);
-//   servoR.reset(ContinuousServo::RIGHT);
-//   digitalWrite(LEDC_DTA, HIGH);
-
-//   delay(5000);
 }
