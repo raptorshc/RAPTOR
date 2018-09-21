@@ -3,8 +3,8 @@
 */
 #include "Pilot.h"
 
-#define SRVOL_DTA 6 // Left servo
-#define SRVOR_DTA 5 // Right servo
+#define SRVOL_DTA 5 // Left servo
+#define SRVOR_DTA 6 // Right servo
 
 #define RIGHT 1
 #define LEFT 0
