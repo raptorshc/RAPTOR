@@ -61,6 +61,31 @@ void Pilot::fly(float curr_angle)
     }
 }
 
+/* 
+ * test will turn the payload left, right, then straighten out
+ */
+void Pilot::test(void)
+{
+}
+
+/* 
+ * servoR_status acts as a public accessor for the readMicroseconds method of servoR
+ */
+uint8_t Pilot::servoR_status(void)
+{
+    return servoR->readMicroseconds();
+}
+
+/* 
+ * servoR_status acts as a public accessor for the readMicroseconds method of servoL
+ */
+uint8_t Pilot::servoL_status(void)
+{
+    servoL->readMicroseconds();
+}
+
+/* PRIVATE METHODS */
+
 /*
  *  Makes the box take a right turn
  */
@@ -109,11 +134,4 @@ bool Pilot::shouldTurn(uint8_t &dirTurn, float curr_angle)
         return false;
     else
         return true;
-}
-
-/* 
- * test will turn the payload left, right, then straighten out
- */
-void Pilot::test(void)
-{
 }

@@ -67,10 +67,11 @@ void setup()
 
   delay(10);
   Serial.print(F("TIME,"
-                 "TEMPERATURE, PRESSURE, ALTITUDE,"
-                 "LATITUDE, LONGITUDE, ANGLE,"
-                 "X, Y, Z,"
-                 "SWC, SWP, FLYING\n")); // data header
+                 "TEMPERATURE, PRESSURE, ALTITUDE, "
+                 "LATITUDE, LONGITUDE, ANGLE, "
+                 "X, Y, Z, "
+                 "SWC, SWP, "
+                 "SRVOR, SRVOL, FLYING\n")); // data header
 }
 
 /* 
@@ -113,7 +114,8 @@ void loop()
          << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
          << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
          << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
-         << digitalRead(SWC_PIN) << F(",") << digitalRead(SWP_PIN) << F(",") << flying << "\n"; // write everything to SD card
+         << digitalRead(SWC_PIN) << F(",") << digitalRead(SWP_PIN) << F(",")
+         << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flying << "\n"; // write everything to SD card
 }
 
 /* 
