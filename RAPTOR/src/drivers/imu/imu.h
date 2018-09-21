@@ -17,9 +17,6 @@ class BNO : public Adafruit_BNO055{
         void update(void);
 
         sensors_event_t data;
-
-    private:
-
 };
 
 #endif
