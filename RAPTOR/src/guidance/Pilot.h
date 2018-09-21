@@ -11,24 +11,24 @@
 
 class Pilot
 {
-  public:
+public:
 	Pilot();
 
 	void wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long);
 	void fly(float curr_angle);
 	void test();
 
-  private:
+private:
 	Coordinate _target;
 	float desired_heading;
-	bool is_turning;
-	ContinuousServo servoR, servoL;
+	uint8_t turning; // uses ContinuousServo settings for 0 and 1, 2 is straight
+	ContinuousServo *servoR, *servoL;
 	Pathfinder *p;
 
-	void rightTurn();
-	void leftTurn();
+	void turn_right();
+	void turn_left();
 	void straight();
-	bool shouldTurn(bool &dirTurn, float curr_angle);
+	bool shouldTurn(uint8_t &dirTurn, float curr_angle);
 };
 
 #endif
