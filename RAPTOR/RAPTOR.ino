@@ -102,7 +102,7 @@ void loop()
     float altitude = custom_altitude();
 #endif /* TESTPILOT */
     // just poll altitude calculations
-#ifdef SENSORS_ENABLED
+#ifndef TESTPILOT
     if (!bmp.update())
       bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
 
@@ -112,7 +112,7 @@ void loop()
     if (altitude > CUTDOWN_ALT)
 #endif
     {
-#ifdef CUTDOWN
+#ifndef TESTPILOT
       cutdown(); // cutdown
 
       if (!cutdown_check() || !digitalRead(SWC_PIN))
@@ -158,7 +158,9 @@ void loop()
 
   delay(500);
 
+#ifdef TESTPILOT
   angle = custom_altitude();
+#endif /* TESTPILOT */
 
   bno.update();
 
