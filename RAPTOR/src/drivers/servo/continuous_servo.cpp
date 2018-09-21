@@ -22,8 +22,6 @@ void ContinuousServo::adjustment(int dir)
 	}
 	delay(TTR);
 
-	Serial.print(this->read());
-
 	this->writeMicroseconds(STOP); // Stop the servos once we've reached the deflection setting.
 }
 

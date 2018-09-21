@@ -7,20 +7,23 @@
 #include "src/drivers/servo/continuous_servo.h"
 #include "src/drivers/solenoid/solenoid.h"
 
-template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; } 
+template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; }
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
 #define SWP_PIN A0 // Parafoil solenoid switch
 #define SWC_PIN A1 // Cutdown solenoid switch
 
+#define LEDP_DTA A2 // Parafoil solenoid indicator light
+#define LEDC_DTA A3 // Cutdown solenoid indicator light
+
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
 
 #define SD_GRN 4 // OpenLog Reset pin
 
-#define SRVOR_DTA 5
-#define SRVOL_DTA 6
+#define SRVOR_DTA 6
+#define SRVOL_DTA 5
 
 BNO bno;
 BMP bmp;
@@ -29,6 +32,9 @@ Pilot pilot;
 
 SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
+
+ContinuousServo servoR;
+ContinuousServo servoL;
 
 boolean flying = false;
 
@@ -42,7 +48,6 @@ void setup()
   /* Buzzer and LEDs */
   pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
   pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
-
   /* Solenoids */
   sol_init();
 
@@ -67,10 +72,15 @@ void setup()
 
   delay(10);
   Serial.print(F("TIME,"
-                 "TEMPERATURE, PRESSURE, ALTITUDE,"
-                 "LATITUDE, LONGITUDE, ANGLE,"
-                 "X, Y, Z,"
-                 "SWC, SWP, FLYING\n")); // data header
+                 "TEMPERATURE, PRESSURE, ALTITUDE, "
+                 "LATITUDE, LONGITUDE, ANGLE, "
+                 "X, Y, Z, "
+                 "SWC, SWP, " 
+                 "SERVOR, SERVOL, "
+                 "FLYING\n")); // data header
+
+  servoR.attach(SRVOR_DTA);
+  servoL.attach(SRVOL_DTA);
 }
 
 /* 
@@ -101,11 +111,36 @@ void loop()
         parafoil_deploy(); // try deploying parafoil again
       }
 
-      // pilot.wake();
+      pilot.test();
       flying = true;
     }
   }
 
+  digitalWrite(LEDC_DTA, LOW);
+  servoL.adjustment(ContinuousServo::LEFT); // left servo should always turn left
+  digitalWrite(LEDP_DTA, HIGH);
+
+  delay(1000);
+
+  digitalWrite(LEDP_DTA, LOW);
+  servoL.reset(ContinuousServo::LEFT);
+  digitalWrite(LEDC_DTA, HIGH);
+
+  delay(500);
+
+  digitalWrite(LEDC_DTA, LOW);
+  servoR.adjustment(ContinuousServo::RIGHT); // right servo should always turn right
+  digitalWrite(LEDP_DTA, HIGH);
+
+  delay(1000);
+
+  digitalWrite(LEDP_DTA, LOW);
+  servoR.reset(ContinuousServo::RIGHT);
+  digitalWrite(LEDC_DTA, HIGH);
+
+  delay(500);
+
+  
   bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
@@ -178,4 +213,12 @@ bool cutdown_check(void)
       }
   }
   return true; //Falling
+}
+
+// LEDs, Buzzer, Servo, Solenoid
+void testOutputs(void)
+{
+  digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
+
+  pilot.test();
 }

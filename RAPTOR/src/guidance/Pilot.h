@@ -16,6 +16,7 @@ class Pilot
 
 	void wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long);
 	void fly(float curr_angle);
+	void test();
 
   private:
 	Coordinate _target;
