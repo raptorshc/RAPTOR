@@ -6,9 +6,6 @@
 #define SRVOL_DTA 6 // Left servo
 #define SRVOR_DTA 5 // Right servo
 
-#define RIGHT 1
-#define LEFT 0
-
 /* PUBLIC METHODS */
 
 /*
@@ -66,7 +63,7 @@ void Pilot::fly(float curr_angle)
 void Pilot::rightTurn()
 {
     is_turning = true;
-    servoR.adjustment(RIGHT);
+    servoR.adjustment(ContinuousServo::RIGHT);
 }
 /*
 * Makes the box take a left turn
@@ -74,7 +71,7 @@ void Pilot::rightTurn()
 void Pilot::leftTurn()
 {
     is_turning = true;
-    servoL.adjustment(LEFT);
+    servoL.adjustment(ContinuousServo::LEFT);
 }
 
 void Pilot::straight()
@@ -97,11 +94,32 @@ bool Pilot::shouldTurn(bool &dirTurn, float curr_angle)
 
     /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
     if (abs(alpha_angle - curr_angle) > abs(beta_angle - curr_angle))
-        dirTurn = RIGHT; //right turn
+        dirTurn = ContinuousServo::RIGHT; //right turn
     else
-        dirTurn = LEFT; //left turn
+        dirTurn = ContinuousServo::LEFT; //left turn
     if (abs(curr_angle - desired_heading - 360) < 15 || abs(desired_heading - curr_angle) < 15)
         return false; //The amount of degrees we need to adjust by.
     else
         return true;
+}
+
+void Pilot::test(void)
+{
+    servoR.adjustment(ContinuousServo::RIGHT);
+    servoL.adjustment(ContinuousServo::LEFT);
+
+    delay(1000);
+
+    servoR.reset(ContinuousServo::RIGHT);
+    servoR.reset(ContinuousServo::LEFT);
+
+    delay(1000);
+
+    servoR.adjustment(ContinuousServo::LEFT);
+    servoL.adjustment(ContinuousServo::RIGHT);
+
+    delay(1000);
+
+    servoR.reset(ContinuousServo::LEFT);
+    servoR.reset(ContinuousServo::RIGHT);
 }

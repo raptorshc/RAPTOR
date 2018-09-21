@@ -7,7 +7,7 @@
 #include "src/drivers/servo/continuous_servo.h"
 #include "src/drivers/solenoid/solenoid.h"
 
-template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; } 
+template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; }
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
@@ -180,43 +180,9 @@ bool cutdown_check(void)
 }
 
 // LEDs, Buzzer, Servo, Solenoid
-void testOutputs(void){
-  
+void testOutputs(void)
+{
   digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
-  
-  servoR.adjustment(ContinuousServo::RIGHT);
-  servoL.adjustment(ContinuousServo::LEFT);
 
-  delay(1000);
-
-  servoR.reset(ContinuousServo::RIGHT);
-  servoR.reset(ContinuousServo::LEFT);
-
-  delay(1000);
-
-  servoR.adjustment(ContinuousServo::LEFT);
-  servoL.adjustment(ContinuousServo::RIGHT);
-
-  delay(1000);
-
-  servoR.reset(ContinuousServo::LEFT);
-  servoR.reset(ContinuousServo::RIGHT);
+  pilot.test();
 }
-
-// detect input on both switches
-void testSwitches(void){
-
-}
-
-// gather + print IMU data
-void testIMU(void){
-
-}
-
-// run bmpUpdate, print data
-void testBMP(void){
-
-}
-
-// print GPS data
-void testGPS(void){
