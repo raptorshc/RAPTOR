@@ -11,13 +11,6 @@
 #define TTR 500
 
 /* Public Methods */
-
-/*
- *	Constructor for ContinuousServo
- */
-ContinuousServo::ContinuousServo() {}
-
-
 /*
  *	Adjustment acts as the wrapper for the rest of the methods,
  *   accepting inputs of how much you want to turn in degrees (deg) and in what dir (dir).
@@ -41,7 +34,7 @@ void ContinuousServo::adjustment(uint8_t dir)
  *	reset will reset the servos to the default position after a turn.
  *   Must be called before timeToTurn is used, as it relies on the previous turn's deflection setting.
  */
-void ContinuousServo::reset(int dir)
+void ContinuousServo::reset(uint8_t dir)
 {
 	if (dir == RIGHT)
 		adjustment(LEFT);
