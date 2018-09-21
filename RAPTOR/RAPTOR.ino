@@ -128,8 +128,15 @@ void loop()
         parafoil_deploy(); // try deploying parafoil again
       }
 #endif /* CUTDOWN */
-      Serial << "Waking pilot. Input:(target_lat, target_long, current_lat, current_long)\n";
-      pilot.wake(custom_coordinate(), custom_coordinate(), custom_coordinate(), custom_coordinate());
+      Serial << "Waking pilot.";
+      Coordinate target_lat = (Coordinate){.degrees = 34,.minutes = 43,.seconds = 59};
+      Coordinate target_long = (Coordinate){.degrees = 86,.minutes = 38,.seconds = 27}; // FRANK FRANZ HALL
+
+      Coordinate current_lat = (Coordinate){.degrees = 34,.minutes = 43,.seconds = 19};
+      Coordinate current_long = (Coordinate){.degrees = 86,.minutes = 38,.seconds = 18}; // MSB
+      
+      Serial << "going from: [" << current_lat.degrees << "][" << current_long.degrees << "] to: [" << target_lat.degrees  << "][" << target_long.degrees << "]\n";
+      pilot.wake(target_lat, target_long, current_lat, current_long);
       flying = true;
     }
   }
@@ -159,7 +166,7 @@ void loop()
   delay(500);
 
 #ifdef TESTPILOT
-  angle = custom_altitude();
+  angle = custom_angle();
 #endif /* TESTPILOT */
 
   bno.update();
@@ -212,7 +219,7 @@ SIGNAL(TIMER0_COMPA_vect)
   {
     if (gps.parse(gps.lastNMEA()) && flying)
     {                       // this also sets the newNMEAreceived() flag to false
-#ifdef SENSORS_ENABLED
+#ifndef TESTPILOT
       pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
 #endif /* SENSORS_ENABLED */
 #ifdef TESTPILOT
@@ -252,15 +259,16 @@ void testOutputs(void)
 /*
 * custom_coordinate constructs a coordinate from user input 
 */
-Coordinate custom_coordinate(void){
-  Coordinate result;
-  Serial << "\nPlease input a coordinate (degrees, minutes, seconds): ";
+Coordinate custom_coordinate(String prompt){
+  Coordinate x;
+  Serial << "\nPlease input a " << prompt << " coordinate (degrees, minutes, seconds): ";
   while(Serial.available() == 0);
-  result.degrees = Serial.parseInt();
-  result.minutes = Serial.parseInt();
-  result.seconds = Serial.parseInt();
-  Serial << "\nYour coordinate: degrees[" << result.degrees << "] minutes[" << result.minutes << "] seconds[" << result.seconds << "]\n"; 
-  return result;
+  x.degrees = Serial.parseInt();
+  x.minutes = Serial.parseInt();
+  x.seconds = Serial.parseInt();
+  
+  Serial << "\nYour coordinate: degrees[" << x.degrees << "] minutes[" << x.minutes << "] seconds[" << x.seconds << "]\n"; 
+  return x;
 }
 
 /*

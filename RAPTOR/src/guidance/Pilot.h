@@ -6,8 +6,11 @@
 #ifndef PILOT_h
 #define PILOT_h
 
+#define TESTPILOT
+
 #include "Pathfinder.h"
 #include "../drivers/servo/continuous_servo.h"
+#include "Arduino.h"
 
 class Pilot
 {
