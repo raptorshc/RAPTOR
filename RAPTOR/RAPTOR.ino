@@ -1,3 +1,6 @@
+// debugs
+#define TESTPILOT
+
 #include <elapsedMillis.h>
 
 #include "src/guidance/Pilot.h"
@@ -6,6 +9,8 @@
 #include "src/drivers/imu/imu.h"
 #include "src/drivers/servo/continuous_servo.h"
 #include "src/drivers/solenoid/solenoid.h"
+
+#include "src/guidance/Pathfinder.h"
 
 template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; }
 
@@ -33,10 +38,11 @@ Pilot pilot;
 SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
 
-ContinuousServo servoR;
-ContinuousServo servoL;
+ContinuousServo servoR(ContinuousServo::RIGHT);
+ContinuousServo servoL(ContinuousServo::LEFT);
 
 boolean flying = false;
+float angle = 0;
 
 /* 
  * Arduino setup function, first function to be run.
@@ -94,8 +100,14 @@ void loop()
     if (!bmp.update())
       bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
 
+#ifdef SENSORS_ENABLED
     if (correct_alt_ascending() > CUTDOWN_ALT)
+#endif /* TESTPILOT */
+#ifdef TESTPILOT
+    if (altitude > CUTDOWN_ALT)
+#endif
     {
+#ifdef CUTDOWN
       cutdown(); // cutdown
 
       if (!cutdown_check() || !digitalRead(SWC_PIN))
@@ -110,36 +122,40 @@ void loop()
         Serial << F("!!!! PARAFOIL DEPLOYMENT ERROR !!!!") << "\n";
         parafoil_deploy(); // try deploying parafoil again
       }
-
-      pilot.test();
+#endif /* CUTDOWN */
+      Serial << "Waking pilot. Input:(target_lat, target_long, current_lat, current_long)\n"
+      pilot.wake(custom_coordinate(), custom_coordinate(), custom_coordinate(), custom_coordinate());
       flying = true;
     }
   }
 
   digitalWrite(LEDC_DTA, LOW);
-  servoL.adjustment(ContinuousServo::LEFT); // left servo should always turn left
+  servoL.turn(); // left servo should always turn left
   digitalWrite(LEDP_DTA, HIGH);
 
   delay(1000);
 
   digitalWrite(LEDP_DTA, LOW);
-  servoL.reset(ContinuousServo::LEFT);
+  servoL.reset();
   digitalWrite(LEDC_DTA, HIGH);
 
   delay(500);
 
   digitalWrite(LEDC_DTA, LOW);
-  servoR.adjustment(ContinuousServo::RIGHT); // right servo should always turn right
+  servoR.turn(); // right servo should always turn right
   digitalWrite(LEDP_DTA, HIGH);
 
   delay(1000);
 
   digitalWrite(LEDP_DTA, LOW);
-  servoR.reset(ContinuousServo::RIGHT);
+  servoR.reset();
   digitalWrite(LEDC_DTA, HIGH);
 
   delay(500);
 
+  // Coordinate latitude = custom_coordinate();
+  // Coordinate longitude = custom_coordinate();
+  // float altitude = custom_altitude();
   
   bno.update();
 
@@ -191,7 +207,11 @@ SIGNAL(TIMER0_COMPA_vect)
   {
     if (gps.parse(gps.lastNMEA()) && flying)
     {                       // this also sets the newNMEAreceived() flag to false
+#ifdef SENSORS_ENABLED
       pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
+#endif /* SENSORS_ENABLED */
+#ifdef TESTPILOT
+      pilot.fly(angle);
     }
   }
 }
@@ -221,4 +241,30 @@ void testOutputs(void)
   digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
 
   pilot.test();
+}
+
+/*
+* custom_coordinate constructs a coordinate from user input 
+*/
+Coordinate custom_coordinate(void){
+  Coordinate result;
+  Serial << "\nPlease input a coordinate (degrees, minutes, seconds): ";
+  while(Serial.available() == 0);
+  result.degrees = Serial.parseInt();
+  result.minutes = Serial.parseInt();
+  result.seconds = Serial.parseInt();
+  Serial << "\nYour coordinate: degrees[" << result.degrees << "] minutes[" << result.minutes << "] seconds[" << result.seconds << "]\n"; 
+  return result;
+}
+
+/*
+* custom_coordinate constructs a coordinate from user input 
+*/
+float custom_altitude_angle(float &angle){
+  Serial << "\nPlease input an altitude and an angle (altitude,angle): ";
+  while(Serial.available() == 0);
+  float altitude = Serial.parseInt();
+  angle = Serial.parseInt();
+  Serial << "\nAltitude: " << altitude << " angle: " << angle << "\n";
+  return altitude;
 }

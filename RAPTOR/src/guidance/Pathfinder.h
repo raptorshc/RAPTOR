@@ -13,7 +13,7 @@
 
 struct Coordinate
 {
-    uint8_t degrees, minutes, seconds;
+    int degrees, minutes, seconds;
     float decimal;
 };
 
