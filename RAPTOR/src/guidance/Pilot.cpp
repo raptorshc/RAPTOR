@@ -8,8 +8,6 @@
 #define SRVOR_DTA 5 // Right servo
 
 #define STRAIGHT 2
-#define RIGHT 1
-#define LEFT 0
 
 /* PUBLIC METHODS */
 
@@ -18,8 +16,8 @@
  */
 Pilot::Pilot()
 {
-    this->servoR = new ContinuousServo(RIGHT);
-    this->servoL = new ContinuousServo(LEFT);
+    this->servoR = new ContinuousServo(ContinuousServo::RIGHT);
+    this->servoL = new ContinuousServo(ContinuousServo::LEFT);
     this->current_turn = STRAIGHT;
     this->target_turn = STRAIGHT;
 }
@@ -35,7 +33,6 @@ void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_
     this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
     this->p->findPath();
     desired_heading = p->getAngle();
-    printf("desired_heading: %f\n", desired_heading);
 }
 
 /*
@@ -50,7 +47,7 @@ void Pilot::fly(float curr_angle)
         {
             straight();
         }
-        else if (target_turn == LEFT)
+        else if (target_turn == ContinuousServo::LEFT)
         {
             turn_left();
         }
@@ -66,25 +63,25 @@ void Pilot::fly(float curr_angle)
  */
 void Pilot::turn_right()
 {
-    if (current_turn == LEFT)
+    if (current_turn == ContinuousServo::LEFT)
         straight();
     servoR->turn();
-    current_turn = RIGHT;
+    current_turn = ContinuousServo::RIGHT;
 }
 /*
 * Makes the box take a left turn
 */
 void Pilot::turn_left()
 {
-    if (current_turn == RIGHT)
+    if (current_turn == ContinuousServo::RIGHT)
         straight();
     servoL->turn();
-    current_turn = LEFT;
+    current_turn = ContinuousServo::LEFT;
 }
 
 void Pilot::straight()
 {
-    if (current_turn == RIGHT)
+    if (current_turn == ContinuousServo::RIGHT)
     {
         servoR->reset();
     }
@@ -116,9 +113,9 @@ int Pilot::find_turn(float curr_angle)
         beta_angle -= 360;
     /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
     if (abs(alpha_angle - curr_angle) > abs(beta_angle - curr_angle))
-        return RIGHT;
+        return ContinuousServo::RIGHT;
     else
-        return LEFT;
+        return ContinuousServo::LEFT;
 }
 
 /* 

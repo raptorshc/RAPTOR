@@ -29,8 +29,8 @@ template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg);
 
 #define SD_GRN 4 // OpenLog Reset pin
 
-#define SRVOR_DTA 6
-#define SRVOL_DTA 5
+#define SRVOR_DTA 5
+#define SRVOL_DTA 6
 
 BNO bno;
 BMP bmp;
@@ -40,8 +40,8 @@ Pilot pilot;
 SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
 
-ContinuousServo servoR(ContinuousServo::RIGHT);
-ContinuousServo servoL(ContinuousServo::LEFT);
+// ContinuousServo servoR(ContinuousServo::RIGHT);
+// ContinuousServo servoL(ContinuousServo::LEFT);
 
 boolean flying = false;
 float angle = 347.30;
@@ -87,8 +87,14 @@ void setup()
                  "SERVOR, SERVOL, "
                  "FLYING\n")); // data header
 
-  servoR.attach(SRVOR_DTA);
-  servoL.attach(SRVOL_DTA);
+  // servoR.attach(SRVOR_DTA);
+  // servoL.attach(SRVOL_DTA);
+
+  // servoL.writeMicroseconds(1500);
+  // servoR.writeMicroseconds(1500);
+
+  delay(1000);
+  testOutputs();
 }
 
 /* 
@@ -140,34 +146,14 @@ void loop()
       flying = true;
     }
   }
-
-  // digitalWrite(LEDC_DTA, LOW);
-  // servoL.turn(); // left servo should always turn left
-  // digitalWrite(LEDP_DTA, HIGH);
-
-  // delay(1000);
-
-  // digitalWrite(LEDP_DTA, LOW);
-  // servoL.reset();
-  // digitalWrite(LEDC_DTA, HIGH);
-
-  // delay(500);
-
-  // digitalWrite(LEDC_DTA, LOW);
-  // servoR.turn(); // right servo should always turn right
-  // digitalWrite(LEDP_DTA, HIGH);
-
-  // delay(1000);
-
-  // digitalWrite(LEDP_DTA, LOW);
-  // servoR.reset();
-  digitalWrite(LEDC_DTA, HIGH);
-
+  // testOutputs();
   delay(500);
 
 #ifdef TESTPILOT
   angle = custom_angle();
 #endif /* TESTPILOT */
+  pilot.fly(angle);
+  delay(10);
 
   bno.update();
 
@@ -214,7 +200,7 @@ float correct_alt_descending(void)
 SIGNAL(TIMER0_COMPA_vect)
 {
   gps.read(); // Check to see if we have new data
-
+  
   if (gps.newNMEAreceived())
   {
     if (gps.parse(gps.lastNMEA()) && flying)
@@ -252,8 +238,15 @@ bool cutdown_check(void)
 void testOutputs(void)
 {
   digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
+  
+  digitalWrite(LEDC_DTA, LOW);
 
-  pilot.test();
+  cutdown();
+  Serial << "Cutdown, switch reads " << cutdown_switch() << "\n";
+
+  parafoil_deploy();
+  Serial << "Deploy, switch reads " << parafoil_switch() << "\n";
+
 }
 
 /*
