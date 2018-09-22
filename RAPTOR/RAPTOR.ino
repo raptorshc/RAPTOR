@@ -44,7 +44,7 @@ ContinuousServo servoR(ContinuousServo::RIGHT);
 ContinuousServo servoL(ContinuousServo::LEFT);
 
 boolean flying = false;
-float angle = 0;
+float angle = 347.30;
 
 /* 
  * Arduino setup function, first function to be run.
@@ -141,26 +141,26 @@ void loop()
     }
   }
 
-  digitalWrite(LEDC_DTA, LOW);
-  servoL.turn(); // left servo should always turn left
-  digitalWrite(LEDP_DTA, HIGH);
+  // digitalWrite(LEDC_DTA, LOW);
+  // servoL.turn(); // left servo should always turn left
+  // digitalWrite(LEDP_DTA, HIGH);
 
-  delay(1000);
+  // delay(1000);
 
-  digitalWrite(LEDP_DTA, LOW);
-  servoL.reset();
-  digitalWrite(LEDC_DTA, HIGH);
+  // digitalWrite(LEDP_DTA, LOW);
+  // servoL.reset();
+  // digitalWrite(LEDC_DTA, HIGH);
 
-  delay(500);
+  // delay(500);
 
-  digitalWrite(LEDC_DTA, LOW);
-  servoR.turn(); // right servo should always turn right
-  digitalWrite(LEDP_DTA, HIGH);
+  // digitalWrite(LEDC_DTA, LOW);
+  // servoR.turn(); // right servo should always turn right
+  // digitalWrite(LEDP_DTA, HIGH);
 
-  delay(1000);
+  // delay(1000);
 
-  digitalWrite(LEDP_DTA, LOW);
-  servoR.reset();
+  // digitalWrite(LEDP_DTA, LOW);
+  // servoR.reset();
   digitalWrite(LEDC_DTA, HIGH);
 
   delay(500);

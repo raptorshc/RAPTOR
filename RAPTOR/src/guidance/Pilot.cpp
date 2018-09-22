@@ -2,11 +2,14 @@
 
 */
 #include "Pilot.h"
+#include <stdio.h>
 
 #define SRVOL_DTA 6 // Left servo
 #define SRVOR_DTA 5 // Right servo
 
-#define STRAIGHT 3
+#define STRAIGHT 2
+#define RIGHT 1
+#define LEFT 0
 
 /* PUBLIC METHODS */
 
@@ -15,9 +18,10 @@
  */
 Pilot::Pilot()
 {
-    this->servoR = new ContinuousServo(ContinuousServo::RIGHT);
-    this->servoL = new ContinuousServo(ContinuousServo::LEFT);
-    this->turning = STRAIGHT;
+    this->servoR = new ContinuousServo(RIGHT);
+    this->servoL = new ContinuousServo(LEFT);
+    this->current_turn = STRAIGHT;
+    this->target_turn = STRAIGHT;
 }
 
 /*
@@ -31,10 +35,7 @@ void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_
     this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
     this->p->findPath();
     desired_heading = p->getAngle();
-#ifdef TESTPILOT
-    Serial.print("desired_heading: ");
-    Serial.print(desired_heading);
-#endif /* TESTPILOT */
+    printf("desired_heading: %f\n", desired_heading);
 }
 
 /*
@@ -42,26 +43,21 @@ void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_
  */
 void Pilot::fly(float curr_angle)
 {
-    uint8_t dirTurn = STRAIGHT;
-    bool should_turn = shouldTurn(dirTurn, curr_angle);
-    if (turning == STRAIGHT)
+    target_turn = find_turn(curr_angle);
+    if (target_turn != current_turn)
     {
-        if (should_turn)
+        if (target_turn == STRAIGHT)
         {
-            if (dirTurn)
-            {
-                turn_left();
-            }
-            else
-            {
-                turn_right();
-            }
-        }
-    }
-    else
-    {
-        if (!should_turn)
             straight();
+        }
+        else if (target_turn == LEFT)
+        {
+            turn_left();
+        }
+        else
+        {
+            turn_right();
+        }
     }
 }
 
@@ -70,26 +66,33 @@ void Pilot::fly(float curr_angle)
  */
 void Pilot::turn_right()
 {
-    turning = ContinuousServo::RIGHT;
+    if (current_turn == LEFT)
+        straight();
     servoR->turn();
+    current_turn = RIGHT;
 }
 /*
 * Makes the box take a left turn
 */
 void Pilot::turn_left()
 {
-    turning = ContinuousServo::LEFT;
+    if (current_turn == RIGHT)
+        straight();
     servoL->turn();
+    current_turn = LEFT;
 }
 
 void Pilot::straight()
 {
-    if (turning == ContinuousServo::RIGHT)
+    if (current_turn == RIGHT)
+    {
         servoR->reset();
+    }
     else
+    {
         servoL->reset();
-
-    turning = STRAIGHT;
+    }
+    current_turn = STRAIGHT;
 }
 
 /* 
@@ -97,27 +100,31 @@ void Pilot::straight()
  * calculate which way to turn and by how much. 
  * returns if we should turn
  */
-bool Pilot::shouldTurn(uint8_t &dirTurn, float curr_angle)
+int Pilot::find_turn(float curr_angle)
 {
     float alpha_angle, beta_angle;
+
+    if (abs(abs(curr_angle - desired_heading) - 360) < 15 || abs(desired_heading - curr_angle) < 15)
+        return STRAIGHT; // if the difference between our current and desired heading is less than 15,  continue straight
 
     alpha_angle = desired_heading + 90; //Alpha angle is in the quadrant to the left of our target angle
     beta_angle = desired_heading + 270; //Beta angle is in the quadrant to the right
 
+    if (alpha_angle > 360)
+        alpha_angle -= 360;
+    if (beta_angle > 360)
+        beta_angle -= 360;
     /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
     if (abs(alpha_angle - curr_angle) > abs(beta_angle - curr_angle))
-        dirTurn = ContinuousServo::RIGHT;
+        return RIGHT;
     else
-        dirTurn = ContinuousServo::LEFT;
-    if (abs(curr_angle - desired_heading - 360) < 15 || abs(desired_heading - curr_angle) < 15)
-        return false;
-    else
-        return true;
+        return LEFT;
 }
 
 /* 
- * test will turn the payload left, right, then straighten out
+ * get_turn returns the current turn of the pilot
  */
-void Pilot::test(void)
+int Pilot::get_turn(void)
 {
+    return current_turn;
 }
