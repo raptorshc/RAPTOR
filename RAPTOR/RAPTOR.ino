@@ -7,7 +7,7 @@
 #include "src/drivers/servo/continuous_servo.h"
 #include "src/drivers/solenoid/solenoid.h"
 
-template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; } 
+template <class T>inline Print &operator<<(Print &obj, T arg){obj.print(arg); return obj;} // allows stream style input and output
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
@@ -37,14 +37,8 @@ void setup()
   pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
   pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
 
-  /* Solenoids */
-  sol_init();
-
-  /* BMP180 */
-  bmp.init();
-
-  /* IMU */
-  bno.init();
+  /* Solenoids, Servos, BMP, BNO */
+  startup_sequence();
 
   /* GPS */
   gps.init();
@@ -104,13 +98,13 @@ void loop()
       }
 
       Coordinate target_lat, target_long, current_lat, current_long;
-      
+
       target_lat.decimal = 34.73; // HARD CODED TARGET COORDINATES
       target_long.decimal = 86.64;
 
       current_lat.decimal = gps.latitude;
       current_long.decimal = gps.longitude;
-      
+
       pilot.wake(target_lat, target_long, current_lat, current_long);
       flight_state = 2;
     }
@@ -210,4 +204,36 @@ void print_data()
          << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
          << cutdown_switch() << F(",") << parafoil_switch() << F(",")
          << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flight_state << "\n"; // write everything to SD card
+}
+
+/* 
+ *  startup_sequence gives us a nice little sequences that indicates board power,
+ *    solenoid power, servo power, and successful sensor initialization
+ */
+void startup_sequence(void)
+{
+  analogWrite(BZZ_DTA, 200);
+  delay(500);
+  analogWrite(BZZ_DTA, 0);
+
+  sol_init();
+  pilot.servo_test();
+
+  delay(200);
+  
+
+  if (bmp.init() && bno.init())
+  { // check to see if our sensors are working, if they are blink once, if not blink 5 times
+    digitalWrite(LEDS_DTA, HIGH);
+    delay(500);
+    digitalWrite(LEDS_DTA, LOW);
+  }
+  else
+  {
+    for (int i = 0; i < 5; i++)
+    {
+      digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
+      delay(200);
+    }
+  }
 }

@@ -18,6 +18,10 @@ Pilot::Pilot()
 {
     this->servoR = new ContinuousServo(ContinuousServo::RIGHT);
     this->servoL = new ContinuousServo(ContinuousServo::LEFT);
+
+    servoR->attach(SRVOR_DTA);
+    servoL->attach(SRVOL_DTA);
+
     this->current_turn = STRAIGHT;
     this->target_turn = STRAIGHT;
 }
@@ -27,9 +31,6 @@ Pilot::Pilot()
  */
 void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long)
 {
-    servoR->attach(SRVOR_DTA);
-    servoL->attach(SRVOL_DTA);
-
     this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
     this->p->findPath();
     desired_heading = p->getAngle();
@@ -71,7 +72,7 @@ uint8_t Pilot::servoR_status(void)
  */
 uint8_t Pilot::servoL_status(void)
 {
-    servoL->readMicroseconds();
+    return servoL->readMicroseconds();
 }
 
 /* 
@@ -80,6 +81,21 @@ uint8_t Pilot::servoL_status(void)
 int Pilot::get_turn(void)
 {
     return current_turn;
+}
+
+/* 
+ * servo_test turns and resets both servos to indicate servo power and attachment
+ */
+void Pilot::servo_test(void){
+  servoL->turn();
+  delay(200);
+  servoR->reset();
+
+  delay(500);
+  
+  servoR->turn();
+  delay(200);
+  servoL->reset();
 }
 
 /* PRIVATE METHODS */

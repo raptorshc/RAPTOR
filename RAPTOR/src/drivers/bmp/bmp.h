@@ -16,7 +16,7 @@ class BMP
 {
 public:
   BMP() : Adafruit_BMP085_Unified(10085) {}
-  void init(void);
+  bool init(void);
   bool update(void);
 
   float baseline, pressure, temperature, altitude;
