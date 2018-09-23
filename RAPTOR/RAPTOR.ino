@@ -11,16 +11,10 @@ template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg);
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
-#define SWP_PIN A0 // Parafoil solenoid switch
-#define SWC_PIN A1 // Cutdown solenoid switch
-
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
 
 #define SD_GRN 4 // OpenLog Reset pin
-
-#define SRVOR_DTA 5
-#define SRVOL_DTA 6
 
 BNO bno;
 BMP bmp;

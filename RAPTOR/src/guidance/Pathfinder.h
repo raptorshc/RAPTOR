@@ -7,13 +7,12 @@
 #define Pathfinder_h
 
 #include <math.h>
-#include "Arduino.h"
 
 #define pi 3.141592
 
 struct Coordinate
 {
-    uint8_t degrees, minutes, seconds;
+    int degrees, minutes, seconds;
     float decimal;
 };
 
@@ -28,7 +27,7 @@ struct Path
 struct PathAdjustment
 {
     double degrees;   //Amount to turn
-    uint8_t rotation; //Which way to turn. 1 is right, 0 is left.
+    int rotation; //Which way to turn. 1 is right, 0 is left.
 };
 
 class Pathfinder
@@ -45,7 +44,7 @@ class Pathfinder
   private:
     void coord_dmsToDec(Coordinate &c1);
     void path_dmsToDec();
-    Path *_Path;
+    Path _Path;
 };
 
 #endif
