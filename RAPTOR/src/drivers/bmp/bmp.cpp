@@ -10,11 +10,12 @@
  *	init begins the BMP measurements and 
  *   grabs a baseline pressure for alt calculations.
  */
-void BMP::init(void)
+bool BMP::init(void)
 {
   if (!this->begin())
   { // Begin bmp measurements
     Serial.print(F("No BMP detected!"));
+    return false;
   }
 
   // gather a baseline
@@ -23,6 +24,8 @@ void BMP::init(void)
 
   while (!update() && counter++ < 50); // until we can get a good pressure reading or we've tried more than 50 times
   baseline = pressure; // grab a baseline pressure
+
+  return true;
 }
 
 /*
