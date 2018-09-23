@@ -1,212 +1,213 @@
-#include <SFE_BMP180.h>
-#include <Wire.h>
-#include <Servo.h>
-#include <SD.h>
 #include <elapsedMillis.h>
 
-#define SERVO_STOP 90
+#include "src/guidance/Pilot.h"
+#include "src/drivers/bmp/bmp.h"
+#include "src/drivers/gps/gps.h"
+#include "src/drivers/imu/imu.h"
+#include "src/drivers/servo/continuous_servo.h"
+#include "src/drivers/solenoid/solenoid.h"
 
-#define SERVO1_PIN 6
-#define SERVO2_PIN 5
-#define SERVO1_SWITCH 4
-#define SERVO2_SWITCH 1
+template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; } 
 
-#define SOLENOID1_PIN 9
-#define SOLENOID1_SWITCH 2
+#define CUTDOWN_ALT 900 // altitude to cut down at
 
-#define SOLENOID2_PIN 8
-#define SOLENOID2_SWITCH 3
+#define BZZ_DTA 11  // Buzzer
+#define LEDS_DTA 12 // External flight LEDs
 
+#define SD_GRN 4 // OpenLog Reset pin
 
-Servo servo1;
-Servo servo2;
-SFE_BMP180 pressure; //SDA -> A4, SCL -> A5 https://learn.adafruit.com/bmp085/wiring-the-bmp085
-File file;           //CLK -> 13, DO -> 12, DI -> 11, CS -> 10 https://learn.adafruit.com/adafruit-micro-sd-breakout-board-card-tutorial/arduino-wiring
+BNO bno;
+BMP bmp;
 elapsedMillis timeElapsed;
+Pilot pilot;
 
-float baseline;
+SoftwareSerial mySerial(3, 2); // GPS serial comm pins
+GPS gps(mySerial);
 
-void setup() {
+uint8_t flight_state = 0;
+
+/* 
+ * Arduino setup function, first function to be run.
+ */
+void setup()
+{
   timeElapsed = 0;
 
-  servo1.attach(SERVO1_PIN);
-  servo2.attach(SERVO2_PIN);
-  
-  pinMode(SERVO1_SWITCH, OUTPUT);
-  pinMode(SERVO2_SWITCH, OUTPUT);
-  
-  pinMode(SOLENOID1_PIN, OUTPUT);
-  pinMode(SOLENOID2_PIN, OUTPUT);
+  /* Buzzer and LEDs */
+  pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
+  pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
 
-  pinMode(SOLENOID1_SWITCH, OUTPUT);
-  pinMode(SOLENOID2_SWITCH, OUTPUT);
+  /* Solenoids */
+  sol_init();
 
-  servo1.write(90);
-  servo2.write(90);
-  /* Pressure */
-  pressure.begin();
-  baseline = getPressure();
+  /* BMP180 */
+  bmp.init();
 
-  digitalWrite(SOLENOID2_PIN, HIGH);
-  /* SD Card */
-  pinMode(10, OUTPUT);
-  SD.begin(10);
-  file.close();
-}
+  /* IMU */
+  bno.init();
 
-void loop() {
-  file = SD.open("data.csv", FILE_WRITE);  //FORMAT: time(sec), temperature(C), pressure(Pascal?), altitude(m), servo 1(bool), servo 2(bool), solenoid 1(bool), solenoid 2(bool) 
-  
-  file.print(timeElapsed/1000);
-  file.print(",");
-    
-  double P = getPressure();
-  file.print(P);
-  file.print(",");
-  double a = pressure.altitude(P, baseline);
-  file.print(a);
-  file.print(",");
+  /* GPS */
+  gps.init();
 
-  if(a > 150){
-    servoTest(1000);
-    
-    solenoidTest(500);
-  }
-  file.print("\n");
-  file.close();
-  delay(5000);
-}
+  /* SD */
+  pinMode(SD_GRN, OUTPUT);
+  Serial.begin(9600);
 
-double getPressure(){
-  char status;
-  double T,P,p0,a,b;
-
-  // You must first get a temperature measurement to perform a pressure reading.
-  
-  // Start a temperature measurement:
-  // If request is successful, the number of ms to wait is returned.
-  // If request is unsuccessful, 0 is returned.
-
-  status = pressure.startTemperature();
-  if (status != 0)
-  {
-    // Wait for the measurement to complete:
-
-    delay(status);
-
-    // Retrieve the completed temperature measurement:
-    // Note that the measurement is stored in the variable T.
-    // Use '&T' to provide the address of T to the function.
-    // Function returns 1 if successful, 0 if failure.
-
-    status = pressure.getTemperature(T);
-    if (status != 0)
-    {
-      // Start a pressure measurement:
-      // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
-      // If request is successful, the number of ms to wait is returned.
-      // If request is unsuccessful, 0 is returned.
-
-      status = pressure.startPressure(3);
-      if (status != 0)
-      {
-        // Wait for the measurement to complete:
-        delay(status);
-
-        // Retrieve the completed pressure measurement:
-        // Note that the measurement is stored in the variable P.
-        // Use '&P' to provide the address of P.
-        // Note also that the function requires the previous temperature measurement (T).
-        // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
-        // Function returns 1 if successful, 0 if failure.
-
-        status = pressure.getPressure(P,T);
-        if (status != 0)
-        {
-          file.print(T);
-          file.print(",");
-          return(P);
-        }
-        else file.println("error retrieving pressure measurement\n");
-      }
-      else file.println("error starting pressure measurement\n");
-    }
-    else file.println("error retrieving temperature measurement\n");
-  }
-  else file.println("error starting temperature measurement\n");
-}
-
-/*
-   servoTest will send a write to the servo to test it, upon which a physical switch will activate a pin if it is hit.
-   The function will monitor this pin, and record to the SD card whether it is hit within the duration given.
-*/
-void servoTest(int duration) {
-  int milli = 0;
-  boolean switch1_hit = false;
-  boolean switch2_hit = false;
-
-  servo1.write(SERVO_STOP);
-  servo2.write(SERVO_STOP);
+  // Reset OpenLog
+  digitalWrite(SD_GRN, LOW);
+  delay(100);
+  digitalWrite(SD_GRN, HIGH);
 
   delay(10);
+  Serial.print(F("TIME,"
+                 "TEMPERATURE, PRESSURE, ALTITUDE, "
+                 "LATITUDE, LONGITUDE, ANGLE, "
+                 "X, Y, Z, "
+                 "SWC, SWP, "
+                 "SRVOR, SRVOL, FLIGHT_STATE\n")); // data header
+}
 
-  servo1.write(180);
-  servo2.write(180);
-  
-  while (milli < duration) {                 // Until the limit switch for the servo is hit, or we have waited for duration in milliseconds.
-    if(!switch1_hit)
-      switch1_hit = digitalRead(SERVO1_SWITCH);                 // Read in the digital value of the SERVO_SWITCH pins
-    if(!switch2_hit)
-      switch2_hit = digitalRead(SERVO2_SWITCH);
-    delay(1);
-    milli++;                                                    // Increment i every 1 millisecond
-  }
+/* 
+ * Arduino loop function, always runs.
+ */
+void loop()
+{
+  switch (flight_state)
+  {
+  case 0: // flight state 0 is launch
+    if (!bmp.update())
+      bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
 
-  delay(100);
-  servo1.write(SERVO_STOP);
-  servo2.write(SERVO_STOP);
+    if (correct_alt_ascending() > 30.0)
+      flight_state = 1; // transition to flight state 1
 
-  if (switch1_hit) {                                         // If the switch has been hit
-    file.print("TRUE,");
-  }
-  else {
-    file.print("FALSE,");
-  }
+    break;
+  case 1: // flight state 1 is ascent
+    if (!bmp.update())
+      bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
 
-  if (switch2_hit) {                                         // If the switch has been hit
-    file.print("TRUE,");
-  }
-  else {
-    file.print("FALSE,");
+    if (correct_alt_ascending() > CUTDOWN_ALT)
+    {
+      cutdown(); // cutdown
+
+      if (!cutdown_check() || cutdown_switch())
+      { // we want to make sure that we have cut down and we are falling
+        Serial << F("\n!!!! CUTDOWN ERROR !!!!\n");
+        cutdown(); // try cutdown again
+      }
+
+      parafoil_deploy(); // deploy parafoil
+      if (parafoil_switch())
+      { // make sure the parafoil has deployed
+        Serial << F("\n!!!! PARAFOIL DEPLOYMENT ERROR !!!!\n");
+        parafoil_deploy(); // try deploying parafoil again, probably won't do much
+      }
+
+      Coordinate target_lat, target_long, current_lat, current_long;
+      
+      target_lat.decimal = 34.73; // HARD CODED TARGET COORDINATES
+      target_long.decimal = 86.64;
+
+      current_lat.decimal = gps.latitude;
+      current_long.decimal = gps.longitude;
+      
+      pilot.wake(target_lat, target_long, current_lat, current_long);
+      flight_state = 2;
+    }
+    print_data();
+    break;
+  case 2: // flight state 2 is descent
+    if (correct_alt_descending() < 30.0)
+    { // **** maybe check a few times?
+      flight_state = 3;
+      Serial << "\n!!!! LANDED !!!!\n";
+    }
+    print_data();
+    delay(100);
+    break;
+  case 3:                                           // flight state 3 is landed
+    digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA)); // toggle LEDs every second
+    analogWrite(BZZ_DTA, 200);                      // turn on buzzer for 500 ms, off for 500 ms
+    delay(500);
+    analogWrite(BZZ_DTA, 0);
+    delay(500);
+    break;
   }
 }
 
-/*
-   solenoidTest will send a write to the servo to test it, upon which a physical switch will activate a pin if it is hit.
-   The function will monitor this pin, and record to the SD card whether it is hit within the duration given.
-*/
-void solenoidTest(int duration) {
-  int milli = 0;
-  boolean switch_hit = false;
-
-  digitalWrite(SOLENOID1_PIN, HIGH);                        // Start the solenoid
-
-  while (!switch_hit && milli < duration) {                // Until the limit switch for the solenoid is hit, or we have waited for duration in milliseconds.
-    switch_hit = digitalRead(SOLENOID1_SWITCH);             // Read in the digital value of the SERVO_SWITCH pins
-    delay(1);
-    milli++;                                                   // Increment i every 1 millisecond
-  }
-  digitalWrite(SOLENOID1_PIN, LOW);
-
-  if (switch_hit) {                                        // If the switch has been hit
-    file.print("TRUE,");
-  }
-  else {
-    file.print("FALSE,");
-  }
-  if(digitalRead(SOLENOID2_SWITCH))
-    file.print("TRUE");
+/* 
+ * check our altitude measurements with the assumption we are ascending, 
+ *  grab the correct one or return the average if they're both correct.
+ */
+float correct_alt_ascending(void)
+{
+  if (bmp.altitude - gps.altitude > 50)
+    return bmp.altitude;
+  else if (gps.altitude - bmp.altitude > 50)
+    return gps.altitude;
   else
-    file.print("FALSE");
+    return (bmp.altitude + gps.altitude) / 2;
 }
 
+/* 
+ * check our altitude measurements with the assumption we are descending, 
+ *  grab the correct one or return the average if they're both correct.
+ */
+float correct_alt_descending(void)
+{
+  if (gps.altitude - bmp.altitude > 50)
+    return bmp.altitude;
+  else if (bmp.altitude - gps.altitude > 50)
+    return gps.altitude;
+  else
+    return (bmp.altitude + gps.altitude) / 2;
+}
+
+/* 
+ *  Interrupt on millisecond,
+ *    check if we have a new GPS NMEA string, if we do grab bmp data and fly
+ */
+SIGNAL(TIMER0_COMPA_vect)
+{
+  gps.read(); // Check to see if we have new data
+
+  if (gps.newNMEAreceived())
+  {
+    if (gps.parse(gps.lastNMEA()) && flight_state == 2)
+    {                       // this also sets the newNMEAreceived() flag to false
+      pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
+    }
+  }
+}
+
+/* 
+ *  cutdown_check checks 10 consecutive alitude measurements over 2 seconds, 
+ *    if all are decreasing return true, if not return false  
+ */
+bool cutdown_check(void)
+{
+  for (int i = 0; i < 10; i++)
+  {
+    uint16_t prevAltitude = correct_alt_descending(); //Update previous altitude
+    delay(200);                                       //.2 second delay
+    if (bmp.update())
+      if (correct_alt_ascending() > prevAltitude) //Are we falling (is our current altitude higher or lower than our previous altitude)?
+      {
+        return false; //Ascending
+      }
+  }
+  return true; //Falling
+}
+
+void print_data()
+{
+  bno.update();
+
+  /* Let's spray the OpenLog with a hose of data */
+  Serial << timeElapsed << F(",")
+         << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
+         << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
+         << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
+         << cutdown_switch() << F(",") << parafoil_switch() << F(",")
+         << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flight_state << "\n"; // write everything to SD card
+}
