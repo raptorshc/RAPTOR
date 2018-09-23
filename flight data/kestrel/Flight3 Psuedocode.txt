@@ -1,0 +1,37 @@
+component initializations
+
+set up interrupts for GPS, BMP180 - flag goes true when both collected, data save + throw to Pilot on flag
+
+take initial GPS reading
+
+altitude > 50
+
+main loop:
+	check for flag
+	if flag:
+		if alt>1000:
+			cutdown 
+			check for falling
+			deploy parafoil
+			check parafoil - wake Pilot
+		
+		else if Pilot enabled:
+			Pilot.fly()
+		
+		save data
+		
+Pilot:
+	fields:
+		update struct{
+			current_heading, desired_heading, is_turningR, is_turningL
+		}
+	
+	methods:
+		public:
+			constructor			
+			wake
+			fly // turn for set amount of time, then check heading, then turn additional if needed ** IT'S WORKING IT'S WORKING **
+		private:
+			rightTurn
+			leftTurn
+			shouldTurn
