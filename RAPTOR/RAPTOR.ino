@@ -37,14 +37,8 @@ void setup()
   pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
   pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
 
-  /* Solenoids */
-  sol_init();
-
-  /* BMP180 */
-  bmp.init();
-
-  /* IMU */
-  bno.init();
+  /* Solenoids, Servos, BMP, BNO */
+  startup_sequence();
 
   /* GPS */
   gps.init();
