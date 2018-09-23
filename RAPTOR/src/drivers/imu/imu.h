@@ -10,13 +10,14 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 
-class BNO : public Adafruit_BNO055{
-    public:
-        BNO() : Adafruit_BNO055(55){}
-        bool init(void);
-        void update(void);
+class BNO : public Adafruit_BNO055
+{
+  public:
+    BNO() : Adafruit_BNO055(55) {}
+    bool init(void);
+    void update(void);
 
-        sensors_event_t data;
+    sensors_event_t data;
 };
 
 #endif
