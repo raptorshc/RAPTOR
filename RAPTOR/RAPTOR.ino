@@ -212,12 +212,12 @@ void print_data()
  */
 void startup_sequence(void)
 {
-  analogWrite(BZZ_DTA, 200);
+  analogWrite(BZZ_DTA, 200); // turn on the buzzer for a second to indicate board power
   delay(500);
   analogWrite(BZZ_DTA, 0);
 
-  sol_init();
-  pilot.servo_test();
+  sol_init(); // initialize solenoids, should hear them click
+  pilot.servo_test(); // rotates and resets each servo
 
   delay(200);
   
