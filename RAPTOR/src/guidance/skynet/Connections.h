@@ -1,6 +1,6 @@
 #pragma once
 
-struct Connections 
+struct Connections
 {
 	double m_dWeight;
 	double m_dDeltaWeight;

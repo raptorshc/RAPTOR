@@ -5,9 +5,8 @@ Neuron::Neuron(int numOutputs, int index)
 	m_iIndex = index;
 	for (int numConnections = 0; numConnections < numOutputs; numConnections++) //Creates connections between layers
 	{
-		m_vOutputWeight.push_back(Connections()); //Adds new connection
+		m_vOutputWeight.push_back(Connections());		 //Adds new connection
 		m_vOutputWeight.back().m_dWeight = randWeight(); // assigns random weight to connection
-
 	}
 	m_dEta = 0.25;
 	m_dAlpha = 0.4;
@@ -35,7 +34,7 @@ double Neuron::getOutput()
 
 double Neuron::randWeight() //returns random double between 0 and 1
 {
-	return rand() / double(RAND_MAX); 
+	return rand() / double(RAND_MAX);
 }
 
 void Neuron::feedForward(Layer &prevLayer)
@@ -44,7 +43,7 @@ void Neuron::feedForward(Layer &prevLayer)
 
 	for (int n = 0; n < prevLayer.size(); n++)
 	{
-			sum += prevLayer[n].getOutput() * prevLayer[n].m_vOutputWeight[m_iIndex].m_dWeight;
+		sum += prevLayer[n].getOutput() * prevLayer[n].m_vOutputWeight[m_iIndex].m_dWeight;
 	}
 
 	m_dOutput = activation(sum);
@@ -68,7 +67,7 @@ double Neuron::sumLayer(Layer &nextLayer)
 {
 	double sum = 0.0;
 
-	for (unsigned n = 0; n < nextLayer.size() - 1; ++n) 
+	for (unsigned n = 0; n < nextLayer.size() - 1; ++n)
 	{
 		sum += m_vOutputWeight[n].m_dWeight * nextLayer[n].m_dGradient;
 	}
@@ -78,7 +77,7 @@ double Neuron::sumLayer(Layer &nextLayer)
 
 void Neuron::updateWeights(Layer &prevLayer)
 {
-	for (unsigned n = 0; n < prevLayer.size(); ++n)		//for each neuron in prevLayer including bias
+	for (unsigned n = 0; n < prevLayer.size(); ++n) //for each neuron in prevLayer including bias
 	{
 		Neuron &neuron = prevLayer[n];
 		double oldDeltaWeight = neuron.m_vOutputWeight[m_iIndex].m_dDeltaWeight;

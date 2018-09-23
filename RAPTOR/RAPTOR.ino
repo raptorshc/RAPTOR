@@ -1,6 +1,6 @@
 #include <elapsedMillis.h>
 
-#include "src/guidance/Pilot.h"
+#include "src/guidance/pilot/Pilot.h"
 #include "src/drivers/bmp/bmp.h"
 #include "src/drivers/gps/gps.h"
 #include "src/drivers/imu/imu.h"

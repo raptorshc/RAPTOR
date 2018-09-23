@@ -28,8 +28,8 @@ void Pathfinder::findPath()
 
     /* First find the vector between our coordinates */
     this->_Path.lat_vec = this->_Path.lat_final.decimal - this->_Path.lat_initial.decimal;
-    this->_Path.long_vec = -1.0*(this->_Path.long_final.decimal) - -1.0*(this->_Path.long_initial.decimal);
-    
+    this->_Path.long_vec = -1.0 * (this->_Path.long_final.decimal) - -1.0 * (this->_Path.long_initial.decimal);
+
     /* Compute the angle of the vector to find our bearing */
     this->_Path.angle = atan2(this->_Path.long_vec, this->_Path.lat_vec) * 180.0 / pi; //atan returns in radians, * 180/pi is converting radians to degrees, 90 - gives bearing.
     if (this->_Path.angle < 0)
