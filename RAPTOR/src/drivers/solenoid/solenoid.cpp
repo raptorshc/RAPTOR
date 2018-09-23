@@ -32,10 +32,22 @@ void sol_init(void)
     digitalWrite(SOLC_DTA, HIGH); // Engage Cutdown solenoid
 }
 
-void cutdown(void){
-
+void cutdown(void)
+{
+    // digitalWrite(SOLC_DTA, HIGH);
+    digitalWrite(SOLC_DTA, LOW);
 }
 
-void deploy_parafoil(void){
+void parafoil_deploy(void)
+{
+    // digitalWrite(SOLC_DTA, HIGH);
+    digitalWrite(SOLP_DTA, LOW);
+}
 
+bool cutdown_switch(void){
+    return digitalRead(SWC_PIN);
+}
+
+bool parafoil_switch(void){
+    return digitalRead(SWP_PIN);
 }

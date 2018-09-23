@@ -9,6 +9,13 @@
 #include "Arduino.h"
 #include <Adafruit_BNO055.h>
 
-void imu_init(void){
-    
+void BNO::init(void){
+    if(!this->begin())
+        Serial.print(F("No BNO055 detected!"));
+    //calibrate?
+}
+
+void BNO::update(){
+    this->getEvent(&this->data);
+    // might do some extra processing here?
 }

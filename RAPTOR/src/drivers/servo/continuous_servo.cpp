@@ -2,65 +2,40 @@
 
 */
 #include "continuous_servo.h"
-#include "Arduino.h"
-
-#define RIGHT 1 // Direction of the turn
-#define LEFT 0  //Direction of the turn
-#define SERVO_STOP 90
-#define TTR 100
+#include <Arduino.h>
 
 /* Public Methods */
-
 /*
- *	Constructor for ContinuousServo
+ *	turn will rotate the servos to a certain configuration, based on the set time to rotate (TTR),
+ * 		if reset is given as true, the servo will rotate in the opposite direction for the same amount of time.
  */
-ContinuousServo::ContinuousServo() {}
-
-/*
- *	servoAdjustment acts as the wrapper for the rest of the methods,
- *   accepting inputs of how much you want to turn in degrees (deg) and in what dir (dir).
- */
-void ContinuousServo::servoAdjustment(int dir)
+void ContinuousServo::turn(bool reset /*= false*/)
 {
-	this->write(SERVO_STOP); // Stop the servos just in-case they're running already.
-	if (dir == RIGHT)
-		this->write(0); // If it is a right turn, just use the deflection setting speed.
-	else
-		this->write(180); // Otherwise, add 90 to the speed to reverse the direction.
-	delay(500);
-	
-	delay(_ttr);			 // Delay the set amount of time to get to the deflection setting.
-	this->write(SERVO_STOP); // Stop the servos once we've reached the deflection setting.
-}
-
-/* Private Methods */
-
-/*
- *	timeToTurn calculates the duration of the turn in milliseconds based on the degrees given in servoAdjustment.
- *	 The function will select a deflection setting for the user, based on if the turn will take more or less than a second to execute.
- */
-int ContinuousServo::timeToTurn(float degree)
-{
-	if (degree / float(_dPSH) >= 1)
-	{ // If the turn takes more than one second, use high deflection
-		_currentdef = HIGH;
-		return degree / _dPSH;
+	this->writeMicroseconds(STOP); // Stop the servos just in-case they're running already.
+	delay(10);
+	if (servo == RIGHT)
+	{
+		if (reset)
+			this->writeMicroseconds(CCW);
+		else
+			this->writeMicroseconds(CW); // based on the turn, we will rotate CW or CCW
 	}
 	else
-	{ // Otherwise use low deflection
-		_currentdef = LOW;
-		return degree / _dPSL;
+	{ // left servo
+		if (reset)
+			this->writeMicroseconds(CW); // reset will turn the servo the other way for the same amount of time
+		else
+			this->writeMicroseconds(CCW);
 	}
+	delay(TTR);
+
+	this->writeMicroseconds(STOP); // Stop the servos once we've reached the deflection setting.
 }
 
 /*
- *	resetServo will reset the servos to the default position after a turn.
- *   Must be called before timeToTurn is used, as it relies on the previous turn's deflection setting.
+ *	reset will reset the servos to the default position after a turn.
  */
-void ContinuousServo::resetServo(int dir)
+void ContinuousServo::reset()
 {
-	if (dir == RIGHT)
-		servoAdjustment(LEFT);
-	else
-		servoAdjustment(RIGHT);
+	turn(true);
 }

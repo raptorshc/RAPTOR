@@ -9,5 +9,9 @@
 #include "Arduino.h"
 
 void sol_init(void);
+void cutdown(void);
+void parafoil_deploy(void);
+bool cutdown_switch(void);
+bool parafoil_switch(void);
 
 #endif

@@ -7,14 +7,19 @@
 #ifndef BMP_H_
 #define BMP_H_
 
-struct BmpData // since the BMP object doesn't store data for us
+#include <Adafruit_BMP085_U.h> // external adafruit library
+#include <Adafruit_Sensor.h>
+#include "Arduino.h"
+
+class BMP
+    : public Adafruit_BMP085_Unified
 {
+public:
+  BMP() : Adafruit_BMP085_Unified(10085) {}
+  void init(void);
+  bool update(void);
+
   float baseline, pressure, temperature, altitude;
 };
-
-extern BmpData bmp_data;
-
-void bmp_init(void);
-bool bmp_update(void);
 
 #endif /* BMP_H_ */

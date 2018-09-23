@@ -10,9 +10,16 @@
 #include "Arduino.h"
 #include <Adafruit_GPS.h>
 
-extern Adafruit_GPS gps;
+#include "../../guidance/Pathfinder.h"
 
-void gps_init(void);
-double correct_alt(void);
+class GPS
+    : public Adafruit_GPS
+{
+  public:
+    GPS(SoftwareSerial &mySerial) : Adafruit_GPS(&mySerial) {}
+
+    void init(void);
+    void update(Coordinate *x, Coordinate *y);
+};
 
 #endif
