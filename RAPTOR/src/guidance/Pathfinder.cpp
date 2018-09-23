@@ -24,7 +24,7 @@ Pathfinder::Pathfinder(Coordinate current_lat, Coordinate current_long, Coordina
 
 void Pathfinder::findPath()
 {
-    path_dmsToDec(); //Convert the coordinates to decimal to make it easier to find the vector and angle.
+    // path_dmsToDec(); //Convert the coordinates to decimal to make it easier to find the vector and angle, don't need if we have decimal already
 
     /* First find the vector between our coordinates */
     this->_Path.lat_vec = this->_Path.lat_final.decimal - this->_Path.lat_initial.decimal;

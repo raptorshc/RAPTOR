@@ -24,7 +24,7 @@ Pilot pilot;
 SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
 
-boolean flying = false;
+uint8_t flight_state = 0;
 
 /* 
  * Arduino setup function, first function to be run.
@@ -48,7 +48,6 @@ void setup()
 
   /* GPS */
   gps.init();
-  delay(1000);
 
   /* SD */
   pinMode(SD_GRN, OUTPUT);
@@ -65,7 +64,7 @@ void setup()
                  "LATITUDE, LONGITUDE, ANGLE, "
                  "X, Y, Z, "
                  "SWC, SWP, "
-                 "SRVOR, SRVOL, FLYING\n")); // data header
+                 "SRVOR, SRVOL, FLIGHT_STATE\n")); // data header
 }
 
 /* 
@@ -73,9 +72,17 @@ void setup()
  */
 void loop()
 {
-  if (!flying)
+  switch (flight_state)
   {
-    // just poll altitude calculations
+  case 0: // flight state 0 is launch
+    if (!bmp.update())
+      bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
+
+    if (correct_alt_ascending() > 30.0)
+      flight_state = 1; // transition to flight state 1
+
+    break;
+  case 1: // flight state 1 is ascent
     if (!bmp.update())
       bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
 
@@ -83,33 +90,49 @@ void loop()
     {
       cutdown(); // cutdown
 
-      if (!cutdown_check() || !digitalRead(SWC_PIN))
+      if (!cutdown_check() || cutdown_switch())
       { // we want to make sure that we have cut down and we are falling
-        Serial << F("!!!! CUTDOWN ERROR !!!!") << "\n";
+        Serial << F("\n!!!! CUTDOWN ERROR !!!!\n");
         cutdown(); // try cutdown again
       }
 
       parafoil_deploy(); // deploy parafoil
-      if (!digitalRead(SWP_PIN))
+      if (parafoil_switch())
       { // make sure the parafoil has deployed
-        Serial << F("!!!! PARAFOIL DEPLOYMENT ERROR !!!!") << "\n";
-        parafoil_deploy(); // try deploying parafoil again
+        Serial << F("\n!!!! PARAFOIL DEPLOYMENT ERROR !!!!\n");
+        parafoil_deploy(); // try deploying parafoil again, probably won't do much
       }
 
-      // pilot.wake();
-      flying = true;
+      Coordinate target_lat, target_long, current_lat, current_long;
+      
+      target_lat.decimal = 34.73; // HARD CODED TARGET COORDINATES
+      target_long.decimal = 86.64;
+
+      current_lat.decimal = gps.latitude;
+      current_long.decimal = gps.longitude;
+      
+      pilot.wake(target_lat, target_long, current_lat, current_long);
+      flight_state = 2;
     }
+    print_data();
+    break;
+  case 2: // flight state 2 is descent
+    if (correct_alt_descending() < 30.0)
+    { // **** maybe check a few times?
+      flight_state = 3;
+      Serial << "\n!!!! LANDED !!!!\n";
+    }
+    print_data();
+    delay(100);
+    break;
+  case 3:                                           // flight state 3 is landed
+    digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA)); // toggle LEDs every second
+    analogWrite(BZZ_DTA, 200);                      // turn on buzzer for 500 ms, off for 500 ms
+    delay(500);
+    analogWrite(BZZ_DTA, 0);
+    delay(500);
+    break;
   }
-
-  bno.update();
-
-  /* Let's spray the OpenLog with a hose of data */
-  Serial << timeElapsed << F(",")
-         << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
-         << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
-         << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
-         << digitalRead(SWC_PIN) << F(",") << digitalRead(SWP_PIN) << F(",")
-         << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flying << "\n"; // write everything to SD card
 }
 
 /* 
@@ -150,7 +173,7 @@ SIGNAL(TIMER0_COMPA_vect)
 
   if (gps.newNMEAreceived())
   {
-    if (gps.parse(gps.lastNMEA()) && flying)
+    if (gps.parse(gps.lastNMEA()) && flight_state == 2)
     {                       // this also sets the newNMEAreceived() flag to false
       pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
     }
@@ -174,4 +197,17 @@ bool cutdown_check(void)
       }
   }
   return true; //Falling
+}
+
+void print_data()
+{
+  bno.update();
+
+  /* Let's spray the OpenLog with a hose of data */
+  Serial << timeElapsed << F(",")
+         << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
+         << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
+         << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
+         << cutdown_switch() << F(",") << parafoil_switch() << F(",")
+         << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flight_state << "\n"; // write everything to SD card
 }
