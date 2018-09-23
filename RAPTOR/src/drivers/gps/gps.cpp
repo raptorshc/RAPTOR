@@ -22,8 +22,3 @@ void GPS::init(void)
     OCR0A = 0xAF;
     TIMSK0 |= _BV(OCIE0A);
 }
-
-/*
- * read fills out long and lat Coordinates using the current GPS values 
- */
-void GPS::update(Coordinate *x, Coordinate *y) {}
