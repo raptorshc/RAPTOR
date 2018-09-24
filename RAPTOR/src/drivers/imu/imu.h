@@ -7,7 +7,16 @@
 #ifndef IMU_H_
 #define IMU_H_
 
-void imu_init(void);
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+
+class BNO : public Adafruit_BNO055{
+    public:
+        BNO() : Adafruit_BNO055(55){}
+        void init(void);
+        void update(void);
+
+        sensors_event_t data;
+};
 
 #endif
-

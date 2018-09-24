@@ -12,24 +12,23 @@
 class ContinuousServo : public Servo
 {
 public:
-  ContinuousServo();
+  ContinuousServo(uint8_t setservo)
+  {
+    this->servo = setservo;
+  }
 
-  void servoAdjustment(int dir);
+  void turn(bool reset = false);
+  void reset();
+
+  static const uint8_t RIGHT = 1,
+                       LEFT = 0;
 
 private:
-  int timeToTurn(float deg);
-  void resetServo(int dir);
-  void manualAdjustment(int dir);
-
-  int _currentdef; // current deflection setting
-
-  int _hspeed = 75; // default high speed is 75
-  int _lspeed = 30; // default low speed is 30
-
-  int _dPSH = 1; // number of degs per second that the high setting rotates with
-  int _dPSL = 2; // number of degs per second that the low setting rotates with
-
-  int _ttr = 100; // default amount of time to rotate the servos to achieve either deflection setting is 100ms
+  static const int STOP = 1500,
+                   CCW = 1000,
+                   CW = 1900,
+                   TTR = 500;
+  uint8_t servo; // uses RIGHT/LEFT to determine which way to turn and how to reset
 };
 
 #endif
