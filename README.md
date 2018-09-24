@@ -30,15 +30,18 @@ Kestrel was designed and built to be a testing payload, where we could fly our e
 
 ### **April 21, 2018** (UAH Space Hardware Club BalloonSat Flight 75)
 
-to be written
+Our first flight took the Kestrel payload up to 100,000ft, where the components performed nearly perfectly, with only one measured failure of a solenoid. The following graphs are constructed from the data collected during the flight.
 
-### **August 31, 2018** (UAH Space Hardware Club BalloonSat Flight 75)
 
-to be written
 
-### **September 29, 2018** (UAH Space Hardware Club BalloonSat Flight 75)
+### **August 31, 2018** (UAH Space Hardware Club BalloonSat Flight 77)
 
-to be written
+For our second flight we gathered additional data using the Kestrel payload. A major issue during the flight was that the Arduino power cycled while near the apogee of the flight. Due to a mistake in the code, a baseline pressure is taken when the board initializes, so the altitude during descent tended into the negative values. The following graphs show adjusted data from the flight for ascent.
+
+
+### **September 29, 2018** (UAH Space Hardware Club BalloonSat Flight 78)
+
+//
 
 ## 5. Project Progress
 
