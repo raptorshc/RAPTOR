@@ -75,6 +75,9 @@ void loop()
     if (correct_alt_ascending() > 30.0)
       flight_state = 1; // transition to flight state 1
 
+    if(!cutdown_switch())
+      flight_state = 1;
+
     break;
   case 1: // flight state 1 is ascent
     if (!bmp.update())
