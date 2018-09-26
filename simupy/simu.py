@@ -68,7 +68,7 @@ def main():
   # parse args
   args = parser.parse_args()
   
-  #strPort = '/dev/tty.usbserial-A7006Yqh'
+  #strPort = '/dev/ttyACM0'
   strPort = args.port
 
   print('reading from serial port %s...' % strPort)
