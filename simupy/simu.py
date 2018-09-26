@@ -3,15 +3,17 @@ simu.py
 Displays data output from Arduino using matplotlib.
 Original code: https://gist.github.com/electronut/d5e5f68c610821e311b0
 """
-import sys, serial, argparse
+import sys
+import serial
+import argparse
 import numpy as np
 from time import sleep
 from collections import deque
 
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-    
+
 # plot class
 class plotter:
   # constr
@@ -40,13 +42,15 @@ class plotter:
   # update plot
   def update(self, frameNum, a0, a1):
       try:
-          line = self.ser.readline()
-          data = [float(val) for val in line.split(',')]
-          # print data
-          if(len(data) == 2):
-              self.add(data)
-              a0.set_data(range(self.maxLen), self.ax)
-              a1.set_data(range(self.maxLen), self.ay)
+          line = self.inf.readline().strip()
+          if line:
+            print(f'line:{line}')
+            data = [float(val) for val in line.split(',')]
+            # print data
+            if(len(data) == 2):
+                self.add(data)
+                a0.set_data(range(self.maxLen), self.ax)
+                a1.set_data(range(self.maxLen), self.ay)
       except KeyboardInterrupt:
           print('exiting')
       
@@ -68,7 +72,7 @@ def main():
   # parse args
   args = parser.parse_args()
   
-  #strPort = '/dev/ttyACM0'
+  # strPort = '/dev/ttyACM0'
   strPort = args.port
 
   print('reading from serial port %s...' % strPort)
