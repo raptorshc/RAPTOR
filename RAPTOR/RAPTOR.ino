@@ -6,7 +6,6 @@
 #include "src/drivers/imu/imu.h"
 #include "src/drivers/servo/continuous_servo.h"
 #include "src/drivers/solenoid/solenoid.h"
-#include "src/drivers/openlog/openlog.h"
 
 template <class T>inline Print &operator<<(Print &obj, T arg){obj.print(arg); return obj;} // allows stream style input and output
 
@@ -15,6 +14,8 @@ template <class T>inline Print &operator<<(Print &obj, T arg){obj.print(arg); re
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
 
+#define SD_GRN 4 // OpenLog Reset pin
+
 BNO bno;
 BMP bmp;
 elapsedMillis timeElapsed;
@@ -22,8 +23,6 @@ Pilot pilot;
 
 SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
-
-OpenLog ol(Serial);
 
 uint8_t flight_state = 0;
 
@@ -45,11 +44,15 @@ void setup()
   gps.init();
 
   /* SD */
-  ol.init(); // initializes the openlog, 
-  //now everything written to Serial is also written to the openlog
-  ol.command(); // command mode
+  pinMode(SD_GRN, OUTPUT);
+  Serial.begin(9600);
 
+  // Reset OpenLog
+  digitalWrite(SD_GRN, LOW);
+  delay(100);
+  digitalWrite(SD_GRN, HIGH);
 
+  delay(10);
   Serial.print(F("TIME,"
                  "TEMPERATURE, PRESSURE, ALTITUDE, "
                  "LATITUDE, LONGITUDE, ANGLE, "
