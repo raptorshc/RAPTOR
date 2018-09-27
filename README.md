@@ -11,3 +11,6 @@ Helpful link for installing libraries: https://www.arduino.cc/en/hacking/librari
 Summary:
 	Copy the contents of the 'libraries' folder into Documents\Arduino\libraries. 
 	The RAPTOR.ino file should then happily compile in the Arduino IDE.
+	
+Data Analysis:
+	https://gist.github.com/seaan/b5e444501d5cfbac11fcf7b2c3e77740
