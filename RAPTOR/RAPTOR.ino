@@ -44,13 +44,7 @@ void setup()
   gps.init();
 
   /* SD */
-  pinMode(SD_GRN, OUTPUT);
   Serial.begin(9600);
-
-  // Reset OpenLog
-  digitalWrite(SD_GRN, LOW);
-  delay(100);
-  digitalWrite(SD_GRN, HIGH);
 
   delay(10);
   Serial.print(F("TIME,"
