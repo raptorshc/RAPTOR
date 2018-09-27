@@ -1,6 +1,6 @@
 """
 simu.py
-Displays data output from Arduino using matplotlib.
+Displays data output from a serial port using matplotlib.
 Original code: https://gist.github.com/electronut/d5e5f68c610821e311b0
 """
 import sys
