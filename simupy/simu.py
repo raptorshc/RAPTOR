@@ -18,13 +18,28 @@ import matplotlib.animation as animation
 # plot class
 class plotter:
     # constr
-    def __init__(self, strPort, maxLen):
+    def __init__(self, strPort, maxLen, axis):
         # open serial port
-        self.ser = serial.Serial(strPort, 9600)
+        self.ser = serial.Serial(strPort,baudrate=9600,
+                     bytesize=serial.EIGHTBITS,
+                     parity=serial.PARITY_NONE,
+                     stopbits=serial.STOPBITS_ONE,
+                     timeout=1,
+                     xonxoff=0,
+                     rtscts=0)
+        # reset and flush input
+        self.ser.setDTR(False)
+        sleep(1)
+        self.ser.flushInput()
+        self.ser.setDTR(True)
 
         self.ax = deque([0.0]*maxLen)
         self.ay = deque([0.0]*maxLen)
         self.maxLen = maxLen
+
+        self.axis = axis
+        self.xlim = 200
+        self.ylim = 10000
 
     # add to buffer
     def addToBuf(self, buf, val):
@@ -35,8 +50,7 @@ class plotter:
             buf.appendleft(val)
 
     # add data
-    def add(self, data):
-        print(data)        
+    def add(self, data):   
         self.addToBuf(self.ax, data[0])
         self.addToBuf(self.ay, data[1])
 
@@ -46,11 +60,18 @@ class plotter:
             line = self.ser.readline().strip().decode("ASCII")
             if line:
                 data = [float(val) for val in line.split(',') if val]
-                # print data
+                print(data)
                 if(len(data) > 10):
                     self.add(data)
-                    a0.set_data(range(self.maxLen), self.ax)
-                    a1.set_data(range(self.maxLen), self.ay)
+                    a0.set_data(self.ax, self.ay)
+
+                    # update the limits
+                    if(data[0] > self.xlim):
+                        self.axis.set_xlim([0,data[0]])
+                        self.xlim = data[0]
+                    if(data[1] > self.ylim):
+                        self.axis.set_ylim([0,data[1]])
+                        self.ylim = data[1]
         except KeyboardInterrupt:
             print('exiting')
         except ValueError:
@@ -82,19 +103,18 @@ def main():
     print('reading from serial port %s...' % strPort)
 
     # plot parameters
-    plot = plotter(strPort, 100)
+    fig = plt.figure()
+    ax = plt.axes(xlim=(0,200), ylim=(0,10000))
+    plot = plotter(strPort, 100, ax)
 
     print('plotting data...')
 
     # set up animation
-    fig = plt.figure()
-    ax = plt.axes(xlim=(0, 100), ylim=(0, 1023))
     a0, = ax.plot([], [])
     a1, = ax.plot([], [])
     anim = animation.FuncAnimation(fig, plot.update,
                                    fargs=(a0, a1),
                                    interval=50)
-
     # show plot
     plt.show()
 
