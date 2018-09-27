@@ -7,6 +7,7 @@ import sys
 import serial
 import argparse
 import numpy as np
+import re
 from time import sleep
 from collections import deque
 
@@ -16,90 +17,93 @@ import matplotlib.animation as animation
 
 # plot class
 class plotter:
-  # constr
-  def __init__(self, strPort, maxLen):
-      # open serial port
-      self.ser = serial.Serial(strPort, 9600)
+    # constr
+    def __init__(self, strPort, maxLen):
+        # open serial port
+        self.ser = serial.Serial(strPort, 9600)
 
-      self.ax = deque([0.0]*maxLen)
-      self.ay = deque([0.0]*maxLen)
-      self.maxLen = maxLen
+        self.ax = deque([0.0]*maxLen)
+        self.ay = deque([0.0]*maxLen)
+        self.maxLen = maxLen
 
-  # add to buffer
-  def addToBuf(self, buf, val):
-      if len(buf) < self.maxLen:
-          buf.append(val)
-      else:
-          buf.pop()
-          buf.appendleft(val)
+    # add to buffer
+    def addToBuf(self, buf, val):
+        if len(buf) < self.maxLen:
+            buf.append(val)
+        else:
+            buf.pop()
+            buf.appendleft(val)
 
-  # add data
-  def add(self, data):
-      assert(len(data) == 2)
-      self.addToBuf(self.ax, data[0])
-      self.addToBuf(self.ay, data[1])
+    # add data
+    def add(self, data):
+        print(data)        
+        self.addToBuf(self.ax, data[0])
+        self.addToBuf(self.ay, data[1])
 
-  # update plot
-  def update(self, frameNum, a0, a1):
-      try:
-          line = self.inf.readline().strip()
-          if line:
-            print(f'line:{line}')
-            data = [float(val) for val in line.split(',')]
-            # print data
-            if(len(data) == 2):
-                self.add(data)
-                a0.set_data(range(self.maxLen), self.ax)
-                a1.set_data(range(self.maxLen), self.ay)
-      except KeyboardInterrupt:
-          print('exiting')
-      
-      return a0, 
+    # update plot
+    def update(self, frameNum, a0, a1):
+        try:
+            line = self.ser.readline().strip().decode("ASCII")
+            if line:
+                data = [float(val) for val in line.split(',') if val]
+                # print data
+                if(len(data) > 10):
+                    self.add(data)
+                    a0.set_data(range(self.maxLen), self.ax)
+                    a1.set_data(range(self.maxLen), self.ay)
+        except KeyboardInterrupt:
+            print('exiting')
+        except ValueError:
+            pass
 
-  # clean up
-  def close(self):
-      # close serial
-      self.ser.flush()
-      self.ser.close()    
+        return a0,
+
+    # clean up
+    def close(self):
+        # close serial
+        self.ser.flush()
+        self.ser.close()
 
 # main() function
+
+
 def main():
-  # create parser
-  parser = argparse.ArgumentParser(description="LDR serial")
-  # add expected arguments
-  parser.add_argument('--port', dest='port', required=True)
+    # create parser
+    parser = argparse.ArgumentParser(description="LDR serial")
+    # add expected arguments
+    parser.add_argument('--port', dest='port', required=True)
 
-  # parse args
-  args = parser.parse_args()
-  
-  # strPort = '/dev/ttyACM0'
-  strPort = args.port
+    # parse args
+    args = parser.parse_args()
 
-  print('reading from serial port %s...' % strPort)
+    # strPort = '/dev/ttyACM0'
+    strPort = args.port
 
-  # plot parameters
-  plot = plotter(strPort, 100)
+    print('reading from serial port %s...' % strPort)
 
-  print('plotting data...')
+    # plot parameters
+    plot = plotter(strPort, 100)
 
-  # set up animation
-  fig = plt.figure()
-  ax = plt.axes(xlim=(0, 100), ylim=(0, 1023))
-  a0, = ax.plot([], [])
-  a1, = ax.plot([], [])
-  anim = animation.FuncAnimation(fig, plot.update, 
-                                 fargs=(a0, a1), 
-                                 interval=50)
+    print('plotting data...')
 
-  # show plot
-  plt.show()
-  
-  # clean up
-  plot.close()
+    # set up animation
+    fig = plt.figure()
+    ax = plt.axes(xlim=(0, 100), ylim=(0, 1023))
+    a0, = ax.plot([], [])
+    a1, = ax.plot([], [])
+    anim = animation.FuncAnimation(fig, plot.update,
+                                   fargs=(a0, a1),
+                                   interval=50)
 
-  print('exiting.')
-  
+    # show plot
+    plt.show()
+
+    # clean up
+    plot.close()
+
+    print('exiting.')
+
 
 # call main
 if __name__ == '__main__':
-  main()
+    main()

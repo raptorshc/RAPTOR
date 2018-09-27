@@ -112,6 +112,7 @@ void loop()
       flight_state = 2;
     }
     print_data();
+    delay(100);
     break;
   case 2: // flight state 2 is descent
     if (correct_alt_descending() < 30.0)
@@ -201,7 +202,7 @@ void print_data()
   bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
-  Serial << timeElapsed << F(",")
+  Serial << timeElapsed << F(",") << timeElapsed*2 << F(",")
          << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
          << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
          << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
