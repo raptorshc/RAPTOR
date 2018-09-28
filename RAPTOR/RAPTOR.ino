@@ -1,4 +1,5 @@
 #include <elapsedMillis.h>
+#include <EEPROM.h>
 
 #include "src/guidance/pilot/Pilot.h"
 #include "src/drivers/bmp/bmp.h"
@@ -14,7 +15,7 @@ template <class T>inline Print &operator<<(Print &obj, T arg){obj.print(arg); re
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
 
-#define SD_GRN 4 // OpenLog Reset pin
+#define SET_BTN 7
 
 BNO bno;
 BMP bmp;
@@ -25,6 +26,7 @@ SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
 
 uint8_t flight_state = 0;
+int EEaddr = 0; // eeprom address
 
 /* 
  * Arduino setup function, first function to be run.
@@ -40,6 +42,14 @@ void setup()
   /* Solenoids, Servos, BMP, BNO */
   startup_sequence();
 
+  if (digitalRead(SET_BTN))
+  {
+    write_EEPROM();
+  }
+  else
+  {
+    read_EEPROM();
+  }
   /* GPS */
   gps.init();
 
@@ -67,7 +77,12 @@ void loop()
       bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
 
     if (correct_alt_ascending() > 30.0)
+    {
       flight_state = 1; // transition to flight state 1
+      write_EEPROM();
+    }
+    if (!cutdown_switch())
+      flight_state = 1;
 
     break;
   case 1: // flight state 1 is ascent
@@ -101,13 +116,16 @@ void loop()
 
       pilot.wake(target_lat, target_long, current_lat, current_long);
       flight_state = 2;
+      write_EEPROM();
     }
     print_data();
+    delay(100);
     break;
   case 2: // flight state 2 is descent
     if (correct_alt_descending() < 30.0)
     { // **** maybe check a few times?
       flight_state = 3;
+      write_EEPROM();
       Serial << "\n!!!! LANDED !!!!\n";
     }
     print_data();
@@ -192,12 +210,12 @@ void print_data()
   bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
-  Serial << timeElapsed << F(",")
-         << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
-         << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
-         << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
-         << cutdown_switch() << F(",") << parafoil_switch() << F(",")
-         << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flight_state << "\n"; // write everything to SD card
+  Serial << timeElapsed << F(",") 
+  << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
+  << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
+  << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
+  << cutdown_switch() << F(",") << parafoil_switch() << F(",")
+  << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flight_state << "\n"; // write everything to SD card
 }
 
 /* 
@@ -206,15 +224,14 @@ void print_data()
  */
 void startup_sequence(void)
 {
-  analogWrite(BZZ_DTA, 200);
+  analogWrite(BZZ_DTA, 200); // turn on the buzzer for a second to indicate board power
   delay(500);
   analogWrite(BZZ_DTA, 0);
 
-  sol_init();
-  pilot.servo_test();
+  sol_init();         // initialize solenoids, should hear them click
+  pilot.servo_test(); // rotates and resets each servo
 
   delay(200);
-  
 
   if (bmp.init() && bno.init())
   { // check to see if our sensors are working, if they are blink once, if not blink 5 times
@@ -230,4 +247,19 @@ void startup_sequence(void)
       delay(200);
     }
   }
+}
+
+void write_EEPROM()
+{
+  EEPROM.write(0, flight_state);   // flight state is always at address 0
+  EEPROM.write(100, bmp.baseline); // baseline pressure always at address 100
+  EEPROM.write(200, bmp.altitude);
+}
+
+void read_EEPROM()
+{
+  flight_state = EEPROM.read(0);
+  if(flight_state == 1)
+    flight_state = 2; // this makes sense cause we'll be falling!
+  bmp.baseline = EEPROM.read(100);
 }
