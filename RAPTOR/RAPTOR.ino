@@ -42,6 +42,9 @@ void setup()
   /* Solenoids, Servos, BMP, BNO */
   startup_sequence();
 
+  Serial.begin(9600);
+
+  pinMode(SET_BTN, OUTPUT);
   if (digitalRead(SET_BTN))
   {
     write_EEPROM();
@@ -54,7 +57,7 @@ void setup()
   gps.init();
 
   /* SD */
-  Serial.begin(9600);
+  // Serial.begin(9600);
 
   delay(10);
   Serial.print(F("TIME,"
@@ -81,7 +84,7 @@ void loop()
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
     }
-    if (!cutdown_switch())
+    if (cutdown_switch()) // *************** FOR TESTING PLEASE REMOVE *************
       flight_state = 1;
 
     break;
@@ -251,15 +254,20 @@ void startup_sequence(void)
 
 void write_EEPROM()
 {
-  EEPROM.write(0, flight_state);   // flight state is always at address 0
-  EEPROM.write(100, bmp.baseline); // baseline pressure always at address 100
-  EEPROM.write(200, bmp.altitude);
+  Serial << "Write EEPROM\n";
+  EEPROM.put(0, flight_state);   // flight state is always at address 0
+  EEPROM.put(100, bmp.baseline); // baseline pressure always at address 100
 }
 
 void read_EEPROM()
 {
-  flight_state = EEPROM.read(0);
+  Serial << "Read EEPROM\n";
+  EEPROM.get(0, flight_state);
   if(flight_state == 1)
     flight_state = 2; // this makes sense cause we'll be falling!
-  bmp.baseline = EEPROM.read(100);
+
+  EEPROM.get(100, bmp.baseline);
+  
+  Serial << "Saved flight state: " << flight_state;
+  Serial << "\nSaved baseline: " << bmp.baseline << "\n";
 }
