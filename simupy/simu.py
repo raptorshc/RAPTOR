@@ -93,14 +93,19 @@ def main():
     parser = argparse.ArgumentParser(description="LDR serial")
     # add expected arguments
     parser.add_argument('--port', dest='port', required=True)
+    parser.add_argument('--data', dest='data', required=False)
 
     # parse args
     args = parser.parse_args()
 
     # strPort = '/dev/ttyACM0'
     strPort = args.port
+    data = { i : 0 for i in args.data.split() }
 
     print('reading from serial port %s...' % strPort)
+    print('data: ')
+    for key in data.keys():
+        print(key + ', ')
 
     # plot parameters
     fig = plt.figure()
