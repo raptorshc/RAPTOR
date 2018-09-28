@@ -20,13 +20,13 @@ class plotter:
     # constr
     def __init__(self, strPort, maxLen, axis1, axis2=False):
         # open serial port
-        self.ser = serial.Serial(strPort,baudrate=9600,
-                     bytesize=serial.EIGHTBITS,
-                     parity=serial.PARITY_NONE,
-                     stopbits=serial.STOPBITS_ONE,
-                     timeout=1,
-                     xonxoff=0,
-                     rtscts=0)
+        self.ser = serial.Serial(strPort, baudrate=9600,
+                                 bytesize=serial.EIGHTBITS,
+                                 parity=serial.PARITY_NONE,
+                                 stopbits=serial.STOPBITS_ONE,
+                                 timeout=1,
+                                 xonxoff=0,
+                                 rtscts=0)
         # reset and flush input
         self.ser.setDTR(False)
         sleep(1)
@@ -40,7 +40,7 @@ class plotter:
         self.maxLen = maxLen
 
         self.axis1 = axis1
-        self.axis2 = axis2 # ay2
+        self.axis2 = axis2  # ay2
 
         self.xlim = 100
         self.ylim1 = 100
@@ -55,7 +55,7 @@ class plotter:
             buf.appendleft(val)
 
     # add data
-    def add(self, data):   
+    def add(self, data):
         self.addToBuf(self.ax, data[0])
         self.addToBuf(self.ay, data[1])
 
@@ -74,19 +74,18 @@ class plotter:
                     a0.set_data(self.ax, self.ay)
                     if self.axis2:
                         a1.set_data(self.ay2)
-                        
 
                     # update the limits
                     if(data[0] > self.xlim):
-                        self.axis1.set_xlim([0,data[0]])
+                        self.axis1.set_xlim([0, data[0]])
                         self.xlim = data[0]
                     if(data[1] > self.ylim1):
                         self.ylim1 = data[1]
-                        self.axis1.set_ylim([0,self.ylim1])
+                        self.axis1.set_ylim([0, self.ylim1])
                     if self.axis2:
                         if(data[2] > self.ylim2):
-                            self.ylim2 = data[2]    
-                            self.axis2.set_ylim([0,self.ylim2])
+                            self.ylim2 = data[2]
+                            self.axis2.set_ylim([0, self.ylim2])
         except KeyboardInterrupt:
             print('exiting')
         except ValueError:
@@ -110,7 +109,7 @@ def main():
     parser = argparse.ArgumentParser(description="LDR serial")
     # add expected arguments
     parser.add_argument('--port', dest='port', required=True)
-    parser.add_argument('--data', dest='datalist', nargs = '+', required=False)
+    parser.add_argument('--data', dest='datalist', nargs='+', required=False)
 
     # parse args
     args = parser.parse_args()
@@ -124,19 +123,14 @@ def main():
         print(item)
 
     # build plots
-    # if len(data) > 3
-    #     fig1, ax = plt.subplots()
-    #     ax.plot()
-    #     ax.set_xlabel(data.keys()[1])
-    #     ax.set_ylabel(data.keys()[2])
     if len(args.datalist) > 2:
-        fig, (ax1,ax2) = plt.subplots(2,1)
-        ax1 = plt.axes(xlim=(0,100), ylim=(0,100))
+        fig, (ax1, ax2) = plt.subplots(2, 1)
+        ax1 = plt.axes(xlim=(0, 100), ylim=(0, 100))
         ax1.set_xlabel(args.datalist[0])
         ax1.set_ylabel(args.datalist[1])
 
         ax2 = ax1.twinx()
-        ax2.set_ylim(0,100)
+        ax2.set_ylim(0, 100)
         ax2.tick_params('y', colors='r')
         ax2.set_ylabel(args.datalist[2], color='r')
 
@@ -150,10 +144,10 @@ def main():
         anim = animation.FuncAnimation(fig, plot.update,
                                        fargs=(a0, a1),
                                        interval=50)
-    
+
     else:
         fig = plt.figure()
-        ax = plt.axes(xlim=(0,100), ylim=(0,100))
+        ax = plt.axes(xlim=(0, 100), ylim=(0, 100))
         ax.set_xlabel(args.datalist[0])
         ax.set_ylabel(args.datalist[1])
         plot = plotter(strPort, 100, axis1=ax)
@@ -165,7 +159,6 @@ def main():
         anim = animation.FuncAnimation(fig, plot.update,
                                        fargs=(a0),
                                        interval=50)
-    
 
     # show plot
     plt.show()
