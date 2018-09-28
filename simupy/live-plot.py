@@ -42,8 +42,9 @@ class plotter:
         self.axis1 = axis1
         self.axis2 = axis2 # ay2
 
-        self.xlim = 200
-        self.ylim = 10000
+        self.xlim = 100
+        self.ylim1 = 100
+        self.ylim2 = 100
 
     # add to buffer
     def addToBuf(self, buf, val):
@@ -62,13 +63,13 @@ class plotter:
             self.addToBuf(self.ay2, data[2])
 
     # update plot
-    def update(self, frameNum, a0, a1):
+    def update(self, frameNum, a0, a1=0):
         try:
             line = self.ser.readline().strip().decode("ASCII")
             if line:
                 data = [float(val) for val in line.split(',') if val]
                 print(data)
-                if(len(data) > 3):
+                if(len(data) > 0):
                     self.add(data)
                     a0.set_data(self.ax, self.ay)
                     if self.axis2:
@@ -79,19 +80,20 @@ class plotter:
                     if(data[0] > self.xlim):
                         self.axis1.set_xlim([0,data[0]])
                         self.xlim = data[0]
-                    if(data[1] > self.ylim):
-                        self.ylim = data[1]
-                        self.axis1.set_ylim([0,self.ylim)
+                    if(data[1] > self.ylim1):
+                        self.ylim1 = data[1]
+                        self.axis1.set_ylim([0,self.ylim1])
                     if self.axis2:
-                        if(data[2] > self.ylim):
-                            self.ylim = data[2]
-                        self.axis1.set_ylim([0,self.ylim])    
-                        self.axis2.set_ylim([0,self.ylim]) # some logic issues with this might need to fix
+                        if(data[2] > self.ylim2):
+                            self.ylim2 = data[2]    
+                            self.axis2.set_ylim([0,self.ylim2])
         except KeyboardInterrupt:
             print('exiting')
         except ValueError:
             pass
 
+        if self.axis2:
+            return a0, a1
         return a0,
 
     # clean up
@@ -105,6 +107,8 @@ class plotter:
 
 def main():
     # create parser
+    parser = argparse.ArgumentParser(description="LDR serial")
+    # add expected arguments
     parser.add_argument('--port', dest='port', required=True)
     parser.add_argument('--data', dest='datalist', nargs = '+', required=False)
 
@@ -113,12 +117,11 @@ def main():
 
     # strPort = '/dev/ttyACM0'
     strPort = args.port
-    data = { i : 0 for i in args.datalist }
 
     print('reading from serial port %s...' % strPort)
     print('data: ')
-    for key in data.keys():
-        print(key + ', ')
+    for item in args.datalist:
+        print(item)
 
     # build plots
     # if len(data) > 3
@@ -126,32 +129,44 @@ def main():
     #     ax.plot()
     #     ax.set_xlabel(data.keys()[1])
     #     ax.set_ylabel(data.keys()[2])
-    if len(data) > 2:
-        fig, ax1 = plt.subplots()
-        ax1.plot()
-        ax1.set_xlabel(data.keys()[1])
-        ax1.set_ylabel(data.keys()[2])
+    if len(args.datalist) > 2:
+        fig, (ax1,ax2) = plt.subplots(2,1)
+        ax1 = plt.axes(xlim=(0,100), ylim=(0,100))
+        ax1.set_xlabel(args.datalist[0])
+        ax1.set_ylabel(args.datalist[1])
 
         ax2 = ax1.twinx()
-        ax2.plot(color='r')
-        ax2.set_ylabel(data.keys[3])
+        ax2.set_ylim(0,100)
+        ax2.tick_params('y', colors='r')
+        ax2.set_ylabel(args.datalist[2], color='r')
 
         plot = plotter(strPort, 100, axis1=ax1, axis2=ax2)
+
+        print('plotting data...')
+
+        # set up animation
+        a0, = ax1.plot([], [])
+        a1, = ax2.plot([], [])
+        anim = animation.FuncAnimation(fig, plot.update,
+                                       fargs=(a0, a1),
+                                       interval=50)
+    
     else:
         fig = plt.figure()
-        ax = plt.axes(xlim=(0,1000), ylim=(0,1000))
-        ax.set_xlabel(data.keys()[1])
-        ax.set_ylabel(data.keys()[2])
-        plot = plotter(strPort, 100, ax)
+        ax = plt.axes(xlim=(0,100), ylim=(0,100))
+        ax.set_xlabel(args.datalist[0])
+        ax.set_ylabel(args.datalist[1])
+        plot = plotter(strPort, 100, axis1=ax)
 
-    print('plotting data...')
+        print('plotting data...')
 
-    # set up animation
-    a0, = ax.plot([], [])
-    a1, = ax.plot([], [])
-    anim = animation.FuncAnimation(fig, plot.update,
-                                   fargs=(a0, a1),
-                                   interval=50)
+        # set up animation
+        a0 = ax.plot([], [])
+        anim = animation.FuncAnimation(fig, plot.update,
+                                       fargs=(a0),
+                                       interval=50)
+    
+
     # show plot
     plt.show()
 

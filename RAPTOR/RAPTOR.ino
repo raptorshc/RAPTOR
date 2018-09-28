@@ -202,12 +202,12 @@ void print_data()
   bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
-  Serial << timeElapsed << F(",") <<
-         << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
-         << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
-         << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
-         << cutdown_switch() << F(",") << parafoil_switch() << F(",")
-         << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flight_state << "\n"; // write everything to SD card
+  Serial << timeElapsed/1000 << F(",") << (timeElapsed/1000)*(timeElapsed/1000) << F(",") << (timeElapsed/10000)*(timeElapsed/1000)*(timeElapsed/10000) << "\n";
+        //  << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
+        //  << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
+        //  << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
+        //  << cutdown_switch() << F(",") << parafoil_switch() << F(",")
+        //  << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flight_state << "\n"; // write everything to SD card
 }
 
 /* 
