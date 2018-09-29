@@ -83,8 +83,7 @@ void loop()
     }
     if (cutdown_switch()) // *************** FOR TESTING PLEASE REMOVE *************
       flight_state = 1;
-  print_data();
-  delay(100);
+  blink_led(1000);
     break;
   case 1: // flight state 1 is ascent
     if (!bmp.update())
@@ -120,7 +119,7 @@ void loop()
       write_EEPROM();
     }
     print_data();
-    delay(100);
+    blink_led(200);
     break;
   case 2: // flight state 2 is descent
     if (correct_alt_descending() < 30.0)
@@ -130,11 +129,11 @@ void loop()
       Serial << "\n!!!! LANDED !!!!\n";
     }
     print_data();
-    delay(100);
+    blink_led(100);
     break;
   case 3:                                           // flight state 3 is landed
-    digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA)); // toggle LEDs every second
-    analogWrite(BZZ_DTA, 200);                      // turn on buzzer for 500 ms, off for 500 ms
+    blink_led(500);                                 // toggle LEDs every 1.5 second
+    analogWrite(BZZ_DTA, 200);                      // turn on buzzer for 500 ms, off for 1000 ms
     delay(500);
     analogWrite(BZZ_DTA, 0);
     delay(500);
@@ -230,6 +229,9 @@ void startup_sequence(void)
   analogWrite(BZZ_DTA, 0);
 
   sol_init();         // initialize solenoids, should hear them click
+  cutdown_switch();
+  parafoil_switch();
+  
   pilot.servo_test(); // rotates and resets each servo
 
   delay(200);
@@ -237,12 +239,12 @@ void startup_sequence(void)
   if (bmp.init() && bno.init())
   { // check to see if our sensors are working, if they are blink once, if not blink 5 times
     digitalWrite(LEDS_DTA, HIGH);
-    delay(500);
+    delay(3000);
     digitalWrite(LEDS_DTA, LOW);
   }
   else
   {
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 15; i++)
     {
       digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
       delay(200);
@@ -268,4 +270,10 @@ void read_EEPROM()
 
   Serial << "Saved flight state: " << flight_state;
   Serial << "\nSaved baseline: " << bmp.baseline << "\n";
+}
+
+void blink_led(uint8_t length)
+{
+  digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
+  delay(length);
 }
