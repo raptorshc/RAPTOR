@@ -30,6 +30,9 @@ void sol_init(void)
 
     digitalWrite(SOLP_DTA, HIGH); // Engage Parafoil solenoid
     digitalWrite(SOLC_DTA, HIGH); // Engage Cutdown solenoid
+
+    digitalWrite(LEDP_DTA, HIGH); // turn on parafoil solenoid led
+    digitalWrite(LEDC_DTA, HIGH); // turn on cutdown solenoid led
 }
 
 void cutdown(void)

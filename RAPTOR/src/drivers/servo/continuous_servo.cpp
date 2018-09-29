@@ -4,6 +4,8 @@
 #include "continuous_servo.h"
 #include <Arduino.h>
 
+#define DEBUG
+
 /* Public Methods */
 /*
  *	turn will rotate the servos to a certain configuration, based on the set time to rotate (TTR),
@@ -11,6 +13,10 @@
  */
 void ContinuousServo::turn(bool reset /*= false*/)
 {
+	this->attach(this->pin);
+#ifdef DEBUG
+	Serial.print("\nturning\n");
+#endif
 	this->writeMicroseconds(STOP); // Stop the servos just in-case they're running already.
 	delay(10);
 	if (servo == RIGHT)
@@ -30,6 +36,8 @@ void ContinuousServo::turn(bool reset /*= false*/)
 	delay(TTR);
 
 	this->writeMicroseconds(STOP); // Stop the servos once we've reached the deflection setting.
+	delay(100);
+	this->detach();
 }
 
 /*

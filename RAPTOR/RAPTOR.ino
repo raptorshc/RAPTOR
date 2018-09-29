@@ -8,7 +8,7 @@
 #include "src/drivers/servo/continuous_servo.h"
 #include "src/drivers/solenoid/solenoid.h"
 
-template <class T>inline Print &operator<<(Print &obj, T arg){obj.print(arg); return obj;} // allows stream style input and output
+template <class T> inline Print &operator<<(Print &obj, T arg){obj.print(arg);return obj;} // allows stream style input and output
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
@@ -45,19 +45,16 @@ void setup()
   Serial.begin(9600);
 
   pinMode(SET_BTN, OUTPUT);
-  if (digitalRead(SET_BTN))
-  {
-    write_EEPROM();
-  }
-  else
-  {
-    read_EEPROM();
-  }
+  // if (digitalRead(SET_BTN))
+  // {
+  //   write_EEPROM();
+  // }
+  // else
+  // {
+  //   read_EEPROM();
+  // }
   /* GPS */
   gps.init();
-
-  /* SD */
-  // Serial.begin(9600);
 
   delay(10);
   Serial.print(F("TIME,"
@@ -86,7 +83,8 @@ void loop()
     }
     if (cutdown_switch()) // *************** FOR TESTING PLEASE REMOVE *************
       flight_state = 1;
-
+  print_data();
+  delay(100);
     break;
   case 1: // flight state 1 is ascent
     if (!bmp.update())
@@ -213,12 +211,12 @@ void print_data()
   bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
-  Serial << timeElapsed << F(",") 
-  << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
-  << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
-  << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
-  << cutdown_switch() << F(",") << parafoil_switch() << F(",")
-  << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flight_state << "\n"; // write everything to SD card
+  Serial << timeElapsed << F(",")
+         << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
+         << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
+         << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
+         << cutdown_switch() << F(",") << parafoil_switch() << F(",")
+         << pilot.servoR_status() << F(",") << pilot.servoL_status() << F(",") << flight_state << "\n"; // write everything to SD card
 }
 
 /* 
@@ -263,11 +261,11 @@ void read_EEPROM()
 {
   Serial << "Read EEPROM\n";
   EEPROM.get(0, flight_state);
-  if(flight_state == 1)
+  if (flight_state == 1)
     flight_state = 2; // this makes sense cause we'll be falling!
 
   EEPROM.get(100, bmp.baseline);
-  
+
   Serial << "Saved flight state: " << flight_state;
   Serial << "\nSaved baseline: " << bmp.baseline << "\n";
 }
