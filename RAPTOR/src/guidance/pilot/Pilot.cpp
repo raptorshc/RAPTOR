@@ -82,9 +82,6 @@ int Pilot::get_turn(void)
  */
 void Pilot::servo_test(void)
 {   
-    this->servoR = new ContinuousServo(ContinuousServo::RIGHT, SRVOR_DTA);
-    this->servoL = new ContinuousServo(ContinuousServo::LEFT, SRVOL_DTA);
-
     servoL->turn();
     delay(500);
     servoL->reset();
@@ -96,6 +93,16 @@ void Pilot::servo_test(void)
     servoR->reset();
 }
 
+void Pilot::servo_init(void)
+{
+    this->servoR = new ContinuousServo(ContinuousServo::RIGHT, SRVOR_DTA);
+    this->servoL = new ContinuousServo(ContinuousServo::LEFT, SRVOL_DTA);   
+}
+
+void Pilot::sleep(void)
+{
+    straight();
+}
 /* PRIVATE METHODS */
 
 /*

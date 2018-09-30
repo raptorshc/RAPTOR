@@ -25,7 +25,8 @@ public:
 	int get_turn(void);
 
 	void servo_test(void);
-
+	void servo_init(void);
+	void sleep(void);
 private:
 	Coordinate _target;
 	float desired_heading;

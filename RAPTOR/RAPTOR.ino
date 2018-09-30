@@ -40,20 +40,21 @@ void setup()
   pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
   pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
 
-  /* Solenoids, Servos, BMP, BNO */
-  startup_sequence();
-
   Serial.begin(9600);
 
   pinMode(SET_BTN, OUTPUT);
+  if (!digitalRead(SET_BTN))
+  {
+    read_EEPROM();
+  }
+  /* Solenoids, Servos, BMP, BNO */
+  startup_sequence();
+
   if (digitalRead(SET_BTN))
   {
     write_EEPROM();
   }
-  else
-  {
-    read_EEPROM();
-  }
+
   /* GPS */
   gps.init();
 
@@ -74,9 +75,8 @@ void loop()
   switch (flight_state)
   {
   case 0: // flight state 0 is launch
-    if (!bmp.update())
-      bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
-
+    bmp.update();
+    
     if (correct_alt_ascending() > 30.0)
     {
       flight_state = 1; // transition to flight state 1
@@ -88,8 +88,7 @@ void loop()
   print_data();
     break;
   case 1: // flight state 1 is ascent
-    if (!bmp.update())
-      bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
+    bmp.update();
 
     if (correct_alt_ascending() > CUTDOWN_ALT)
     // if (timeElapsed > 10000)
@@ -102,6 +101,9 @@ void loop()
         cutdown(); // try cutdown again
       }
 
+      while(correct_alt_descending() > 800){
+        bmp.update();
+      } // wait a hundred feet to deployment
       parafoil_deploy(); // deploy parafoil
       if (parafoil_switch())
       { // make sure the parafoil has deployed
@@ -126,16 +128,17 @@ void loop()
     blink_led(200);
     break;
   case 2: // flight state 2 is descent
+    bmp.update();
     fly_time = timeElapsed;
     if(fly_time > 1000)
     {
       pilot.fly(custom_angle()); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
-    if (correct_alt_descending() < 30.0)
+    if (correct_alt_descending() < 30.0)//correct_alt_descending() < 30.0)
     { // **** maybe check a few times?
+      pilot.sleep();
       flight_state = 3;
-      write_EEPROM();
       Serial << "\n!!!! LANDED !!!!\n";
     }
     print_data();
@@ -234,30 +237,42 @@ void print_data()
  */
 void startup_sequence(void)
 {
-  analogWrite(BZZ_DTA, 200); // turn on the buzzer for a second to indicate board power
-  delay(500);
-  analogWrite(BZZ_DTA, 0);
+  if(flight_state == 0)
+  {
+    analogWrite(BZZ_DTA, 200); // turn on the buzzer for a second to indicate board power
+    delay(500);
+    analogWrite(BZZ_DTA, 0);
+  }
 
   sol_init();         // initialize solenoids, should hear them click
   cutdown_switch();
   parafoil_switch();
   
-  pilot.servo_test(); // rotates and resets each servo
+  pilot.servo_init();
+  if(flight_state == 0)
+  {
+    pilot.servo_test(); // rotates and resets each servo
+    delay(200);
+  }
 
-  delay(200);
-
-  if (bmp.init() && bno.init())
+  if (bmp.init(flight_state) && bno.init())
   { // check to see if our sensors are working, if they are blink once, if not blink 5 times
-    digitalWrite(LEDS_DTA, HIGH);
-    delay(3000);
-    digitalWrite(LEDS_DTA, LOW);
+    if(flight_state == 0)
+    {
+      digitalWrite(LEDS_DTA, HIGH);
+      delay(3000);
+      digitalWrite(LEDS_DTA, LOW);
+    }
   }
   else
   {
-    for (int i = 0; i < 15; i++)
+    if(flight_state == 0)
     {
-      digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
-      delay(200);
+      for (int i = 0; i < 15; i++)
+      {
+        digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
+        delay(200);
+      }
     }
   }
   

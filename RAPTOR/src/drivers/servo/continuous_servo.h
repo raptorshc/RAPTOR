@@ -28,7 +28,7 @@ private:
   static const int STOP = 1500,
                    CCW = 1000,
                    CW = 2000,
-                   TTR = 500;
+                   TTR = 1000;
   uint8_t servo; // uses RIGHT/LEFT to determine which way to turn and how to reset
   uint8_t pin; // pin the servo is hooked up to
 };
