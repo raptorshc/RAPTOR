@@ -17,6 +17,7 @@ class GPS
     GPS(SoftwareSerial &mySerial) : Adafruit_GPS(&mySerial) {}
 
     void init(void);
+    void correct_coords(void);
 };
 
 #endif

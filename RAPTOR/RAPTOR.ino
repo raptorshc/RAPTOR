@@ -27,6 +27,7 @@ GPS gps(mySerial);
 
 uint8_t flight_state = 0;
 int EEaddr = 0; // eeprom address
+volatile long fly_time = 0;
 
 /* 
  * Arduino setup function, first function to be run.
@@ -45,14 +46,14 @@ void setup()
   Serial.begin(9600);
 
   pinMode(SET_BTN, OUTPUT);
-  // if (digitalRead(SET_BTN))
-  // {
-  //   write_EEPROM();
-  // }
-  // else
-  // {
-  //   read_EEPROM();
-  // }
+  if (digitalRead(SET_BTN))
+  {
+    write_EEPROM();
+  }
+  else
+  {
+    read_EEPROM();
+  }
   /* GPS */
   gps.init();
 
@@ -81,15 +82,17 @@ void loop()
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
     }
-    if (cutdown_switch()) // *************** FOR TESTING PLEASE REMOVE *************
-      flight_state = 1;
+    // if (!cutdown_switch()) // *************** FOR TESTING PLEASE REMOVE *************
+    //   flight_state = 1;
   blink_led(1000);
+  print_data();
     break;
   case 1: // flight state 1 is ascent
     if (!bmp.update())
       bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
 
     if (correct_alt_ascending() > CUTDOWN_ALT)
+    // if (timeElapsed > 10000)
     {
       cutdown(); // cutdown
 
@@ -114,6 +117,7 @@ void loop()
       current_lat.decimal = gps.latitude;
       current_long.decimal = gps.longitude;
 
+      Serial << "Waking pilot\n";
       pilot.wake(target_lat, target_long, current_lat, current_long);
       flight_state = 2;
       write_EEPROM();
@@ -122,6 +126,12 @@ void loop()
     blink_led(200);
     break;
   case 2: // flight state 2 is descent
+    fly_time = timeElapsed;
+    if(fly_time > 1000)
+    {
+      pilot.fly(custom_angle()); // the pilot just needs our current angle to do his calculations
+      fly_time = 0;
+    }
     if (correct_alt_descending() < 30.0)
     { // **** maybe check a few times?
       flight_state = 3;
@@ -179,9 +189,9 @@ SIGNAL(TIMER0_COMPA_vect)
 
   if (gps.newNMEAreceived())
   {
-    if (gps.parse(gps.lastNMEA()) && flight_state == 2)
-    {                       // this also sets the newNMEAreceived() flag to false
-      pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
+    if (gps.parse(gps.lastNMEA()))
+    {  
+      gps.correct_coords();
     }
   }
 }
@@ -212,10 +222,10 @@ void print_data()
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << F(",")
          << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
-         << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
-         << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
-         << cutdown_switch() << F(",") << parafoil_switch() << F(",")
-         << pilot.servoR_status() << F(",") << pilot.servoL_status() << F(",") << flight_state << "\n"; // write everything to SD card
+        //  << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
+        //  << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
+        //  << cutdown_switch() << F(",") << parafoil_switch() << F(",")
+         << pilot.get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
 }
 
 /* 
@@ -250,6 +260,7 @@ void startup_sequence(void)
       delay(200);
     }
   }
+  
 }
 
 void write_EEPROM()
@@ -272,8 +283,19 @@ void read_EEPROM()
   Serial << "\nSaved baseline: " << bmp.baseline << "\n";
 }
 
-void blink_led(uint8_t length)
+void blink_led(int length)
 {
   digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
   delay(length);
+}
+
+/*
+* custom_angle returns an angle parsed from user input 
+*/
+float custom_angle(void){
+  Serial << "\nPlease input an angle: ";
+  while(Serial.available() == 0);
+  float angle = Serial.parseFloat();
+  Serial << "\nAngle: " << angle << "\n";
+  return angle;
 }

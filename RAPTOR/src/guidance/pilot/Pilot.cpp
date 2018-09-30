@@ -4,8 +4,8 @@
 #include "Pilot.h"
 #include <stdio.h>
 
-#define SRVOR_DTA 5 // Right servo
-#define SRVOL_DTA 6 // Left servo
+#define SRVOR_DTA 6 // Right servo
+#define SRVOL_DTA 5 // Left servo
 
 #define STRAIGHT 2
 
@@ -27,7 +27,7 @@ void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_
 {
     this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
     this->p->findPath();
-    desired_heading = p->getAngle();
+    desired_heading = 358.0;//p->getAngle();
 }
 
 /*
