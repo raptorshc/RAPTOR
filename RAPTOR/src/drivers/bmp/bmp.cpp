@@ -20,8 +20,8 @@ bool BMP::init(uint8_t fs)
 
   // gather a baseline
   uint8_t counter = 0;
-  
-  if(fs==0)
+
+  if (fs == 0)
   {
     baseline = 1013.25; // put in a fake baseline for the initial calculation, which won't be used
 
@@ -49,7 +49,7 @@ bool BMP::update(void)
     // temperature in celsius
     getTemperature(&this->temperature);
     // altitude in meters to feet
-    this->altitude = 3.28084*pressureToAltitude(this->baseline, this->pressure);
+    this->altitude = 3.28084 * pressureToAltitude(this->baseline, this->pressure);
   }
   else
     return false; // collection failed

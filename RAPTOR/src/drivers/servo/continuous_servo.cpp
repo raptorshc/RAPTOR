@@ -15,9 +15,10 @@ void ContinuousServo::turn(bool reset /*= false*/)
 {
 	this->attach(this->pin);
 #ifdef DEBUG
-	if(reset)
+	if (reset)
 		Serial.print("\nresetting\n");
-	else Serial.print("\nturning\n");
+	else
+		Serial.print("\nturning\n");
 
 	analogWrite(11, 200); // turn on the buzzer for a second to indicate board power
 	delay(500);

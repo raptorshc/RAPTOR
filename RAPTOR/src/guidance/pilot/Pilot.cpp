@@ -27,7 +27,7 @@ void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_
 {
     this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
     this->p->findPath();
-    desired_heading = 358.0;//p->getAngle();
+    desired_heading = p->getAngle();
 }
 
 /*

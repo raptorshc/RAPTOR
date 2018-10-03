@@ -318,8 +318,7 @@ void blink_led(int length)
 float custom_angle(void)
 {
   Serial << "\nPlease input an angle: ";
-  while (Serial.available() == 0)
-    ;
+  while (Serial.available() == 0);
   float angle = Serial.parseFloat();
   Serial << "\nAngle: " << angle << "\n";
   return angle;
