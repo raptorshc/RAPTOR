@@ -223,7 +223,7 @@ void print_data()
   bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
-  Serial << timeElapsed << F(",")
+  Serial << timeElapsed << F(",") <<
          << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
         //  << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
         //  << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")

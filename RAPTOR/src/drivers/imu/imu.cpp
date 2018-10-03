@@ -9,8 +9,10 @@
 #include "Arduino.h"
 #include <Adafruit_BNO055.h>
 
-bool BNO::init(void){
-    if(!this->begin()){
+bool BNO::init(void)
+{
+    if (!this->begin())
+    {
         Serial.print(F("No BNO055 detected!"));
         return false;
     }
@@ -18,7 +20,8 @@ bool BNO::init(void){
     return true;
 }
 
-void BNO::update(){
+void BNO::update()
+{
     this->getEvent(&this->data);
     // might do some extra processing here?
 }
