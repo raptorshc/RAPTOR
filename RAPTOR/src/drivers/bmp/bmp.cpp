@@ -10,7 +10,7 @@
  *	init begins the BMP measurements and 
  *   grabs a baseline pressure for alt calculations.
  */
-bool BMP::init(void)
+bool BMP::init(uint8_t fs)
 {
   if (!this->begin())
   { // Begin bmp measurements
@@ -20,11 +20,14 @@ bool BMP::init(void)
 
   // gather a baseline
   uint8_t counter = 0;
-  baseline = 1013.25; // put in a fake baseline for the initial calculation, which won't be used
+  
+  if(fs==0)
+  {
+    baseline = 1013.25; // put in a fake baseline for the initial calculation, which won't be used
 
-  while (!update() && counter++ < 50); // until we can get a good pressure reading or we've tried more than 50 times
-  baseline = pressure; // grab a baseline pressure
-
+    while (!update() && counter++ < 50); // until we can get a good pressure reading or we've tried more than 50 times
+    baseline = pressure; // grab a baseline pressure
+  }
   return true;
 }
 
@@ -42,11 +45,11 @@ bool BMP::update(void)
   if (event.pressure)
   {
     // pressure in hPa
-    pressure = event.pressure;
+    this->pressure = event.pressure;
     // temperature in celsius
-    getTemperature(&temperature);
-    // altitude in feet
-    pressureToAltitude(baseline, pressure);
+    getTemperature(&this->temperature);
+    // altitude in meters to feet
+    this->altitude = 3.28084*pressureToAltitude(this->baseline, this->pressure);
   }
   else
     return false; // collection failed

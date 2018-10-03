@@ -30,6 +30,9 @@ void sol_init(void)
 
     digitalWrite(SOLP_DTA, HIGH); // Engage Parafoil solenoid
     digitalWrite(SOLC_DTA, HIGH); // Engage Cutdown solenoid
+
+    digitalWrite(LEDP_DTA, LOW); // turn off parafoil solenoid led
+    digitalWrite(LEDC_DTA, LOW); // turn off cutdown solenoid led
 }
 
 void cutdown(void)
@@ -45,9 +48,26 @@ void parafoil_deploy(void)
 }
 
 bool cutdown_switch(void){
-    return digitalRead(SWC_PIN);
+    if(digitalRead(SWC_PIN))
+    {
+        digitalWrite(LEDC_DTA, HIGH);
+        return true;
+    }
+    else
+    {
+        digitalWrite(LEDC_DTA, LOW);
+        return false;
+    }
 }
 
 bool parafoil_switch(void){
-    return digitalRead(SWP_PIN);
+    if(digitalRead(SWP_PIN))
+    {
+        digitalWrite(LEDP_DTA, HIGH);
+        return true;
+    }
+    else{
+        digitalWrite(LEDP_DTA, LOW);
+        return false;  
+    }
 }

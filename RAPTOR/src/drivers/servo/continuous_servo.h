@@ -12,9 +12,10 @@
 class ContinuousServo : public Servo
 {
 public:
-  ContinuousServo(uint8_t setservo)
+  ContinuousServo(uint8_t setservo, uint8_t pin)
   {
     this->servo = setservo;
+    this->pin = pin;
   }
 
   void turn(bool reset = false);
@@ -26,9 +27,10 @@ public:
 private:
   static const int STOP = 1500,
                    CCW = 1000,
-                   CW = 1900,
-                   TTR = 500;
+                   CW = 2000,
+                   TTR = 1000;
   uint8_t servo; // uses RIGHT/LEFT to determine which way to turn and how to reset
+  uint8_t pin; // pin the servo is hooked up to
 };
 
 #endif

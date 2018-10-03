@@ -20,12 +20,13 @@ public:
 	void wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long);
 	void fly(float curr_angle);
 
-	uint8_t servoR_status(void);
-	uint8_t servoL_status(void);
+	int servoR_status(void);
+	int servoL_status(void);
 	int get_turn(void);
 
 	void servo_test(void);
-
+	void servo_init(void);
+	void sleep(void);
 private:
 	Coordinate _target;
 	float desired_heading;
