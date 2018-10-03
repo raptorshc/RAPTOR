@@ -47,8 +47,9 @@ void parafoil_deploy(void)
     digitalWrite(SOLP_DTA, LOW);
 }
 
-bool cutdown_switch(void){
-    if(digitalRead(SWC_PIN))
+bool cutdown_switch(void)
+{
+    if (digitalRead(SWC_PIN))
     {
         digitalWrite(LEDC_DTA, HIGH);
         return true;
@@ -60,14 +61,16 @@ bool cutdown_switch(void){
     }
 }
 
-bool parafoil_switch(void){
-    if(digitalRead(SWP_PIN))
+bool parafoil_switch(void)
+{
+    if (digitalRead(SWP_PIN))
     {
         digitalWrite(LEDP_DTA, HIGH);
         return true;
     }
-    else{
+    else
+    {
         digitalWrite(LEDP_DTA, LOW);
-        return false;  
+        return false;
     }
 }
