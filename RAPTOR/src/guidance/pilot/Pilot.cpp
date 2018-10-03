@@ -27,7 +27,7 @@ void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_
 {
     this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
     this->p->findPath();
-    desired_heading = 358.0;//p->getAngle();
+    desired_heading = p->getAngle();
 }
 
 /*
@@ -81,7 +81,7 @@ int Pilot::get_turn(void)
  * servo_test turns and resets both servos to indicate servo power and attachment
  */
 void Pilot::servo_test(void)
-{   
+{
     servoL->turn();
     delay(500);
     servoL->reset();
@@ -96,7 +96,7 @@ void Pilot::servo_test(void)
 void Pilot::servo_init(void)
 {
     this->servoR = new ContinuousServo(ContinuousServo::RIGHT, SRVOR_DTA);
-    this->servoL = new ContinuousServo(ContinuousServo::LEFT, SRVOL_DTA);   
+    this->servoL = new ContinuousServo(ContinuousServo::LEFT, SRVOL_DTA);
 }
 
 void Pilot::sleep(void)
