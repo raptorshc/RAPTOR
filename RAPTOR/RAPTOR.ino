@@ -174,6 +174,11 @@ float correct_alt_ascending(void)
  */
 float correct_alt_descending(void)
 {
+  if (bmp.altitude == 0) // if either are zero during descent, don't trust them
+    return gps.altitude;
+  if (gps.altitude == 0)
+    return bmp.altitude;
+  
   if (gps.altitude - bmp.altitude > 50)
     return bmp.altitude;
   else if (bmp.altitude - gps.altitude > 50)
