@@ -18,11 +18,11 @@ bool BMP::init(uint8_t fs)
     return false;
   }
 
-  // gather a baseline
   uint8_t counter = 0;
 
   if (fs == 0)
   {
+    // gather a baseline
     baseline = 1013.25; // put in a fake baseline for the initial calculation, which won't be used
 
     while (!update() && counter++ < 50); // until we can get a good pressure reading or we've tried more than 50 times

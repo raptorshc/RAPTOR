@@ -28,6 +28,10 @@ void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_
     this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
     this->p->findPath();
     desired_heading = p->getAngle();
+
+    Serial.print("Desired heading:");
+    Serial.print(desired_heading);
+    Serial.print("\n");   
 }
 
 /*
@@ -158,8 +162,17 @@ int Pilot::find_turn(float curr_angle)
         alpha_angle -= 360;
     if (beta_angle > 360)
         beta_angle -= 360;
+    
     /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
-    if (abs(alpha_angle - curr_angle) > abs(beta_angle - curr_angle))
+    float alpha_dif = abs(alpha_angle-curr_angle);
+    float beta_dif = abs(beta_angle-curr_angle);
+    
+    if(alpha_dif > 180)
+        alpha_dif = 360 - alpha_dif;
+    if(beta_dif > 180)
+        beta_dif = 360 - beta_dif;
+    
+    if (alpha_dif > beta_dif)
         return ContinuousServo::RIGHT;
     else
         return ContinuousServo::LEFT;

@@ -26,8 +26,8 @@ SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
 
 uint8_t flight_state = 0;
-int EEaddr = 0; // eeprom address
 volatile long fly_time = 0;
+bool didwake = false;
 
 /* 
  * Arduino setup function, first function to be run.
@@ -82,8 +82,7 @@ void loop()
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
     }
-    // if (!cutdown_switch()) // *************** FOR TESTING PLEASE REMOVE *************
-    //   flight_state = 1;
+
     blink_led(1000);
     print_data();
     break;
@@ -91,7 +90,6 @@ void loop()
     bmp.update();
 
     if (correct_alt_ascending() > CUTDOWN_ALT)
-    // if (timeElapsed > 10000)
     {
       cutdown(); // cutdown
 
@@ -112,6 +110,15 @@ void loop()
         parafoil_deploy(); // try deploying parafoil again, probably won't do much
       }
 
+      flight_state = 2;
+      write_EEPROM();
+    }
+    print_data();
+    blink_led(200);
+    break;
+  case 2: // flight state 2 is descent
+    if(!didwake)
+    {
       Coordinate target_lat, target_long, current_lat, current_long;
 
       target_lat.decimal = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
@@ -122,13 +129,8 @@ void loop()
 
       Serial << "Waking pilot\n";
       pilot.wake(target_lat, target_long, current_lat, current_long);
-      flight_state = 2;
-      write_EEPROM();
+      didwake = true;
     }
-    print_data();
-    blink_led(200);
-    break;
-  case 2: // flight state 2 is descent
     bmp.update();
     fly_time = timeElapsed;
     if (fly_time > 1000)
@@ -136,7 +138,7 @@ void loop()
       pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
-    if (correct_alt_descending() < 30.0) //correct_alt_descending() < 30.0)
+    if (correct_alt_descending() < 50.0) //correct_alt_descending() < 30.0)
     {
       if (landing_check())
       {

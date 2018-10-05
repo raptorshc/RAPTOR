@@ -16,12 +16,11 @@ bool BNO::init(void)
         Serial.print(F("No BNO055 detected!"));
         return false;
     }
-    //calibrate?
+    //calibrate here
     return true;
 }
 
 void BNO::update()
 {
     this->getEvent(&this->data);
-    // might do some extra processing here?
 }

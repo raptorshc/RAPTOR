@@ -26,7 +26,7 @@ struct Path
 
 struct PathAdjustment
 {
-    double degrees; //Amount to turn
+    float degrees; //Amount to turn
     int rotation;   //Which way to turn. 1 is right, 0 is left.
 };
 
