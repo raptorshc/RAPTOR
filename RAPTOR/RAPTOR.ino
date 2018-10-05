@@ -50,20 +50,6 @@ void setup()
   /* Solenoids, Servos, BMP, BNO */
   startup_sequence();
 
-  // TEST *********************************************
-  for(int i = 0; i < 5; i++)
-  {
-    analogWrite(BZZ_DTA, 200);
-    delay(500);
-    analogWrite(BZZ_DTA, 0);
-    delay(500);
-  }
-
-  cutdown();
-  parafoil_deploy();
-
-  // END TEST *****************************************
-
   if (digitalRead(SET_BTN))
   {
     write_EEPROM();
