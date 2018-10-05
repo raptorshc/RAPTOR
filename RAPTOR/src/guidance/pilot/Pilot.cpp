@@ -4,8 +4,8 @@
 #include "Pilot.h"
 #include <stdio.h>
 
-#define SRVOR_DTA 5 // Right servo
-#define SRVOL_DTA 6 // Left servo
+#define SRVOR_DTA 6 // Right servo
+#define SRVOL_DTA 5 // Left servo
 
 #define STRAIGHT 2
 
@@ -16,12 +16,6 @@
  */
 Pilot::Pilot()
 {
-    this->servoR = new ContinuousServo(ContinuousServo::RIGHT);
-    this->servoL = new ContinuousServo(ContinuousServo::LEFT);
-
-    servoR->attach(SRVOR_DTA);
-    servoL->attach(SRVOL_DTA);
-
     this->current_turn = STRAIGHT;
     this->target_turn = STRAIGHT;
 }
@@ -60,17 +54,17 @@ void Pilot::fly(float curr_angle)
 }
 
 /* 
- * servoR_status acts as a public accessor for the readMicroseconds method of servoR
+ * servoR_status acts as a public accessor for the read method of servoR
  */
-uint8_t Pilot::servoR_status(void)
+int Pilot::servoR_status(void)
 {
     return servoR->readMicroseconds();
 }
 
 /* 
- * servoR_status acts as a public accessor for the readMicroseconds method of servoL
+ * servoR_status acts as a public accessor for the read method of servoL
  */
-uint8_t Pilot::servoL_status(void)
+int Pilot::servoL_status(void)
 {
     return servoL->readMicroseconds();
 }
@@ -86,18 +80,29 @@ int Pilot::get_turn(void)
 /* 
  * servo_test turns and resets both servos to indicate servo power and attachment
  */
-void Pilot::servo_test(void){
-  servoL->turn();
-  delay(200);
-  servoR->reset();
+void Pilot::servo_test(void)
+{
+    servoL->turn();
+    delay(500);
+    servoL->reset();
 
-  delay(500);
-  
-  servoR->turn();
-  delay(200);
-  servoL->reset();
+    delay(1000);
+
+    servoR->turn();
+    delay(500);
+    servoR->reset();
 }
 
+void Pilot::servo_init(void)
+{
+    this->servoR = new ContinuousServo(ContinuousServo::RIGHT, SRVOR_DTA);
+    this->servoL = new ContinuousServo(ContinuousServo::LEFT, SRVOL_DTA);
+}
+
+void Pilot::sleep(void)
+{
+    straight();
+}
 /* PRIVATE METHODS */
 
 /*

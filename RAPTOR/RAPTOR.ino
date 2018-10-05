@@ -1,4 +1,5 @@
 #include <elapsedMillis.h>
+#include <EEPROM.h>
 
 #include "src/guidance/pilot/Pilot.h"
 #include "src/drivers/bmp/bmp.h"
@@ -7,14 +8,14 @@
 #include "src/drivers/servo/continuous_servo.h"
 #include "src/drivers/solenoid/solenoid.h"
 
-template <class T>inline Print &operator<<(Print &obj, T arg){obj.print(arg); return obj;} // allows stream style input and output
+template <class T> inline Print &operator<<(Print &obj, T arg){obj.print(arg);return obj;} // allows stream style input and output
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
 
-#define SD_GRN 4 // OpenLog Reset pin
+#define SET_BTN 7
 
 BNO bno;
 BMP bmp;
@@ -25,6 +26,8 @@ SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
 
 uint8_t flight_state = 0;
+int EEaddr = 0; // eeprom address
+volatile long fly_time = 0;
 
 /* 
  * Arduino setup function, first function to be run.
@@ -37,20 +40,23 @@ void setup()
   pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
   pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
 
+  Serial.begin(9600);
+
+  pinMode(SET_BTN, OUTPUT);
+  if (!digitalRead(SET_BTN))
+  {
+    read_EEPROM();
+  }
   /* Solenoids, Servos, BMP, BNO */
   startup_sequence();
 
+  if (digitalRead(SET_BTN))
+  {
+    write_EEPROM();
+  }
+
   /* GPS */
   gps.init();
-
-  /* SD */
-  pinMode(SD_GRN, OUTPUT);
-  Serial.begin(9600);
-
-  // Reset OpenLog
-  digitalWrite(SD_GRN, LOW);
-  delay(100);
-  digitalWrite(SD_GRN, HIGH);
 
   delay(10);
   Serial.print(F("TIME,"
@@ -69,21 +75,23 @@ void loop()
   switch (flight_state)
   {
   case 0: // flight state 0 is launch
-    if (!bmp.update())
-      bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
+    bmp.update();
 
     if (correct_alt_ascending() > 30.0)
+    {
       flight_state = 1; // transition to flight state 1
-
-    if(!cutdown_switch())
-      flight_state = 1;
-
+      write_EEPROM();
+    }
+    // if (!cutdown_switch()) // *************** FOR TESTING PLEASE REMOVE *************
+    //   flight_state = 1;
+    blink_led(1000);
+    print_data();
     break;
   case 1: // flight state 1 is ascent
-    if (!bmp.update())
-      bmp.pressure = bmp.temperature = bmp.altitude = 0; // if the bmp doesn't work set them to zero
+    bmp.update();
 
     if (correct_alt_ascending() > CUTDOWN_ALT)
+    // if (timeElapsed > 10000)
     {
       cutdown(); // cutdown
 
@@ -93,6 +101,10 @@ void loop()
         cutdown(); // try cutdown again
       }
 
+      while (correct_alt_descending() > 800)
+      {
+        bmp.update();
+      }                  // wait a hundred feet to deployment
       parafoil_deploy(); // deploy parafoil
       if (parafoil_switch())
       { // make sure the parafoil has deployed
@@ -108,24 +120,37 @@ void loop()
       current_lat.decimal = gps.latitude;
       current_long.decimal = gps.longitude;
 
+      Serial << "Waking pilot\n";
       pilot.wake(target_lat, target_long, current_lat, current_long);
       flight_state = 2;
+      write_EEPROM();
     }
     print_data();
-    delay(100);
+    blink_led(200);
     break;
   case 2: // flight state 2 is descent
-    if (correct_alt_descending() < 30.0)
-    { // **** maybe check a few times?
-      flight_state = 3;
-      Serial << "\n!!!! LANDED !!!!\n";
+    bmp.update();
+    fly_time = timeElapsed;
+    if (fly_time > 1000)
+    {
+      pilot.fly(custom_angle()); // the pilot just needs our current angle to do his calculations
+      fly_time = 0;
+    }
+    if (correct_alt_descending() < 30.0) //correct_alt_descending() < 30.0)
+    {
+      if (landing_check())
+      {
+        pilot.sleep();
+        flight_state = 3;
+        Serial << "\n!!!! LANDED !!!!\n";
+      }
     }
     print_data();
-    delay(100);
+    blink_led(100);
     break;
-  case 3:                                           // flight state 3 is landed
-    digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA)); // toggle LEDs every second
-    analogWrite(BZZ_DTA, 200);                      // turn on buzzer for 500 ms, off for 500 ms
+  case 3:                      // flight state 3 is landed
+    blink_led(500);            // toggle LEDs every 1.5 second
+    analogWrite(BZZ_DTA, 200); // turn on buzzer for 500 ms, off for 1000 ms
     delay(500);
     analogWrite(BZZ_DTA, 0);
     delay(500);
@@ -153,6 +178,11 @@ float correct_alt_ascending(void)
  */
 float correct_alt_descending(void)
 {
+  if (bmp.altitude == 0) // if either are zero during descent, don't trust them
+    return gps.altitude;
+  if (gps.altitude == 0)
+    return bmp.altitude;
+
   if (gps.altitude - bmp.altitude > 50)
     return bmp.altitude;
   else if (bmp.altitude - gps.altitude > 50)
@@ -171,9 +201,9 @@ SIGNAL(TIMER0_COMPA_vect)
 
   if (gps.newNMEAreceived())
   {
-    if (gps.parse(gps.lastNMEA()) && flight_state == 2)
-    {                       // this also sets the newNMEAreceived() flag to false
-      pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
+    if (gps.parse(gps.lastNMEA()))
+    {
+      gps.correct_coords();
     }
   }
 }
@@ -202,12 +232,12 @@ void print_data()
   bno.update();
 
   /* Let's spray the OpenLog with a hose of data */
-  Serial << timeElapsed << F(",") <<
+  Serial << timeElapsed << F(",")
          << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
          << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
          << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
          << cutdown_switch() << F(",") << parafoil_switch() << F(",")
-         << F(",") << pilot.servoR_status() << F(",") << pilot.servoL_status() << flight_state << "\n"; // write everything to SD card
+         << pilot.get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
 }
 
 /* 
@@ -216,28 +246,98 @@ void print_data()
  */
 void startup_sequence(void)
 {
-  analogWrite(BZZ_DTA, 200); // turn on the buzzer for a second to indicate board power
-  delay(500);
-  analogWrite(BZZ_DTA, 0);
+  if (flight_state == 0)
+  {
+    analogWrite(BZZ_DTA, 200); // turn on the buzzer for a second to indicate board power
+    delay(500);
+    analogWrite(BZZ_DTA, 0);
+  }
 
   sol_init(); // initialize solenoids, should hear them click
-  pilot.servo_test(); // rotates and resets each servo
+  cutdown_switch();
+  parafoil_switch();
 
-  delay(200);
-  
+  pilot.servo_init();
+  if (flight_state == 0)
+  {
+    pilot.servo_test(); // rotates and resets each servo
+    delay(200);
+  }
 
-  if (bmp.init() && bno.init())
+  if (bmp.init(flight_state) && bno.init())
   { // check to see if our sensors are working, if they are blink once, if not blink 5 times
-    digitalWrite(LEDS_DTA, HIGH);
-    delay(500);
-    digitalWrite(LEDS_DTA, LOW);
+    if (flight_state == 0)
+    {
+      digitalWrite(LEDS_DTA, HIGH);
+      delay(3000);
+      digitalWrite(LEDS_DTA, LOW);
+    }
   }
   else
   {
-    for (int i = 0; i < 5; i++)
+    if (flight_state == 0)
     {
-      digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
-      delay(200);
+      for (int i = 0; i < 15; i++)
+      {
+        digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
+        delay(200);
+      }
     }
   }
+}
+
+void write_EEPROM()
+{
+  Serial << "Write EEPROM\n";
+  EEPROM.put(0, flight_state);   // flight state is always at address 0
+  EEPROM.put(100, bmp.baseline); // baseline pressure always at address 100
+}
+
+void read_EEPROM()
+{
+  Serial << "Read EEPROM\n";
+  EEPROM.get(0, flight_state);
+  if (flight_state == 1)
+    flight_state = 2; // this makes sense cause we'll be falling!
+
+  EEPROM.get(100, bmp.baseline);
+
+  Serial << "Saved flight state: " << flight_state;
+  Serial << "\nSaved baseline: " << bmp.baseline << "\n";
+}
+
+void blink_led(int length)
+{
+  digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
+  delay(length);
+}
+
+/*
+* custom_angle returns an angle parsed from user input 
+*/
+float custom_angle(void)
+{
+  Serial << "\nPlease input an angle: ";
+  while (Serial.available() == 0);
+  float angle = Serial.parseFloat();
+  Serial << "\nAngle: " << angle << "\n";
+  return angle;
+}
+
+/*
+* landing_check checks the altitude 4 times to see if we've actually landed 
+*/
+bool landing_check(void)
+{
+  uint8_t counter = 0;
+  while (counter++ < 4 && correct_alt_descending() < 50)
+  { // check our altitude 4 times, if we're below 50ft in all of them we're landed
+    delay(100);
+    bmp.update();
+  }
+  if (counter < 3)
+  { // we exited our while loop early
+    return false;
+  }
+  return true;
 }
