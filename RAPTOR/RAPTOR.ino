@@ -133,7 +133,7 @@ void loop()
     fly_time = timeElapsed;
     if (fly_time > 1000)
     {
-      pilot.fly(custom_angle()); // the pilot just needs our current angle to do his calculations
+      pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
     if (correct_alt_descending() < 30.0) //correct_alt_descending() < 30.0)
