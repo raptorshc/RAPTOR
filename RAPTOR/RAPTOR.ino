@@ -121,7 +121,7 @@ void loop()
     {
       Coordinate target_lat, target_long, current_lat, current_long;
 
-      target_lat.decimal = 34.758224; // HARD CODED TARGET COORDINATES
+      target_lat.decimal = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
       target_long.decimal = 86.657632;
 
       current_lat.decimal = gps.latitude;
@@ -135,8 +135,7 @@ void loop()
     fly_time = timeElapsed;
     if (fly_time > 1000)
     {
-      pilot.fly(custom_angle()); // the pilot just needs our current angle to do his calculations
-      /*********************** CHANGE FOR FLIGHT ***********************/
+      pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
     if (correct_alt_descending() < 50.0) //correct_alt_descending() < 30.0)
