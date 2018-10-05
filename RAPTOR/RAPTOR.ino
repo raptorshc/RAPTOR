@@ -28,6 +28,7 @@ GPS gps(mySerial);
 uint8_t flight_state = 0;
 int EEaddr = 0; // eeprom address
 volatile long fly_time = 0;
+bool didwake = false;
 
 /* 
  * Arduino setup function, first function to be run.
@@ -112,6 +113,15 @@ void loop()
         parafoil_deploy(); // try deploying parafoil again, probably won't do much
       }
 
+      flight_state = 2;
+      write_EEPROM();
+    }
+    print_data();
+    blink_led(200);
+    break;
+  case 2: // flight state 2 is descent
+    if(!didwake)
+    {
       Coordinate target_lat, target_long, current_lat, current_long;
 
       target_lat.decimal = 34.73; // HARD CODED TARGET COORDINATES
@@ -122,13 +132,8 @@ void loop()
 
       Serial << "Waking pilot\n";
       pilot.wake(target_lat, target_long, current_lat, current_long);
-      flight_state = 2;
-      write_EEPROM();
+      didwake = true;
     }
-    print_data();
-    blink_led(200);
-    break;
-  case 2: // flight state 2 is descent
     bmp.update();
     fly_time = timeElapsed;
     if (fly_time > 1000)
