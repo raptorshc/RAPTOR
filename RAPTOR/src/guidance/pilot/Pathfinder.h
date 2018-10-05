@@ -13,14 +13,14 @@
 struct Coordinate
 {
     int degrees, minutes, seconds;
-    float decimal;
+    double decimal;
 };
 
 struct Path
 {
     Coordinate lat_initial, long_initial;
     Coordinate lat_final, long_final;
-    float lat_vec, long_vec;
+    double lat_vec, long_vec;
     float angle;
 };
 
