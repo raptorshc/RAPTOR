@@ -13,20 +13,20 @@
 struct Coordinate
 {
     int degrees, minutes, seconds;
-    float decimal;
+    double decimal;
 };
 
 struct Path
 {
     Coordinate lat_initial, long_initial;
     Coordinate lat_final, long_final;
-    float lat_vec, long_vec;
+    double lat_vec, long_vec;
     float angle;
 };
 
 struct PathAdjustment
 {
-    double degrees; //Amount to turn
+    float degrees; //Amount to turn
     int rotation;   //Which way to turn. 1 is right, 0 is left.
 };
 

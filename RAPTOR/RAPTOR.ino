@@ -26,7 +26,6 @@ SoftwareSerial mySerial(3, 2); // GPS serial comm pins
 GPS gps(mySerial);
 
 uint8_t flight_state = 0;
-int EEaddr = 0; // eeprom address
 volatile long fly_time = 0;
 bool didwake = false;
 
@@ -50,6 +49,20 @@ void setup()
   }
   /* Solenoids, Servos, BMP, BNO */
   startup_sequence();
+
+  // TEST *********************************************
+  for(int i = 0; i < 5; i++)
+  {
+    analogWrite(BZZ_DTA, 200);
+    delay(500);
+    analogWrite(BZZ_DTA, 0);
+    delay(500);
+  }
+
+  cutdown();
+  parafoil_deploy();
+
+  // END TEST *****************************************
 
   if (digitalRead(SET_BTN))
   {
@@ -83,8 +96,7 @@ void loop()
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
     }
-    // if (!cutdown_switch()) // *************** FOR TESTING PLEASE REMOVE *************
-    //   flight_state = 1;
+
     blink_led(1000);
     print_data();
     break;
@@ -92,7 +104,6 @@ void loop()
     bmp.update();
 
     if (correct_alt_ascending() > CUTDOWN_ALT)
-    // if (timeElapsed > 10000)
     {
       cutdown(); // cutdown
 
@@ -142,7 +153,7 @@ void loop()
       /*********************** CHANGE FOR FLIGHT ***********************/
       fly_time = 0;
     }
-    if (correct_alt_descending() < 30.0) //correct_alt_descending() < 30.0)
+    if (correct_alt_descending() < 50.0) //correct_alt_descending() < 30.0)
     {
       if (landing_check())
       {
