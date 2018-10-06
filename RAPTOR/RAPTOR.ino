@@ -99,7 +99,7 @@ void loop()
         cutdown(); // try cutdown again
       }
 
-      while (correct_alt_descending() > 800)
+      while (correct_alt_descending() > 875)
       {
         bmp.update();
       }                  // wait a hundred feet to deployment
@@ -135,8 +135,7 @@ void loop()
     fly_time = timeElapsed;
     if (fly_time > 1000)
     {
-      pilot.fly(custom_angle()); // the pilot just needs our current angle to do his calculations
-      /*********************** CHANGE FOR FLIGHT ***********************/
+      pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
     if (correct_alt_descending() < 50.0) //correct_alt_descending() < 30.0)
