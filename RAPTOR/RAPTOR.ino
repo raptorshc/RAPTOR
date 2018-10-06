@@ -121,7 +121,7 @@ void loop()
     {
       Coordinate target_lat, target_long, current_lat, current_long;
 
-      target_lat.decimal = 34.758224; // HARD CODED TARGET COORDINATES
+      target_lat.decimal = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
       target_long.decimal = 86.657632;
 
       current_lat.decimal = gps.latitude;
