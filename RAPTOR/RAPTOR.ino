@@ -77,7 +77,7 @@ void loop()
   case 0: // flight state 0 is launch
     bmp.update();
 
-    if (correct_alt_ascending() > 30.0)
+    if (bmp.altitude > 30.0)
     {
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
@@ -89,7 +89,7 @@ void loop()
   case 1: // flight state 1 is ascent
     bmp.update();
 
-    if (correct_alt_ascending() > CUTDOWN_ALT)
+    if (bmp.altitude > CUTDOWN_ALT)
     {
       cutdown(); // cutdown
 
@@ -99,7 +99,7 @@ void loop()
         cutdown(); // try cutdown again
       }
 
-      while (correct_alt_descending() > 800)
+      while (bmp.altitude > 875)
       {
         bmp.update();
       }                  // wait a hundred feet to deployment
@@ -138,7 +138,7 @@ void loop()
       pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
-    if (correct_alt_descending() < 50.0) //correct_alt_descending() < 30.0)
+    if (bmp.altitude < 50.0) //correct_alt_descending() < 30.0)
     {
       if (landing_check())
       {
@@ -218,10 +218,10 @@ bool cutdown_check(void)
 {
   for (int i = 0; i < 10; i++)
   {
-    uint16_t prevAltitude = correct_alt_descending(); //Update previous altitude
+    uint16_t prevAltitude = bmp.altitude; //Update previous altitude
     delay(200);                                       //.2 second delay
     if (bmp.update())
-      if (correct_alt_ascending() > prevAltitude) //Are we falling (is our current altitude higher or lower than our previous altitude)?
+      if (bmp.altitude > prevAltitude) //Are we falling (is our current altitude higher or lower than our previous altitude)?
       {
         return false; //Ascending
       }
@@ -267,7 +267,7 @@ void startup_sequence(void)
   }
 
   if (bmp.init(flight_state) && bno.init())
-  { // check to see if our sensors are working, if they are blink once, if not blink 5 times
+  { // check to see if our sensors are working, if they are blink once, if not blink 15 times
     if (flight_state == 0)
     {
       digitalWrite(LEDS_DTA, HIGH);
@@ -332,7 +332,7 @@ float custom_angle(void)
 bool landing_check(void)
 {
   uint8_t counter = 0;
-  while (counter++ < 4 && correct_alt_descending() < 50)
+  while (counter++ < 4 && bmp.altitude < 50)
   { // check our altitude 4 times, if we're below 50ft in all of them we're landed
     delay(100);
     bmp.update();
