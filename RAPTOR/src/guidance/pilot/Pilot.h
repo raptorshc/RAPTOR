@@ -9,7 +9,7 @@
 #define TESTPILOT
 
 #include "Pathfinder.h"
-#include "../../drivers/servo/continuous_servo.h"
+#include "../drivers/servo/continuous_servo.h"
 #include "Arduino.h"
 
 class Pilot

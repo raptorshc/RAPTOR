@@ -4,8 +4,8 @@
  * Utilizes Adafruit BNO055 library.
  * Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
-#ifndef IMU_H_
-#define IMU_H_
+#ifndef BNO_H_
+#define BNO_H_
 
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
