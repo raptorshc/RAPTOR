@@ -19,7 +19,7 @@ bool BNO::init(void)
     return true;
 }
 
-void BNO::update()
+bool BNO::update()
 {
-    this->getEvent(&this->data);
+    return this->getEvent(&this->data);
 }

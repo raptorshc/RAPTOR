@@ -20,6 +20,7 @@ elapsedMillis timeElapsed;
 
 uint8_t flight_state = 0;
 volatile long fly_time = 0;
+volatile bool first_gps = true;
 bool didwake = false;
 
 /* 
@@ -165,7 +166,11 @@ SIGNAL(TIMER0_COMPA_vect)
   {
     if (environment.gps->parse(environment.gps->lastNMEA()))
     {
+      if (first_gps)
+        environment.gps->set_initalt();
+
       environment.gps->correct_coords();
+      environment.gps->calc_agl();
     }
   }
 }
