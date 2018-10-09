@@ -18,10 +18,10 @@ Pathfinder::Pathfinder(Coordinate current, Coordinate target)
 }
 
 /*
- *	findpath acts as the wrapper for the rest of the methods,
+ *	find_path acts as the wrapper for the rest of the methods,
  *   accepting inputs of current location and desired location.
  */
-void Pathfinder::findpath()
+void Pathfinder::find_path()
 {
     /* First find the vector between our coordinates */
     this->path.lat_vec = this->path.target.latitude - this->path.current.latitude;

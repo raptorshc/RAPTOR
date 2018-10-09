@@ -30,8 +30,6 @@ class Pathfinder
 
     void find_path(void);
 
-    void adjust_path(Path path_target, Path path_current, PathAdjustment *adjustment);
-
     float get_angle(void);
     float get_distance(void);
 

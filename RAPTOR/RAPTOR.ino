@@ -1,11 +1,10 @@
 #include <elapsedMillis.h>
 #include <EEPROM.h>
+#include <Streaming.h>
 
 #include "src/guidance/pilot/pilot.h"
 #include "src/environment/environment.h"
 #include "src/guidance/drivers/solenoid/solenoid.h"
-
-template <class T> inline Print &operator<<(Print &obj, T arg){obj.print(arg);return obj;} // allows stream style input and output
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
@@ -111,18 +110,18 @@ void loop()
     blink_led(200);
     break;
   case 2: // flight state 2 is descent
-    if(!didwake)
+    if (!didwake)
     {
-      Coordinate target_lat, target_long, current_lat, current_long;
+      Coordinate current, target;
 
-      target_lat.decimal = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
-      target_long.decimal = 86.657632;
+      current.latitude = environment.gps->latitude;
+      current.longitude = environment.gps->longitude;
 
-      current_lat.decimal = environment.gps->latitude;
-      current_long.decimal = environment.gps->longitude;
+      target.latitude = 86.657632;
+      target.longitude = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
 
       Serial << "Waking pilot\n";
-      pilot.wake(target_lat, target_long, current_lat, current_long);
+      pilot.wake(current, target);
       didwake = true;
     }
     environment.bmp->update();
@@ -233,7 +232,7 @@ void startup_sequence(void)
 void write_EEPROM()
 {
   Serial << "Write EEPROM\n";
-  EEPROM.put(0, flight_state);   // flight state is always at address 0
+  EEPROM.put(0, flight_state);                // flight state is always at address 0
   EEPROM.put(100, environment.bmp->baseline); // baseline pressure always at address 100
 }
 
@@ -262,7 +261,8 @@ void blink_led(int length)
 float custom_angle(void)
 {
   Serial << "\nPlease input an angle: ";
-  while (Serial.available() == 0);
+  while (Serial.available() == 0)
+    ;
   float angle = Serial.parseFloat();
   Serial << "\nAngle: " << angle << "\n";
   return angle;
