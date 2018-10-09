@@ -64,7 +64,7 @@ void setup()
                  "LATITUDE, LONGITUDE, ANGLE, "
                  "X, Y, Z, "
                  "SWC, SWP, "
-                 "SRVOR, SRVOL, FLIGHT_STATE\n")); // data header
+                 "TURN, FLIGHT_STATE\n")); // data header
 }
 
 /* 
