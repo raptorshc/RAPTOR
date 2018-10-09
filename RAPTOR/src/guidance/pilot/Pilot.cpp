@@ -1,7 +1,9 @@
 /*
-
+  pilot.cpp - 
+	DESCRIPTION NEEDED.
+	Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
-#include "Pilot.h"
+#include "pilot.h"
 #include <stdio.h>
 
 #define SRVOR_DTA 6 // Right servo

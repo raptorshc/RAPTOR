@@ -1,10 +1,10 @@
 /*
-  Pathfinder.h - 
+  pathfinder.h - 
 	DESCRIPTION NEEDED.
 	Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
-#ifndef Pathfinder_h
-#define Pathfinder_h
+#ifndef PATHFINDER_h
+#define PATHFINDER_h
 
 #include <math.h>
 
@@ -12,39 +12,31 @@
 
 struct Coordinate
 {
-    int degrees, minutes, seconds;
-    double decimal;
+    double latitude, longitude;
 };
 
 struct Path
 {
-    Coordinate lat_initial, long_initial;
-    Coordinate lat_final, long_final;
-    double lat_vec, long_vec;
-    float angle;
-};
+    Coordinate current, target;
 
-struct PathAdjustment
-{
-    float degrees; //Amount to turn
-    int rotation;   //Which way to turn. 1 is right, 0 is left.
+    double lat_vec, long_vec;
+    float angle, distance;
 };
 
 class Pathfinder
 {
   public:
-    Pathfinder(Coordinate current_lat, Coordinate current_long, Coordinate final_lat, Coordinate final_long);
+    Pathfinder(Coordinate current, Coordinate target);
 
-    void findPath();
+    void find_path(void);
 
-    void adjustPath(Path path_target, Path path_current, PathAdjustment *adjustment);
+    void adjust_path(Path path_target, Path path_current, PathAdjustment *adjustment);
 
-    double getAngle(void);
+    float get_angle(void);
+    float get_distance(void);
 
   private:
-    void coord_dmsToDec(Coordinate &c1);
-    void path_dmsToDec();
-    Path _Path;
+    Path path;
 };
 
 #endif

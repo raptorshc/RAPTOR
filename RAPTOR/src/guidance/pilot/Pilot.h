@@ -1,7 +1,7 @@
 /*
-  Pilot.h - 
-	DESCRIPTION NEEDED.
-	Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
+  pilot.h - 
+		DESCRIPTION NEEDED.
+		Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
 #ifndef PILOT_h
 #define PILOT_h
