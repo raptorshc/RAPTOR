@@ -56,11 +56,14 @@ class plotter:
 
     # add data
     def add(self, data):
-        self.addToBuf(self.ax, data[0])
-        self.addToBuf(self.ay, data[1])
+        try:
+            self.addToBuf(self.ax, data[0])
+            self.addToBuf(self.ay, data[1])
 
-        if self.axis2:
-            self.addToBuf(self.ay2, data[2])
+            if self.axis2:
+                self.addToBuf(self.ay2, data[2])
+        except IndexError:
+            pass
 
     # update plot
     def update(self, frameNum, a0, a1=0):
@@ -88,11 +91,11 @@ class plotter:
                             self.axis2.set_ylim([0, self.ylim2])
         except KeyboardInterrupt:
             print('exiting')
-        except ValueError:
+        except ValueError or IndexError:
             pass
 
         if self.axis2:
-            return a0, a1
+            return (a0, a1)
         return a0,
 
     # clean up
