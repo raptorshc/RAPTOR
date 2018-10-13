@@ -11,6 +11,7 @@
  */
 void ContinuousServo::turn(bool reset /*= false*/)
 {
+	this->attach(this->pin);
 	this->writeMicroseconds(STOP); // Stop the servos just in-case they're running already.
 	delay(10);
 	if (servo == RIGHT)
@@ -30,6 +31,8 @@ void ContinuousServo::turn(bool reset /*= false*/)
 	delay(TTR);
 
 	this->writeMicroseconds(STOP); // Stop the servos once we've reached the deflection setting.
+	delay(100);
+	this->detach();
 }
 
 /*
