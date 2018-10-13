@@ -9,13 +9,18 @@
 #include "Arduino.h"
 #include <Adafruit_BNO055.h>
 
-void BNO::init(void){
-    if(!this->begin())
+bool BNO::init(void)
+{
+    if (!this->begin())
+    {
         Serial.print(F("No BNO055 detected!"));
-    //calibrate?
+        return false;
+    }
+    //calibrate here
+    return true;
 }
 
-void BNO::update(){
+void BNO::update()
+{
     this->getEvent(&this->data);
-    // might do some extra processing here?
 }
