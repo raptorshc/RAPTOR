@@ -26,6 +26,12 @@ The requirements for flight software are to maintain accurate measurements from 
 
 Kestrel was designed and built to be a testing payload, where we could fly our environmental sensors, continuous servos and solenoids to test their reliability and power consumption on a high altitude flight.
 
+![alt text](https://lh3.googleusercontent.com/1o9nY4RvOQGDZTQBY0d3M0oymKL5FPMcOie_QyGTn0_0s2nfabPlYtp4XrS53vgEl31j4T295NOKGKeISqotcockGwPX17MacXHBMp5uQQhCgSTBN3fivYLe4FH1sv7LIwD_jMzwX0xuYfu2I7zcKqNWYCED4FGPxXIC2lp9WhjVXdyVxlG2mypMxBv7matItwner1dqWoc0-8VIdjEP2aFd7tcvNrXtY4KThVsYXTu_WTHsyYvhj51TiOX4oJQbpk91M41Vuaf-9wlotDnrBLGKEyYNOQSero3I_h9XqgsIIMKDaJQmmzK8gyGDPt9G3sRPc0t0jdvQOY7Kxvdpk4dimrI1KPCLvvKjmj8Sz7qjrb2Eb4AjAmUVQbY7hBT8Okc2IodMNK_0iG5RgeYsRDUH2gYtrwl3cdZvUf_Mb-ik4wDyqlk3FPh8wue_QHCtcDMfmFxLXnh9t6I8pjCoASx5NAmAlmIxECGQ_wFuVaCft_TXxiOwZVAJDaJE92KxI8Y-hB9OsX4ng2PsiRiAATfGO9ljCzctCG4QH-NFaGL2eXsTI1lXqa00m9X3xakB2D8HhrWGXt4zMbiEPQ-2WborEbNJ8yWgcpgkalNCoLOwa_rXh5JL0O369-iPGqds=w960-h540-no "Kestrel Payload")
+
+![alt text](https://lh3.googleusercontent.com/1o9nY4RvOQGDZTQBY0d3M0oymKL5FPMcOie_QyGTn0_0s2nfabPlYtp4XrS53vgEl31j4T295NOKGKeISqotcockGwPX17MacXHBMp5uQQhCgSTBN3fivYLe4FH1sv7LIwD_jMzwX0xuYfu2I7zcKqNWYCED4FGPxXIC2lp9WhjVXdyVxlG2mypMxBv7matItwner1dqWoc0-8VIdjEP2aFd7tcvNrXtY4KThVsYXTu_WTHsyYvhj51TiOX4oJQbpk91M41Vuaf-9wlotDnrBLGKEyYNOQSero3I_h9XqgsIIMKDaJQmmzK8gyGDPt9G3sRPc0t0jdvQOY7Kxvdpk4dimrI1KPCLvvKjmj8Sz7qjrb2Eb4AjAmUVQbY7hBT8Okc2IodMNK_0iG5RgeYsRDUH2gYtrwl3cdZvUf_Mb-ik4wDyqlk3FPh8wue_QHCtcDMfmFxLXnh9t6I8pjCoASx5NAmAlmIxECGQ_wFuVaCft_TXxiOwZVAJDaJE92KxI8Y-hB9OsX4ng2PsiRiAATfGO9ljCzctCG4QH-NFaGL2eXsTI1lXqa00m9X3xakB2D8HhrWGXt4zMbiEPQ-2WborEbNJ8yWgcpgkalNCoLOwa_rXh5JL0O369-iPGqds=w960-h540-no "Kestrel Payload Interior Pre-Flight")
+
+![alt text](https://lh3.googleusercontent.com/Vnb5H34lottN6ENmYy4HXDYq0FI4jUY-Tb1n-UdAX_6JT_rF56ef2L4vCgDCr3k1O_OZ2cxmn2xTt4piQ4KSEdU1Y-_Wc5Wf8_txBINfLhKHpWtbHZJdi2KquYy0YO3DlSXi0XNgxUWjm5XFazxMKtZpBFrYDHj08fw61IXRYJRNIeVPF8wkKUzcqtTFIQkb0XpyzunE68uvkFUviitNOZs1RNv7XCcN4KAj_UFCkjtLOmtC4af73zMOSHwzz82QckA7kkz08kl5HhwlLEh3IuhH8RISerjCKpz58rtHWIkqHXic0eRsXPi0oP6VdnomnjYJdCVLXTSHxQhx_AoXGmS2k6BiAUGSK91WgiKRXrDJZne9W-odMcvUDNU1ob-lroD3wVivW7WjLso62Ht0sPDayKdipL7isy_lR9Z5lulWq-DHOJoCBI9WK5-8gy3oSDmn71TtbADViV_2WZcQbUTADZYyYkY0aH04BSyBKPVG06u10fnuuG-7K3XNd0sDWR-Xbw9upDVvDizu1PQ_90_v5rGsvmd3sijwQCWA9FkysPm8KZKjU7POYvIsZ5UyFWF_fbCLobkS8IWGm3VHcf2p5WPqeYsqFhhZaZJBqmve6u4BgWn3HMiyxy5fjHWm=w960-h720-no "Team Photo Before April 21st Flight")
+
 ### **Falcon**
 
 'Falcon' is the '1.0' version of the project. Falcon began when we made a completely new payload, with the plan of making our first real guided flight in mind. This is the first iteration of the payload with the parafoil attached, where all of the major flight goals for the project will be achieved. These goals include cut down, parafoil deployment, and guided descent.
@@ -52,7 +58,9 @@ Kestrel was designed and built to be a testing payload, where we could fly our e
 
 ## 4. Flight Reports
 
-### **April 21, 2018** (UAH Space Hardware Club BalloonSat Flight 75)
+### **KESTREL**
+
+#### **April 21, 2018** (UAH Space Hardware Club BalloonSat Flight 75)
 
 Our first flight took the Kestrel payload up to 100,000ft, where the components performed nearly perfectly, with only three measured failures of a solenoid. The following graphs are constructed from the data collected during the flight.
 
@@ -64,7 +72,7 @@ Our first flight took the Kestrel payload up to 100,000ft, where the components 
 
 
 
-### **August 31, 2018** (UAH Space Hardware Club BalloonSat Flight 77)
+#### **August 31, 2018** (UAH Space Hardware Club BalloonSat Flight 77)
 
 For our second flight we gathered additional data using the Kestrel payload. A major issue during the flight was that the Arduino power cycled while near the apogee of the flight. Due to a mistake in the code, a baseline pressure is taken when the board initializes, so the altitude during descent tended into the negative values. The following graphs show adjusted data from the flight for ascent. There were no recorded solenoid failures during the flight.
 
@@ -72,7 +80,8 @@ For our second flight we gathered additional data using the Kestrel payload. A m
 
 ![alt text](https://lh3.googleusercontent.com/Y4CDoAoS2dIhLRWhnF7a5mxLAkN89WYJ-2H63kcUrKUIaF_1hElJlrU4Xk-xMh04kAqPIyo8T-RROAUbGWmkpqQO6P9UKqv96oe9mTNt2_tanveFWIan3q2ELKeRTuSr3td5RkJul22HY_6ouphoeI_AsPE4-tTNlo2N8ON2lWaVqY-2vvBoBxMCbHlcg8GFzQMku9e32KSeSX4C0cYXz6I8k5JIgeUyMapub-uarkHK1aHVDsjtfC6V47vI_da9QKYYjJP0ap2yFbNyIIDTO1j3ZboP_w2OZzkLhzYqhA2TnYVuEJgcOFwX4ea7ON4U_dtl4BuTxPq2_tGN6nfwM7GqFqyxppiiFBl31SAOE_78_Gi9wOf0qVMZ5w3yPUdJQBoqnGU4FjI3PNAeO7GuXJay-DZE6UTzwhg8iAQMlJRYKTHLpM7AoLEDopjvttDvmFO1kuAvGXok041ZXf7-QEJ8VhcDApRYzauS4llMR63rekm26FqyFbx3VO1KY-YRqmbg-JcjKtY8mvfco_xXvZbSsjWH9RAF85HJPx8p74FAhuvl5fxnYFZ2vNsHbuQdQO_uPbo-vgZvpiPrqXuvja5mqghplvSWkdiv8-zjK0-YLwJM_pEZ4y4VtR5f7UYY=w640-h480-no "Temperature and Pressure vs Time")
 
+### **FALCON**
 
-### **October 6th, 2018** (UAH Space Hardware Club BalloonSat Flight 78)
+#### **October 6th, 2018** (UAH Space Hardware Club BalloonSat Flight 78)
 
 //
