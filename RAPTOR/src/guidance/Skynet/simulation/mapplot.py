@@ -4,8 +4,6 @@ from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 
 import matplotlib.pyplot as plt
 
-import pointgen
-
 class MapPlotter():
     def __init__(self, coordinates):
         self.coordinates = coordinates
@@ -23,12 +21,9 @@ class MapPlotter():
         gl.xformatter = LONGITUDE_FORMATTER
         gl.yformatter = LATITUDE_FORMATTER
 
-    def plot_locations(self):
-
+    def plot_locations(self, best):
         plt.scatter(self.coordinates["longs"][0], self.coordinates["lats"][0],  # put our initial location in red
                     color='red', zorder=2, transform=ccrs.Geodetic())
-
-        best = int(gen.find_best())
 
         for i in range(1, len(self.coordinates["longs"])):
             if i == best:
@@ -46,7 +41,7 @@ class MapPlotter():
                 plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],  # scatter the location seperately
                             color='blue', zorder=2, transform=ccrs.Geodetic())
 
-    def plot_path(self,):
+    def plot_path(self):
         plt.scatter(self.coordinates["longs"][0], self.coordinates["lats"][0],  # put our initial location in red
                     color='red', zorder=2, transform=ccrs.Geodetic())
 
@@ -62,11 +57,3 @@ class MapPlotter():
         plt.tight_layout()
         plt.savefig('test.png')
         plt.show()
-
-gen = pointgen.PointGenerator()
-gen.generate(10)
-
-mp = MapPlotter(gen.points)
-# mp.plot_path()
-mp.plot_locations()
-mp.show()
