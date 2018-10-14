@@ -4,9 +4,18 @@ from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 
 import matplotlib.pyplot as plt
 
+<<<<<<< HEAD
 class MapPlotter():
     def __init__(self, coordinates):
         self.coordinates = coordinates
+=======
+import pointgen
+
+
+class MapPlotter():
+    def __init__(self):
+        self.coords = {"lats": [], "longs": []}
+>>>>>>> 7b5be5f... add map plotter for generated points
 
         self.request = cimgt.OSM()
 
@@ -21,6 +30,7 @@ class MapPlotter():
         gl.xformatter = LONGITUDE_FORMATTER
         gl.yformatter = LATITUDE_FORMATTER
 
+<<<<<<< HEAD
     def plot_locations(self, best):
         plt.scatter(self.coordinates["longs"][0], self.coordinates["lats"][0],  # put our initial location in red
                     color='red', zorder=2, transform=ccrs.Geodetic())
@@ -57,3 +67,39 @@ class MapPlotter():
         plt.tight_layout()
         plt.savefig('test.png')
         plt.show()
+=======
+        self.gen = pointgen.PointGenerator()
+
+    def plot(self, numpoints):
+        self.gen.generate(numpoints)
+
+        plt.scatter(self.gen.points["longs"][0], self.gen.points["lats"][0],  # put our initial location in red
+                    color='red', zorder=2, transform=ccrs.Geodetic())
+
+        best = int(self.gen.find_best())
+        
+        for i in range(1, numpoints+1):
+            if i == best:
+                plt.plot([self.gen.points["longs"][0], self.gen.points["longs"][i]],
+                         [self.gen.points["lats"][0], self.gen.points["lats"][i]],
+                         color='green', linewidth=0.5, zorder=1, transform=ccrs.Geodetic())
+
+                plt.scatter(self.gen.points["longs"][i], self.gen.points["lats"][i], 
+                    color='green', zorder=2, transform=ccrs.Geodetic())
+            else:
+                plt.plot([self.gen.points["longs"][0], self.gen.points["longs"][i]],
+                         [self.gen.points["lats"][0], self.gen.points["lats"][i]],
+                         color='blue', linewidth=0.5, zorder=1, transform=ccrs.Geodetic())  # plot the initial point to a location
+                
+                plt.scatter(self.gen.points["longs"][i], self.gen.points["lats"][i],  # scatter the location seperately
+                    color='blue', zorder=2, transform=ccrs.Geodetic())
+    def show(self):
+        plt.tight_layout()
+        plt.savefig('test.png')
+        plt.show()
+
+
+mp = MapPlotter()
+mp.plot(10)
+mp.show()
+>>>>>>> 7b5be5f... add map plotter for generated points
