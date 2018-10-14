@@ -18,6 +18,11 @@ class GPS
 
     void init(void);
     void correct_coords(void);
+
+    void set_initalt(void);
+    void calc_agl(void);
+
+    float init_alt, agl; // initial altitude and above ground level altitude
 };
 
 #endif

@@ -1,7 +1,9 @@
 /*
-
+  pathfinder.h - 
+	DESCRIPTION NEEDED.
+	Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
-#include "Pathfinder.h"
+#include "pathfinder.h"
 #include <stdlib.h>
 
 /* PUBLIC METHODS */
@@ -9,58 +11,45 @@
 /*
  *  Constructor for Pathfinder 
  */
-Pathfinder::Pathfinder(Coordinate current_lat, Coordinate current_long, Coordinate final_lat, Coordinate final_long)
+Pathfinder::Pathfinder(Coordinate current, Coordinate target)
 {
-    this->_Path.lat_initial = current_lat;
-    this->_Path.lat_final = final_lat;
-    this->_Path.long_initial = current_long;
-    this->_Path.long_final = final_long;
+    this->path.current = current;
+    this->path.target = target;
 }
 
 /*
- *	findPath acts as the wrapper for the rest of the methods,
+ *	find_path acts as the wrapper for the rest of the methods,
  *   accepting inputs of current location and desired location.
  */
-
-void Pathfinder::findPath()
+void Pathfinder::find_path()
 {
-    // path_dmsToDec(); //Convert the coordinates to decimal to make it easier to find the vector and angle, don't need if we have decimal already
-
     /* First find the vector between our coordinates */
-    this->_Path.lat_vec = this->_Path.lat_final.decimal - this->_Path.lat_initial.decimal;
-    this->_Path.long_vec = -1.0 * (this->_Path.long_final.decimal) - -1.0 * (this->_Path.long_initial.decimal);
+    this->path.lat_vec = this->path.target.latitude - this->path.current.latitude;
+    this->path.long_vec = -1.0 * (this->path.target.latitude) - -1.0 * (this->path.current.longitude);
 
     /* Compute the angle of the vector to find our bearing */
-    this->_Path.angle = atan2(this->_Path.long_vec, this->_Path.lat_vec) * 180.0 / pi; //atan returns in radians, * 180/pi is converting radians to degrees, 90 - gives bearing.
-    if (this->_Path.angle < 0)
-        this->_Path.angle += 360; //ensure positive bearing
+    this->path.angle = atan2(this->path.long_vec, this->path.lat_vec) * 180.0 / pi; //atan returns in radians, * 180/pi is converting radians to degrees, 90 - gives bearing.
+    if (this->path.angle < 0)
+        this->path.angle += 360; //ensure positive bearing
+
+    /* Compute the magnitude of the vector to find the distance */
+    this->path.distance = sqrt((this->path.long_vec * this->path.long_vec) + (this->path.lat_vec * this->path.lat_vec));
 }
 
 /*
- *	getAngle returns the angle in the Path struct.
+ *	get_angle returns the angle in the Path struct.
  */
-double Pathfinder::getAngle()
+float Pathfinder::get_angle()
 {
-    return this->_Path.angle;
+    return this->path.angle;
+}
+
+/*
+ *	get_distance returns the distance in the Path struct.
+ */
+float Pathfinder::get_distance()
+{
+    return this->path.distance;
 }
 
 /* PRIVATE METHODS */
-
-/*
- *	coord_dmsToDec calculates a decimal value from the current degrees/minutes/seconds of a coordinate.
- */
-void Pathfinder::coord_dmsToDec(Coordinate &c1)
-{
-    c1.decimal = c1.degrees + c1.minutes / 60.0 + c1.seconds / 3600.0;
-}
-
-/*
- *	path_dmsToDec calls coord_dmsToDec on each coordinate in a Path struct.
- */
-void Pathfinder::path_dmsToDec()
-{
-    coord_dmsToDec(this->_Path.lat_initial);
-    coord_dmsToDec(this->_Path.long_initial);
-    coord_dmsToDec(this->_Path.lat_final);
-    coord_dmsToDec(this->_Path.long_final);
-}

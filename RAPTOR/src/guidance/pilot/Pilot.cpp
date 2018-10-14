@@ -1,7 +1,9 @@
 /*
-
+  pilot.cpp - 
+	DESCRIPTION NEEDED.
+	Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
-#include "Pilot.h"
+#include "pilot.h"
 #include <stdio.h>
 
 #define SRVOR_DTA 6 // Right servo
@@ -21,17 +23,17 @@ Pilot::Pilot()
 }
 
 /*
- *  Method to wake the pilot, giving it the target coordinate.
+ *  Method to wake the pilot, giving it the current and target coordinates.
  */
-void Pilot::wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long)
+void Pilot::wake(Coordinate current, Coordinate target)
 {
-    this->p = new Pathfinder(curr_lat, curr_long, target_lat, target_long);
-    this->p->findPath();
-    desired_heading = p->getAngle();
+    this->p = new Pathfinder(current, target);
+    this->p->find_path();
+    desired_heading = p->get_angle();
 
     Serial.print("Desired heading:");
     Serial.print(desired_heading);
-    Serial.print("\n");   
+    Serial.print("\n");
 }
 
 /*
@@ -97,17 +99,59 @@ void Pilot::servo_test(void)
     servoR->reset();
 }
 
+/* 
+ * servo_init initializes both the left and right servos
+ */
 void Pilot::servo_init(void)
 {
     this->servoR = new ContinuousServo(ContinuousServo::RIGHT, SRVOR_DTA);
     this->servoL = new ContinuousServo(ContinuousServo::LEFT, SRVOL_DTA);
 }
 
+/* 
+ * sleep shuts down the pilot and sets the payload straight
+ */
 void Pilot::sleep(void)
 {
     straight();
 }
 /* PRIVATE METHODS */
+
+/* 
+ * find_turn takes the current angle and finds the correct 
+ * turn based on basic heading math
+ */
+int Pilot::find_turn(float curr_angle)
+{
+    float alpha_angle, beta_angle;
+
+    if (abs(abs(curr_angle - desired_heading) - 360) < 15 || abs(desired_heading - curr_angle) < 15)
+        return STRAIGHT; // if the difference between our current and desired heading is less than 15,  continue straight
+
+    alpha_angle = desired_heading + 90; // alpha angle is in the quadrant to the left of our target angle
+    beta_angle = desired_heading + 270; // beta angle is in the quadrant to the right
+
+    if (alpha_angle > 360)
+        alpha_angle -= 360;
+    if (beta_angle > 360)
+        beta_angle -= 360;
+
+    /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
+    float alpha_dif = abs(alpha_angle - curr_angle);
+    float beta_dif = abs(beta_angle - curr_angle);
+
+    /* As we have created a straight line across the graph, neither difference should be greater than 180 degrees */
+    if (alpha_dif > 180)
+        alpha_dif = 360 - alpha_dif;
+    if (beta_dif > 180)
+        beta_dif = 360 - beta_dif;
+
+    /* If we are closer to the left, turn right, and vice versa */
+    if (alpha_dif > beta_dif)
+        return ContinuousServo::RIGHT;
+    else
+        return ContinuousServo::LEFT;
+}
 
 /*
  *  Makes the box take a right turn
@@ -119,6 +163,7 @@ void Pilot::turn_right()
     servoR->turn();
     current_turn = ContinuousServo::RIGHT;
 }
+
 /*
 * Makes the box take a left turn
 */
@@ -130,6 +175,9 @@ void Pilot::turn_left()
     current_turn = ContinuousServo::LEFT;
 }
 
+/*
+* Straightens out the payload
+*/
 void Pilot::straight()
 {
     if (current_turn == ContinuousServo::RIGHT)
@@ -141,39 +189,4 @@ void Pilot::straight()
         servoL->reset();
     }
     current_turn = STRAIGHT;
-}
-
-/* 
- * adjustPath will take in the current and optimal paths and 
- * calculate which way to turn and by how much. 
- * returns if we should turn
- */
-int Pilot::find_turn(float curr_angle)
-{
-    float alpha_angle, beta_angle;
-
-    if (abs(abs(curr_angle - desired_heading) - 360) < 15 || abs(desired_heading - curr_angle) < 15)
-        return STRAIGHT; // if the difference between our current and desired heading is less than 15,  continue straight
-
-    alpha_angle = desired_heading + 90; //Alpha angle is in the quadrant to the left of our target angle
-    beta_angle = desired_heading + 270; //Beta angle is in the quadrant to the right
-
-    if (alpha_angle > 360)
-        alpha_angle -= 360;
-    if (beta_angle > 360)
-        beta_angle -= 360;
-    
-    /* Determine if alpha or beta angle is closer to our current angle, adjust based on that. */
-    float alpha_dif = abs(alpha_angle-curr_angle);
-    float beta_dif = abs(beta_angle-curr_angle);
-    
-    if(alpha_dif > 180)
-        alpha_dif = 360 - alpha_dif;
-    if(beta_dif > 180)
-        beta_dif = 360 - beta_dif;
-    
-    if (alpha_dif > beta_dif)
-        return ContinuousServo::RIGHT;
-    else
-        return ContinuousServo::LEFT;
 }
