@@ -35,3 +35,6 @@
 .vscode
 *.json
 build/
+
+#python
+__pycache__/
