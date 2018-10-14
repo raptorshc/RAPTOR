@@ -5,10 +5,13 @@ def main():
     gen = pointgen.PointGenerator()
     gen.generate(10)
 
-    mp = mapplot.MapPlotter(gen.points)
-    # mp.plot_path()
-    mp.plot_locations(int(gen.find_best()))
-    mp.show()
+    mpl = mapplot.MapPlotter(gen.points)
+    mpl.plot_locations(int(gen.find_best()))
+    mpl.show("locations.png")
+
+    mpp = mapplot.MapPlotter(gen.points)
+    mpp.plot_path()
+    mpp.show("path.png")
 
 if __name__ == "__main__":
     main()

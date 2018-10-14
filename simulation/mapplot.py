@@ -53,7 +53,7 @@ class MapPlotter():
             plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],  # scatter the current location seperately
                         color='blue', zorder=2, transform=ccrs.Geodetic())
 
-    def show(self):
+    def show(self, filename):
         plt.tight_layout()
-        plt.savefig('test.png')
+        plt.savefig(filename)
         plt.show()
