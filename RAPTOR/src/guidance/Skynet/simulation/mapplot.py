@@ -6,10 +6,9 @@ import matplotlib.pyplot as plt
 
 import pointgen
 
-
 class MapPlotter():
-    def __init__(self):
-        self.coords = {"lats": [], "longs": []}
+    def __init__(self, coordinates):
+        self.coordinates = coordinates
 
         self.request = cimgt.OSM()
 
@@ -23,44 +22,40 @@ class MapPlotter():
         gl.xlabels_top = gl.ylabels_right = False
         gl.xformatter = LONGITUDE_FORMATTER
         gl.yformatter = LATITUDE_FORMATTER
-        
-    def plot_locations(self, numpoints):
-        gen = pointgen.PointGenerator()
-        gen.generate(numpoints)
-        plt.scatter(gen.points["longs"][0], gen.points["lats"][0],  # put our initial location in red
+
+    def plot_locations(self):
+
+        plt.scatter(self.coordinates["longs"][0], self.coordinates["lats"][0],  # put our initial location in red
                     color='red', zorder=2, transform=ccrs.Geodetic())
 
         best = int(gen.find_best())
 
-        for i in range(1, numpoints+1):
+        for i in range(1, len(self.coordinates["longs"])):
             if i == best:
-                plt.plot([gen.points["longs"][0], gen.points["longs"][i]],
-                         [gen.points["lats"][0], gen.points["lats"][i]],
+                plt.plot([self.coordinates["longs"][0], self.coordinates["longs"][i]],
+                         [self.coordinates["lats"][0], self.coordinates["lats"][i]],
                          color='green', linewidth=0.5, zorder=1, transform=ccrs.Geodetic())
 
-                plt.scatter(gen.points["longs"][i], gen.points["lats"][i],
+                plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],
                             color='green', zorder=2, transform=ccrs.Geodetic())
             else:
-                plt.plot([gen.points["longs"][0], gen.points["longs"][i]],
-                         [gen.points["lats"][0], gen.points["lats"][i]],
+                plt.plot([self.coordinates["longs"][0], self.coordinates["longs"][i]],
+                         [self.coordinates["lats"][0], self.coordinates["lats"][i]],
                          color='blue', linewidth=0.5, zorder=1, transform=ccrs.Geodetic())  # plot the initial point to a location
 
-                plt.scatter(gen.points["longs"][i], gen.points["lats"][i],  # scatter the location seperately
+                plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],  # scatter the location seperately
                             color='blue', zorder=2, transform=ccrs.Geodetic())
 
-    def plot_path(self, numpoints):
-        gen = pointgen.PointGenerator()
-        gen.generate(numpoints)
-
-        plt.scatter(gen.points["longs"][0], gen.points["lats"][0],  # put our initial location in red
+    def plot_path(self,):
+        plt.scatter(self.coordinates["longs"][0], self.coordinates["lats"][0],  # put our initial location in red
                     color='red', zorder=2, transform=ccrs.Geodetic())
 
-        for i in range(1, numpoints+1):
-            plt.plot([gen.points["longs"][i-1], gen.points["longs"][i]],
-                     [gen.points["lats"][i-1], gen.points["lats"][i]],
+        for i in range(1, len(self.coordinates["longs"])):
+            plt.plot([self.coordinates["longs"][i-1], self.coordinates["longs"][i]],
+                     [self.coordinates["lats"][i-1], self.coordinates["lats"][i]],
                      color='blue', linewidth=0.5, zorder=1, transform=ccrs.Geodetic())  # plot path from the previous point to the current
 
-            plt.scatter(gen.points["longs"][i], gen.points["lats"][i],  # scatter the current location seperately
+            plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],  # scatter the current location seperately
                         color='blue', zorder=2, transform=ccrs.Geodetic())
 
     def show(self):
@@ -68,7 +63,10 @@ class MapPlotter():
         plt.savefig('test.png')
         plt.show()
 
+gen = pointgen.PointGenerator()
+gen.generate(10)
 
-mp = MapPlotter()
-mp.plot_path(10)
+mp = MapPlotter(gen.points)
+# mp.plot_path()
+mp.plot_locations()
 mp.show()
