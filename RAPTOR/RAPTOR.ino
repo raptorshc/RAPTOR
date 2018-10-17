@@ -6,7 +6,7 @@
 #include "src/environment/environment.h"
 #include "src/guidance/drivers/solenoid/solenoid.h"
 
-#define CUTDOWN_ALT 900 // altitude to cut down at
+#define CUTDOWN_ALT 274.32 // altitude to cut down at in meters. =900ft
 
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
@@ -71,7 +71,7 @@ void loop()
   case 0: // flight state 0 is launch
     environment.bmp->update();
 
-    if (environment.bmp->altitude > 30.0)
+    if (environment.bmp->altitude > 9.144)//Altitude converted to meters. =30ft
     {
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
@@ -93,7 +93,7 @@ void loop()
         cutdown(); // try cutdown again
       }
 
-      while (environment.bmp->altitude > 875)
+      while (environment.bmp->altitude > 266.7)//Altitude converted to meters. =875ft
       {
         environment.bmp->update();
       }                  // wait a hundred feet to deployment
@@ -132,7 +132,7 @@ void loop()
       pilot.fly(environment.gps->angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
-    if (environment.bmp->altitude < 50.0) //correct_alt_descending() < 30.0)
+    if (environment.bmp->altitude < 15.24) //correct_alt_descending() < 30.0) // Altitude converted to meters. =50ft
     {
       if (environment.landing_check())
       {
