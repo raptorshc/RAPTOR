@@ -1,8 +1,9 @@
+import matplotlib.pyplot as plt
+
 import cartopy.crs as ccrs
 import cartopy.io.img_tiles as cimgt
-from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
+from cartopy.mpl.gridliner import LATITUDE_FORMATTER, LONGITUDE_FORMATTER
 
-import matplotlib.pyplot as plt
 
 class MapPlotter():
     def __init__(self, coordinates):
@@ -13,8 +14,9 @@ class MapPlotter():
         plt.switch_backend('Agg')
         ax = plt.axes(projection=self.request.crs)
 
-        ax.set_extent([-90, -80, 31, 38])  # assume we're near to huntsville
-        ax.add_image(self.request, 6, interpolation='bilinear', zorder=0)
+        # assume we're near to huntsville
+        ax.set_extent([-87.6073, -85.573, 34.1928, 35.2612])
+        ax.add_image(self.request, 10, interpolation='bilinear', zorder=0)
 
         gl = ax.gridlines(draw_labels=True, alpha=0.2)
         gl.xlabels_top = gl.ylabels_right = False
