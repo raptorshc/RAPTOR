@@ -1,0 +1,4 @@
+name: simulation
+dependencies:
+  - matplotlib
+  - cartopy
