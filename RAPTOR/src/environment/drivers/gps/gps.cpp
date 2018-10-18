@@ -1,6 +1,6 @@
 /*
- * this->cpp - 
- * Contains implementation for functions in this->h.
+ * gps.cpp - 
+ * Contains implementation for functions in gps.h.
  * Utilizes Adafruit Ultimate GPS library, details: https://learn.adafruit.com/adafruit-ultimate-gps
  * Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
@@ -24,8 +24,10 @@ void GPS::init(void)
     TIMSK0 |= _BV(OCIE0A);
 }
 
+/*
+ * converts lat/long from Adafruit degree-minute format to decimal-degrees 
+ */
 void GPS::correct_coords(void)
-// converts lat/long from Adafruit degree-minute format to decimal-degrees
 // from http://arduinodev.woofex.net/2013/02/06/adafruit_gps_forma/
 {
     float min_long = this->longitude;
@@ -43,4 +45,21 @@ void GPS::correct_coords(void)
 
     min_lat = (int)(min_lat / 100);
     this->latitude = min_lat + (minla / 60);
+}
+
+/*
+ * sets our initial altitude to current altitude, triggered externally
+ */
+void GPS::set_initalt(void)
+{
+    this->init_alt = this->altitude;
+}
+
+/*
+ * calculates above ground level altitude using the GPS MSL altitude 
+ * and our initial altitude then stores it in agl
+ */
+void GPS::calc_agl(void)
+{
+    this->agl = this->altitude - this->init_alt;
 }

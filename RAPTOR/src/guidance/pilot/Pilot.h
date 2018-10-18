@@ -1,45 +1,49 @@
 /*
-  Pilot.h - 
-	DESCRIPTION NEEDED.
-	Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
+  pilot.h - 
+		DESCRIPTION NEEDED.
+		Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
 #ifndef PILOT_h
 #define PILOT_h
 
 #define TESTPILOT
 
-#include "Pathfinder.h"
+#include "pathfinder.h"
 #include "../drivers/servo/continuous_servo.h"
 #include "Arduino.h"
 
 class Pilot
 {
-  public:
+public:
 	Pilot();
 
-	void wake(Coordinate target_lat, Coordinate target_long, Coordinate curr_lat, Coordinate curr_long);
+	void wake(Coordinate current, Coordinate target);
 	void fly(float curr_angle);
 
-	int servoR_status(void);
-	int servoL_status(void);
-	int get_turn(void);
-
+	/* Mutators */
 	void servo_test(void);
 	void servo_init(void);
 	void sleep(void);
 
-  private:
-	Coordinate _target;
+	/* Accessors */
+	int servoR_status(void);
+	int servoL_status(void);
+	int get_turn(void);
+
+private:
 	float desired_heading;
-	int current_turn; // uses ContinuousServo settings for 0 and 1, 2 is straight
-	int target_turn;  // also uses ContinuousServo settings
+
+	int current_turn, target_turn; // uses ContinuousServo settings for 0 (left) and 1 (right), 2 is straight
+
 	ContinuousServo *servoR, *servoL;
 	Pathfinder *p;
 
+	int find_turn(float curr_angle);
+
+	/* Turning Methods */
 	void turn_right();
 	void turn_left();
 	void straight();
-	int find_turn(float curr_angle);
 };
 
 #endif

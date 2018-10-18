@@ -12,24 +12,24 @@
 
 class Environment
 {
-  public:
-    Environment(); // constructor
+public:
+  Environment(); // constructor
 
-    bool init(uint8_t flight_state);
-    void update();
+  bool init(uint8_t flight_state);
+  bool update();
 
-    float correct_alt(uint8_t flight_state);
+  float correct_alt(uint8_t flight_state);
 
-    bool landing_check(void);
-    bool cutdown_check(void);
+  bool landing_check(void);
+  bool cutdown_check(void);
 
-    void print_data();
+  void print_data();
 
-    BMP *bmp;
-    BNO *bno;
-    GPS *gps;
+  BMP *bmp;
+  BNO *bno;
+  GPS *gps;
 
-  private:
+private:
 };
 
 #endif

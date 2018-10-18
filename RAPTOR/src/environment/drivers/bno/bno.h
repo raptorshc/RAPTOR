@@ -15,7 +15,7 @@ class BNO : public Adafruit_BNO055
 public:
   BNO() : Adafruit_BNO055(55) {}
   bool init(void);
-  void update(void);
+  bool update(void);
 
   sensors_event_t data;
 };

@@ -1,13 +1,12 @@
 #include <elapsedMillis.h>
 #include <EEPROM.h>
+#include <Streaming.h>
 
 #include "src/guidance/pilot/pilot.h"
 #include "src/environment/environment.h"
 #include "src/guidance/drivers/solenoid/solenoid.h"
 
-template <class T> inline Print &operator<<(Print &obj, T arg){obj.print(arg);return obj;} // allows stream style input and output
-
-#define CUTDOWN_ALT 900 // altitude to cut down at
+#define CUTDOWN_ALT 274.32 // altitude to cut down at in meters. =900ft
 
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
@@ -21,6 +20,7 @@ elapsedMillis timeElapsed;
 
 uint8_t flight_state = 0;
 volatile long fly_time = 0;
+volatile bool first_gps = true;
 bool didwake = false;
 
 /* 
@@ -71,7 +71,7 @@ void loop()
   case 0: // flight state 0 is launch
     environment.bmp->update();
 
-    if (environment.bmp->altitude > 30.0)
+    if (environment.bmp->altitude > 9.144)//Altitude converted to meters. =30ft
     {
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
@@ -93,7 +93,7 @@ void loop()
         cutdown(); // try cutdown again
       }
 
-      while (environment.bmp->altitude > 875)
+      while (environment.bmp->altitude > 266.7)//Altitude converted to meters. =875ft
       {
         environment.bmp->update();
       }                  // wait a hundred feet to deployment
@@ -111,18 +111,18 @@ void loop()
     blink_led(200);
     break;
   case 2: // flight state 2 is descent
-    if(!didwake)
+    if (!didwake)
     {
-      Coordinate target_lat, target_long, current_lat, current_long;
+      Coordinate current, target;
 
-      target_lat.decimal = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
-      target_long.decimal = 86.657632;
+      current.latitude = environment.gps->latitude;
+      current.longitude = environment.gps->longitude;
 
-      current_lat.decimal = environment.gps->latitude;
-      current_long.decimal = environment.gps->longitude;
+      target.latitude = 86.657632;
+      target.longitude = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
 
       Serial << "Waking pilot\n";
-      pilot.wake(target_lat, target_long, current_lat, current_long);
+      pilot.wake(current, target);
       didwake = true;
     }
     environment.bmp->update();
@@ -132,7 +132,7 @@ void loop()
       pilot.fly(environment.gps->angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
-    if (environment.bmp->altitude < 50.0) //correct_alt_descending() < 30.0)
+    if (environment.bmp->altitude < 15.24) //correct_alt_descending() < 30.0) // Altitude converted to meters. =50ft
     {
       if (environment.landing_check())
       {
@@ -166,7 +166,11 @@ SIGNAL(TIMER0_COMPA_vect)
   {
     if (environment.gps->parse(environment.gps->lastNMEA()))
     {
+      if (first_gps)
+        environment.gps->set_initalt();
+
       environment.gps->correct_coords();
+      environment.gps->calc_agl();
     }
   }
 }
@@ -233,7 +237,7 @@ void startup_sequence(void)
 void write_EEPROM()
 {
   Serial << "Write EEPROM\n";
-  EEPROM.put(0, flight_state);   // flight state is always at address 0
+  EEPROM.put(0, flight_state);                // flight state is always at address 0
   EEPROM.put(100, environment.bmp->baseline); // baseline pressure always at address 100
 }
 
@@ -262,7 +266,8 @@ void blink_led(int length)
 float custom_angle(void)
 {
   Serial << "\nPlease input an angle: ";
-  while (Serial.available() == 0);
+  while (Serial.available() == 0)
+    ;
   float angle = Serial.parseFloat();
   Serial << "\nAngle: " << angle << "\n";
   return angle;
