@@ -1,7 +1,7 @@
 import pointgen
 import mapplot
 
-def main():
+def main():    
     gen = pointgen.PointGenerator()
     gen.generate(10)
 
@@ -12,6 +12,10 @@ def main():
     mpp = mapplot.MapPlotter(gen.points)
     mpp.plot_path()
     mpp.show("outputs/path.png")
+
+    with open("outputs/generated-ouputs.txt", "w") as f:
+        f.write(gen.__str__())
+
 
 if __name__ == "__main__":
     main()

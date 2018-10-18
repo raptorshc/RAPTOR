@@ -78,11 +78,3 @@ class PointGenerator:
     @staticmethod
     def rand_long():
         return random.uniform(-90, -80)  # assume we're near huntsville
-
-
-# with open("generated-ouputs.txt", "w") as f:
-#     for i in range(5):
-#         gen = PointGenerator()
-#         gen.generate(10)
-#         print(gen)
-#         f.write(gen.__str__())
