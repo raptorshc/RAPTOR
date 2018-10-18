@@ -1,14 +1,10 @@
 #include <elapsedMillis.h>
 #include <EEPROM.h>
+#include <Streaming.h>
 
-#include "src/guidance/pilot/Pilot.h"
-#include "src/drivers/bmp/bmp.h"
-#include "src/drivers/gps/gps.h"
-#include "src/drivers/imu/imu.h"
-#include "src/drivers/servo/continuous_servo.h"
-#include "src/drivers/solenoid/solenoid.h"
-
-template <class T> inline Print &operator<<(Print &obj, T arg){obj.print(arg);return obj;} // allows stream style input and output
+#include "src/guidance/pilot/pilot.h"
+#include "src/environment/environment.h"
+#include "src/guidance/drivers/solenoid/solenoid.h"
 
 #define CUTDOWN_ALT 900 // altitude to cut down at
 
@@ -17,16 +13,14 @@ template <class T> inline Print &operator<<(Print &obj, T arg){obj.print(arg);re
 
 #define SET_BTN 7
 
-BNO bno;
-BMP bmp;
-elapsedMillis timeElapsed;
+Environment environment;
 Pilot pilot;
 
-SoftwareSerial mySerial(3, 2); // GPS serial comm pins
-GPS gps(mySerial);
+elapsedMillis timeElapsed;
 
 uint8_t flight_state = 0;
 volatile long fly_time = 0;
+volatile bool first_gps = true;
 bool didwake = false;
 
 /* 
@@ -56,7 +50,7 @@ void setup()
   }
 
   /* GPS */
-  gps.init();
+  environment.gps->init();
 
   delay(10);
   Serial.print(F("TIME,"
@@ -64,7 +58,7 @@ void setup()
                  "LATITUDE, LONGITUDE, ANGLE, "
                  "X, Y, Z, "
                  "SWC, SWP, "
-                 "SRVOR, SRVOL, FLIGHT_STATE\n")); // data header
+                 "TURN, FLIGHT_STATE\n")); // data header
 }
 
 /* 
@@ -75,9 +69,9 @@ void loop()
   switch (flight_state)
   {
   case 0: // flight state 0 is launch
-    bmp.update();
+    environment.bmp->update();
 
-    if (correct_alt_ascending() > 30.0)
+    if (environment.bmp->altitude > 30.0)
     {
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
@@ -87,21 +81,21 @@ void loop()
     print_data();
     break;
   case 1: // flight state 1 is ascent
-    bmp.update();
+    environment.bmp->update();
 
-    if (correct_alt_ascending() > CUTDOWN_ALT)
+    if (environment.bmp->altitude > CUTDOWN_ALT)
     {
       cutdown(); // cutdown
 
-      if (!cutdown_check() || cutdown_switch())
+      if (!environment.cutdown_check() || cutdown_switch())
       { // we want to make sure that we have cut down and we are falling
         Serial << F("\n!!!! CUTDOWN ERROR !!!!\n");
         cutdown(); // try cutdown again
       }
 
-      while (correct_alt_descending() > 800)
+      while (environment.bmp->altitude > 875)
       {
-        bmp.update();
+        environment.bmp->update();
       }                  // wait a hundred feet to deployment
       parafoil_deploy(); // deploy parafoil
       if (parafoil_switch())
@@ -117,30 +111,30 @@ void loop()
     blink_led(200);
     break;
   case 2: // flight state 2 is descent
-    if(!didwake)
+    if (!didwake)
     {
-      Coordinate target_lat, target_long, current_lat, current_long;
+      Coordinate current, target;
 
-      target_lat.decimal = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
-      target_long.decimal = 86.657632;
+      current.latitude = environment.gps->latitude;
+      current.longitude = environment.gps->longitude;
 
-      current_lat.decimal = gps.latitude;
-      current_long.decimal = gps.longitude;
+      target.latitude = 86.657632;
+      target.longitude = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
 
       Serial << "Waking pilot\n";
-      pilot.wake(target_lat, target_long, current_lat, current_long);
+      pilot.wake(current, target);
       didwake = true;
     }
-    bmp.update();
+    environment.bmp->update();
     fly_time = timeElapsed;
     if (fly_time > 1000)
     {
-      pilot.fly(gps.angle); // the pilot just needs our current angle to do his calculations
+      pilot.fly(environment.gps->angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
-    if (correct_alt_descending() < 50.0) //correct_alt_descending() < 30.0)
+    if (environment.bmp->altitude < 50.0) //correct_alt_descending() < 30.0)
     {
-      if (landing_check())
+      if (environment.landing_check())
       {
         pilot.sleep();
         flight_state = 3;
@@ -161,83 +155,35 @@ void loop()
 }
 
 /* 
- * check our altitude measurements with the assumption we are ascending, 
- *  grab the correct one or return the average if they're both correct.
- */
-float correct_alt_ascending(void)
-{
-  if (bmp.altitude - gps.altitude > 50)
-    return bmp.altitude;
-  else if (gps.altitude - bmp.altitude > 50)
-    return gps.altitude;
-  else
-    return (bmp.altitude + gps.altitude) / 2;
-}
-
-/* 
- * check our altitude measurements with the assumption we are descending, 
- *  grab the correct one or return the average if they're both correct.
- */
-float correct_alt_descending(void)
-{
-  if (bmp.altitude == 0) // if either are zero during descent, don't trust them
-    return gps.altitude;
-  if (gps.altitude == 0)
-    return bmp.altitude;
-
-  if (gps.altitude - bmp.altitude > 50)
-    return bmp.altitude;
-  else if (bmp.altitude - gps.altitude > 50)
-    return gps.altitude;
-  else
-    return (bmp.altitude + gps.altitude) / 2;
-}
-
-/* 
  *  Interrupt on millisecond,
  *    check if we have a new GPS NMEA string, if we do grab bmp data and fly
  */
 SIGNAL(TIMER0_COMPA_vect)
 {
-  gps.read(); // Check to see if we have new data
+  environment.gps->read(); // Check to see if we have new data
 
-  if (gps.newNMEAreceived())
+  if (environment.gps->newNMEAreceived())
   {
-    if (gps.parse(gps.lastNMEA()))
+    if (environment.gps->parse(environment.gps->lastNMEA()))
     {
-      gps.correct_coords();
+      if (first_gps)
+        environment.gps->set_initalt();
+
+      environment.gps->correct_coords();
+      environment.gps->calc_agl();
     }
   }
 }
 
-/* 
- *  cutdown_check checks 10 consecutive alitude measurements over 2 seconds, 
- *    if all are decreasing return true, if not return false  
- */
-bool cutdown_check(void)
-{
-  for (int i = 0; i < 10; i++)
-  {
-    uint16_t prevAltitude = correct_alt_descending(); //Update previous altitude
-    delay(200);                                       //.2 second delay
-    if (bmp.update())
-      if (correct_alt_ascending() > prevAltitude) //Are we falling (is our current altitude higher or lower than our previous altitude)?
-      {
-        return false; //Ascending
-      }
-  }
-  return true; //Falling
-}
-
 void print_data()
 {
-  bno.update();
+  environment.bno->update();
 
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << F(",")
-         << bmp.temperature << F(",") << bmp.pressure << F(",") << bmp.altitude << F(",")
-         << gps.latitude << F(",") << gps.longitude << F(",") << gps.angle << F(",")
-         << bno.data.orientation.x << F(",") << bno.data.orientation.y << F(",") << bno.data.orientation.z << F(",")
+         << environment.bmp->temperature << F(",") << environment.bmp->pressure << F(",") << environment.bmp->altitude << F(",")
+         << environment.gps->latitude << F(",") << environment.gps->longitude << F(",") << environment.gps->angle << F(",")
+         << environment.bno->data.orientation.x << F(",") << environment.bno->data.orientation.y << F(",") << environment.bno->data.orientation.z << F(",")
          << cutdown_switch() << F(",") << parafoil_switch() << F(",")
          << pilot.get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
 }
@@ -266,8 +212,8 @@ void startup_sequence(void)
     delay(200);
   }
 
-  if (bmp.init(flight_state) && bno.init())
-  { // check to see if our sensors are working, if they are blink once, if not blink 5 times
+  if (environment.init(flight_state))
+  { // check to see if our sensors are working, if they are blink once, if not blink 15 times
     if (flight_state == 0)
     {
       digitalWrite(LEDS_DTA, HIGH);
@@ -291,8 +237,8 @@ void startup_sequence(void)
 void write_EEPROM()
 {
   Serial << "Write EEPROM\n";
-  EEPROM.put(0, flight_state);   // flight state is always at address 0
-  EEPROM.put(100, bmp.baseline); // baseline pressure always at address 100
+  EEPROM.put(0, flight_state);                // flight state is always at address 0
+  EEPROM.put(100, environment.bmp->baseline); // baseline pressure always at address 100
 }
 
 void read_EEPROM()
@@ -302,10 +248,10 @@ void read_EEPROM()
   if (flight_state == 1)
     flight_state = 2; // this makes sense cause we'll be falling!
 
-  EEPROM.get(100, bmp.baseline);
+  EEPROM.get(100, environment.bmp->baseline);
 
   Serial << "Saved flight state: " << flight_state;
-  Serial << "\nSaved baseline: " << bmp.baseline << "\n";
+  Serial << "\nSaved baseline: " << environment.bmp->baseline << "\n";
 }
 
 void blink_led(int length)
@@ -320,26 +266,9 @@ void blink_led(int length)
 float custom_angle(void)
 {
   Serial << "\nPlease input an angle: ";
-  while (Serial.available() == 0);
+  while (Serial.available() == 0)
+    ;
   float angle = Serial.parseFloat();
   Serial << "\nAngle: " << angle << "\n";
   return angle;
-}
-
-/*
-* landing_check checks the altitude 4 times to see if we've actually landed 
-*/
-bool landing_check(void)
-{
-  uint8_t counter = 0;
-  while (counter++ < 4 && correct_alt_descending() < 50)
-  { // check our altitude 4 times, if we're below 50ft in all of them we're landed
-    delay(100);
-    bmp.update();
-  }
-  if (counter < 3)
-  { // we exited our while loop early
-    return false;
-  }
-  return true;
 }
