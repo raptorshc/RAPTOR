@@ -1,6 +1,6 @@
 #include <elapsedMillis.h>
 #include <EEPROM.h>
-#include <Streaming.h>
+#include <Streaming.h> // http://arduiniana.org/libraries/streaming/
 
 #include "src/guidance/pilot/pilot.h"
 #include "src/environment/environment.h"
@@ -37,17 +37,29 @@ void setup()
   Serial.begin(9600);
 
   pinMode(SET_BTN, OUTPUT);
-  if (!digitalRead(SET_BTN))
-  {
-    read_EEPROM();
-  }
+  // if (!digitalRead(SET_BTN))
+  // {
+  //   read_EEPROM();
+  // }
   /* Solenoids, Servos, BMP, BNO */
   startup_sequence();
 
-  if (digitalRead(SET_BTN))
-  {
-    write_EEPROM();
+// FOR TESTING
+  for(int i = 0; i < 5; i++){
+    blink_led(500);            // toggle LEDs every 1.5 second
+    analogWrite(BZZ_DTA, 200); // turn on buzzer for 500 ms, off for 1000 ms
+    delay(250);
+    analogWrite(BZZ_DTA, 0);
+    delay(250);
   }
+
+  cutdown();
+//
+
+  // if (digitalRead(SET_BTN))
+  // {
+  //   write_EEPROM();
+  // }
 
   /* GPS */
   environment.gps->init();
