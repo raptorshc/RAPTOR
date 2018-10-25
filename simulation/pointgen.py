@@ -6,27 +6,24 @@ an expected output.
 
 Author: Sean Widmier
 '''
-import math
 import random
-
+import math
 
 class PointGenerator:
     def __init__(self):
-        self.points = {"longs": [], "lats": []}
+        self.points = {"longs":[], "lats": []}
         self.vectors = {}
 
     def generate(self, numpoints):
         self.numpoints = numpoints
 
-        # the first entry in each list are the initial points
-        self.points["longs"].append(-86.640948)
-        self.points["lats"].append(34.722427)  # set to huntsville's location
+        self.points["longs"].append(-86.640948) # the first entry in each list are the initial points
+        self.points["lats"].append(34.722427) # set to huntsville's location
 
-        for i in range(1, numpoints+1):
+        for i in range(1,numpoints+1):
             self.points["longs"].append(PointGenerator.rand_long())
-            # generate a random coordinate
-            self.points["lats"].append(PointGenerator.rand_lat())
-
+            self.points["lats"].append(PointGenerator.rand_lat()) # generate a random coordinate
+            
             area = random.random()  # each location has an 'area'
 
             lat_vec = PointGenerator.find_vector(
@@ -76,9 +73,16 @@ class PointGenerator:
 
     @staticmethod
     def rand_lat():
-        return random.uniform(34.1928, 35.2612)  # assume we're near huntsville
+        return random.uniform(31, 38)  # assume we're near huntsville
 
     @staticmethod
     def rand_long():
-        # assume we're near huntsville
-        return random.uniform(-87.6073, -85.573)
+        return random.uniform(-90, -80)  # assume we're near huntsville
+
+
+# with open("generated-ouputs.txt", "w") as f:
+#     for i in range(5):
+#         gen = PointGenerator()
+#         gen.generate(10)
+#         print(gen)
+#         f.write(gen.__str__())
