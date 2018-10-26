@@ -1,12 +1,14 @@
 #include <elapsedMillis.h>
 #include <EEPROM.h>
-#include <Streaming.h>
+#include <Streaming.h> // http://arduiniana.org/libraries/streaming/
 
 #include "src/guidance/pilot/pilot.h"
 #include "src/environment/environment.h"
 #include "src/guidance/drivers/solenoid/solenoid.h"
 
-#define CUTDOWN_ALT 900 // altitude to cut down at
+#define CUTDOWN_ALT 304.8 // altitude to cut down at in meters. =900ft
+#define TARGET_LAT -86.635738;
+#define TARGET_LONG 34.720197; // HARD CODED TARGET COORDINATES
 
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
@@ -71,7 +73,7 @@ void loop()
   case 0: // flight state 0 is launch
     environment.bmp->update();
 
-    if (environment.bmp->altitude > 30.0)
+    if (environment.bmp->altitude > 9.144) //Altitude converted to meters. =30ft
     {
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
@@ -87,16 +89,17 @@ void loop()
     {
       cutdown(); // cutdown
 
-      if (!environment.cutdown_check() || cutdown_switch())
+      if (!cutdown_switch())
       { // we want to make sure that we have cut down and we are falling
         Serial << F("\n!!!! CUTDOWN ERROR !!!!\n");
         cutdown(); // try cutdown again
       }
 
-      while (environment.bmp->altitude > 875)
+      while (environment.bmp->altitude > CUTDOWN_ALT - 3.048) // deploy parafoil after 3 meters
       {
+        delay(1);
         environment.bmp->update();
-      }                  // wait a hundred feet to deployment
+      }
       parafoil_deploy(); // deploy parafoil
       if (parafoil_switch())
       { // make sure the parafoil has deployed
@@ -118,8 +121,8 @@ void loop()
       current.latitude = environment.gps->latitude;
       current.longitude = environment.gps->longitude;
 
-      target.latitude = 86.657632;
-      target.longitude = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
+      target.latitude = TARGET_LAT;
+      target.longitude = TARGET_LONG; // HARD CODED TARGET COORDINATES, Baseball Field!
 
       Serial << "Waking pilot\n";
       pilot.wake(current, target);
@@ -132,7 +135,7 @@ void loop()
       pilot.fly(environment.gps->angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
-    if (environment.bmp->altitude < 50.0) //correct_alt_descending() < 30.0)
+    if (environment.bmp->altitude < 15.24) //correct_alt_descending() < 30.0) // Altitude converted to meters. =50ft
     {
       if (environment.landing_check())
       {
@@ -182,8 +185,8 @@ void print_data()
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << F(",")
          << environment.bmp->temperature << F(",") << environment.bmp->pressure << F(",") << environment.bmp->altitude << F(",")
-         << environment.gps->latitude << F(",") << environment.gps->longitude << F(",") << environment.gps->angle << F(",")
-         << environment.bno->data.orientation.x << F(",") << environment.bno->data.orientation.y << F(",") << environment.bno->data.orientation.z << F(",")
+         << _FLOAT(environment.gps->latitude,7) << F(",") << _FLOAT(environment.gps->longitude,7) << F(",") << _FLOAT(environment.gps->angle,7) << F(",")
+         << _FLOAT(environment.bno->data.orientation.x,4) << F(",") << _FLOAT(environment.bno->data.orientation.y,4) << F(",") << _FLOAT(environment.bno->data.orientation.z,4) << F(",")
          << cutdown_switch() << F(",") << parafoil_switch() << F(",")
          << pilot.get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
 }
