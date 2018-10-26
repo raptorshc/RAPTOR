@@ -6,9 +6,9 @@
 #include "src/environment/environment.h"
 #include "src/guidance/drivers/solenoid/solenoid.h"
 
-#define CUTDOWN_ALT 274.32 // altitude to cut down at in meters. =900ft
-#define TARGET_LAT 86.657632;
-#define TARGET_LONG 34.758224; // HARD CODED TARGET COORDINATES
+#define CUTDOWN_ALT 304.8 // altitude to cut down at in meters. =900ft
+#define TARGET_LAT -86.635738;
+#define TARGET_LONG 34.720197; // HARD CODED TARGET COORDINATES
 
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
