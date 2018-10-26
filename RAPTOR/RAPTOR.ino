@@ -185,8 +185,8 @@ void print_data()
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << F(",")
          << environment.bmp->temperature << F(",") << environment.bmp->pressure << F(",") << environment.bmp->altitude << F(",")
-         << environment.gps->latitude << F(",") << environment.gps->longitude << F(",") << environment.gps->angle << F(",")
-         << environment.bno->data.orientation.x << F(",") << environment.bno->data.orientation.y << F(",") << environment.bno->data.orientation.z << F(",")
+         << _FLOAT(environment.gps->latitude,7) << F(",") << _FLOAT(environment.gps->longitude,7) << F(",") << _FLOAT(environment.gps->angle,7) << F(",")
+         << _FLOAT(environment.bno->data.orientation.x,4) << F(",") << _FLOAT(environment.bno->data.orientation.y,4) << F(",") << _FLOAT(environment.bno->data.orientation.z,4) << F(",")
          << cutdown_switch() << F(",") << parafoil_switch() << F(",")
          << pilot.get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
 }
