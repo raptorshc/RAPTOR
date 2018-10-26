@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source C:\Users\Sean\Documents\GitHub\RAPTOR\hardware\RAPTOR\RAPTOR.sch)
-    (date "10/25/2018 6:59:02 PM")
+    (date "10/25/2018 9:17:35 PM")
     (tool "Eeschema (5.0.0)")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -95,7 +95,7 @@
       (tstamp 56D743B5))
     (comp (ref U1)
       (value BMP280)
-      (footprint LGA-8-2.5X2.5)
+      (footprint Silicon-Standard:LGA-8-2.5X2.5)
       (fields
         (field (name Field4) IC-13090))
       (libsource (lib SparkFun-Sensors) (part BMP280) (description ""))
@@ -214,7 +214,7 @@
     (library (logical Connector_Generic)
       (uri "C:\\Program Files\\KiCad\\share\\kicad\\library/Connector_Generic.lib"))
     (library (logical SparkFun-Sensors)
-      (uri C:\Users\Sean\Documents\kicad\libraries\SparkFun-Sensors.lib)))
+      (uri C:/Users/Sean/Documents/kicad/libraries/SparkFun-Sensors.lib)))
   (nets
     (net (code 1) (name "/9(**)")
       (node (ref P5) (pin 9)))
