@@ -4,4 +4,4 @@
 *.xml
 
 # backup files
- *.bak
+ *bak
