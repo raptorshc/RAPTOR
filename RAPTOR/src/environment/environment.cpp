@@ -57,9 +57,9 @@ float Environment::correct_alt(uint8_t flight_state)
     {
     case 0: // both flight state 0 and 1 are ascending
     case 1:
-        if (this->bmp->altitude - this->gps->agl > 50)
+        if (this->bmp->altitude - this->gps->agl > 15.24)//Altitude converted to meters. =50ft
             return this->bmp->altitude;
-        else if (this->gps->agl - this->bmp->altitude > 50)
+        else if (this->gps->agl - this->bmp->altitude > 15.24)//Altitude converted to meters. =50ft
             return this->gps->agl;
         else
             return (this->bmp->altitude + this->gps->agl) / 2;
@@ -72,9 +72,9 @@ float Environment::correct_alt(uint8_t flight_state)
         if (this->gps->agl == 0)
             return this->bmp->altitude;
 
-        if (this->gps->agl - this->bmp->altitude > 50)
+        if (this->gps->agl - this->bmp->altitude > 15.24)//Altitude converted to meters. =50ft
             return this->bmp->altitude;
-        else if (this->bmp->altitude - this->gps->agl > 50)
+        else if (this->bmp->altitude - this->gps->agl > 15.24)//Altitude converted to meters. =50ft
             return this->gps->agl;
         else
             return (this->bmp->altitude + this->gps->agl) / 2;
@@ -87,7 +87,7 @@ float Environment::correct_alt(uint8_t flight_state)
 bool Environment::landing_check(void)
 {
     uint8_t counter = 0;
-    while (counter++ < 4 && this->bmp->altitude < 50)
+    while (counter++ < 4 && this->bmp->altitude < 15.24)//Altitude converted to meters. =50ft
     { // check our altitude 4 times, if we're below 50ft in all of them we're landed
         delay(100);
         this->bmp->update();
