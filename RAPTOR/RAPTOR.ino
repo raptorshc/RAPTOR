@@ -89,16 +89,17 @@ void loop()
     {
       cutdown(); // cutdown
 
-      if (!environment.cutdown_check() || cutdown_switch())
+      if (!cutdown_switch())
       { // we want to make sure that we have cut down and we are falling
         Serial << F("\n!!!! CUTDOWN ERROR !!!!\n");
         cutdown(); // try cutdown again
       }
 
-      while (environment.bmp->altitude > 266.7) //Altitude converted to meters. =875ft
+      while (environment.bmp->altitude > CUTDOWN_ALT - 3.048) // deploy parafoil after 3 meters
       {
+        delay(1);
         environment.bmp->update();
-      }                  // wait a hundred feet to deployment
+      }
       parafoil_deploy(); // deploy parafoil
       if (parafoil_switch())
       { // make sure the parafoil has deployed
