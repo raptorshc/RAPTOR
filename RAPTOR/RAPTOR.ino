@@ -10,7 +10,6 @@
 #define TARGET_LAT 86.657632;
 #define TARGET_LONG 34.758224; // HARD CODED TARGET COORDINATES
 
-
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
 
@@ -40,29 +39,17 @@ void setup()
   Serial.begin(9600);
 
   pinMode(SET_BTN, OUTPUT);
-  // if (!digitalRead(SET_BTN))
-  // {
-  //   read_EEPROM();
-  // }
+  if (!digitalRead(SET_BTN))
+  {
+    read_EEPROM();
+  }
   /* Solenoids, Servos, BMP, BNO */
   startup_sequence();
 
-// FOR TESTING
-  for(int i = 0; i < 5; i++){
-    blink_led(500);            // toggle LEDs every 1.5 second
-    analogWrite(BZZ_DTA, 200); // turn on buzzer for 500 ms, off for 1000 ms
-    delay(250);
-    analogWrite(BZZ_DTA, 0);
-    delay(250);
+  if (digitalRead(SET_BTN))
+  {
+    write_EEPROM();
   }
-
-  cutdown();
-//
-
-  // if (digitalRead(SET_BTN))
-  // {
-  //   write_EEPROM();
-  // }
 
   /* GPS */
   environment.gps->init();
@@ -86,7 +73,7 @@ void loop()
   case 0: // flight state 0 is launch
     environment.bmp->update();
 
-    if (environment.bmp->altitude > 9.144)//Altitude converted to meters. =30ft
+    if (environment.bmp->altitude > 9.144) //Altitude converted to meters. =30ft
     {
       flight_state = 1; // transition to flight state 1
       write_EEPROM();
@@ -108,7 +95,7 @@ void loop()
         cutdown(); // try cutdown again
       }
 
-      while (environment.bmp->altitude > 266.7)//Altitude converted to meters. =875ft
+      while (environment.bmp->altitude > 266.7) //Altitude converted to meters. =875ft
       {
         environment.bmp->update();
       }                  // wait a hundred feet to deployment
