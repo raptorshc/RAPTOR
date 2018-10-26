@@ -7,6 +7,9 @@
 #include "src/guidance/drivers/solenoid/solenoid.h"
 
 #define CUTDOWN_ALT 274.32 // altitude to cut down at in meters. =900ft
+#define TARGET_LAT 86.657632;
+#define TARGET_LONG 34.758224; // HARD CODED TARGET COORDINATES
+
 
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
@@ -130,8 +133,8 @@ void loop()
       current.latitude = environment.gps->latitude;
       current.longitude = environment.gps->longitude;
 
-      target.latitude = 86.657632;
-      target.longitude = 34.758224; // HARD CODED TARGET COORDINATES, Baseball Field!
+      target.latitude = TARGET_LAT;
+      target.longitude = TARGET_LONG; // HARD CODED TARGET COORDINATES, Baseball Field!
 
       Serial << "Waking pilot\n";
       pilot.wake(current, target);
