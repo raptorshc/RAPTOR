@@ -7,8 +7,8 @@
 #include "src/guidance/drivers/solenoid/solenoid.h"
 
 #define CUTDOWN_ALT 304.8 // altitude to cut down at in meters. =900ft
-#define TARGET_LAT -86.635738;
-#define TARGET_LONG 34.720197; // HARD CODED TARGET COORDINATES
+#define TARGET_LONG -86.635738;
+#define TARGET_LAT 34.720197; // HARD CODED TARGET COORDINATES
 
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
@@ -57,7 +57,7 @@ void setup()
   delay(10);
   Serial.print(F("TIME,"
                  "TEMPERATURE, PRESSURE, ALTITUDE, "
-                 "LATITUDE, LONGITUDE, ANGLE, "
+                 "LATITUDE, LONGITUDE, ANGLE, GPS_ALT"
                  "X, Y, Z, "
                  "SWC, SWP, "
                  "SRVOR, SRVOL, FLIGHT_STATE\n")); // data header
@@ -185,7 +185,7 @@ void print_data()
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << F(",")
          << environment.bmp->temperature << F(",") << environment.bmp->pressure << F(",") << environment.bmp->altitude << F(",")
-         << _FLOAT(environment.gps->latitude,7) << F(",") << _FLOAT(environment.gps->longitude,7) << F(",") << _FLOAT(environment.gps->angle,7) << F(",")
+         << _FLOAT(environment.gps->latitude,7) << F(",") << _FLOAT(environment.gps->longitude,7) << F(",") << _FLOAT(environment.gps->angle,7) << F(","), environment.gps.altitude << F(",")
          << _FLOAT(environment.bno->data.orientation.x,4) << F(",") << _FLOAT(environment.bno->data.orientation.y,4) << F(",") << _FLOAT(environment.bno->data.orientation.z,4) << F(",")
          << cutdown_switch() << F(",") << parafoil_switch() << F(",")
          << pilot.get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
