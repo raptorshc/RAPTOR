@@ -48,8 +48,8 @@ bool BMP::update(void)
     this->pressure = event.pressure;
     // temperature in celsius
     getTemperature(&this->temperature);
-    // altitude in meters to feet
-    this->altitude = 3.28084 * pressureToAltitude(this->baseline, this->pressure);
+    // altitude in meters
+    this->altitude = pressureToAltitude(this->baseline, this->pressure);
   }
   else
     return false; // collection failed

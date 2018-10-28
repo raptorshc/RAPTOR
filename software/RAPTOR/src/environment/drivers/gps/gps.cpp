@@ -28,6 +28,7 @@ void GPS::init(void)
  * converts lat/long from Adafruit degree-minute format to decimal-degrees 
  */
 void GPS::correct_coords(void)
+// from http://arduinodev.woofex.net/2013/02/06/adafruit_gps_forma/
 {
     float min_long = this->longitude;
     float min_lat = this->latitude;
