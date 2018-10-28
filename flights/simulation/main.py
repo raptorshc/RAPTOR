@@ -8,7 +8,7 @@ import xlrd
 
 def main():
     # To open Workbook
-    wb = xlrd.open_workbook("../flights/data/falcon/10.27/DATA.xlsx")
+    wb = xlrd.open_workbook("../data/falcon/10.27/DATA.xlsx")
     sheet = wb.sheet_by_index(0)
 
     data = {"longs": [], "lats": []}
@@ -30,7 +30,6 @@ def main():
     mpp = mapplot.MapPlotter(data)
     mpp.plot_path()
     mpp.show("path.png")
-
 
 if __name__ == "__main__":
     main()
