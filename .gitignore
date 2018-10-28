@@ -38,3 +38,6 @@ build/
 
 #don't bloat it
 *.MP4
+
+#python
+__pycache__/
