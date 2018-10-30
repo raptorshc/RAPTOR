@@ -103,3 +103,17 @@ void Skynet::getResults (vector < double > &resultVals) {
 		resultVals.push_back( m_vLayers.back().at( n ).getOutput() );
 	}
 }
+
+std::ofstream &operator << (std::ofstream &ofs, const Skynet &skynet) {
+	// For all of our layers in SkyNet...
+	for ( auto layer : skynet.m_vLayers ) {
+		// Then for all of our nodes in each layer...
+		for ( auto node : layer ) {
+			// Save the weights of the node's connections to the next layer.
+			ofs << node;
+		}
+		// Print an end line signifying the end of the layer.
+		ofs << std::endl;
+	}
+	return ofs;
+}

@@ -1,7 +1,4 @@
 #include "../../Skynet.h"
-#include "../../Neuron.h"
-#include <vector>
-#include <iostream>
 
 using namespace std;
 
@@ -800,6 +797,11 @@ int main ( ) {
 	cout << "Desired landing site: " << outputNeuronIndex << " with activation value of " << maxActivation << endl;
 	//desired output is 2, 3rd landing site counted from 0
 	cout << "Actual landing site: 2" << endl;
+
+	std::cout << "Saving network to file." << std::endl;
+	std::ofstream outFile( "network.dat" );
+	outFile << testNet;
+	outFile.close();
 }
 
 double utility (double weight, double distance) {

@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <assert.h>
+#include <fstream>
 #include "Neuron.h"
 #include "Layer.h"
 
@@ -19,4 +20,5 @@ public:
 	void feedForward (vector < double > &inputVals);        //input
 	void backProp (vector < double > &targetVals);          //training
 	void getResults (vector < double > &resultVals);        //output
+	friend std::ofstream &operator << (std::ofstream &of, const Skynet &skynet);
 };

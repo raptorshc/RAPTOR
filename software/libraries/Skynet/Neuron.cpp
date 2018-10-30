@@ -81,3 +81,11 @@ void Neuron::updateWeights (Layer &prevLayer) {
 		neuron.m_vOutputWeight[ m_iIndex ].m_dWeight += newDeltaWeight;
 	}
 }
+
+std::ofstream &operator << (std::ofstream &ofs, const Neuron &node) {
+	for ( auto connection : node.m_vOutputWeight ) {
+		ofs << connection.m_dWeight << " ";
+	}
+	ofs << std::endl;
+	return ofs;
+}
