@@ -13,8 +13,8 @@ class MapPlotter():
         plt.switch_backend('Agg')
         ax = plt.axes(projection=self.request.crs)
 
-        ax.set_extent([-90, -80, 31, 38])  # assume we're near to huntsville
-        ax.add_image(self.request, 6, interpolation='bilinear', zorder=0)
+        ax.set_extent([-86.7517, -85.4607, 34.2267, 34.9583])  # assume we're near to huntsville
+        ax.add_image(self.request, 12, interpolation='bilinear', zorder=0)
 
         gl = ax.gridlines(draw_labels=True, alpha=0.2)
         gl.xlabels_top = gl.ylabels_right = False

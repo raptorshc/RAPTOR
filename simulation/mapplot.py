@@ -42,6 +42,7 @@ class MapPlotter():
                             color='blue', zorder=2, transform=ccrs.Geodetic())
 
     def plot_path(self):
+        print(f"\n init long: {self.coordinates["longs"][0]}, init lat: {self.coordinates["lats"][0]}")
         plt.scatter(self.coordinates["longs"][0], self.coordinates["lats"][0],  # put our initial location in red
                     color='red', zorder=2, transform=ccrs.Geodetic())
 

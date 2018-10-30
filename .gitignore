@@ -38,3 +38,5 @@ build/
 
 #python
 __pycache__/
+
+*.MP4
