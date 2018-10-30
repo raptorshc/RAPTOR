@@ -1,4 +1,5 @@
 #include "Neuron.h"
+#include "Activations.h"
 
 Neuron::Neuron (int numOutputs, int index) {
 	m_iIndex = index;
@@ -12,14 +13,30 @@ Neuron::Neuron (int numOutputs, int index) {
 	}
 	m_dEta   = 0.25;
 	m_dAlpha = 0.4;
+	this->m_activation = SkyNet::Activations::ReLU;
+}
+
+Neuron::Neuron (const int &numOutputs, const int &index, const SkyNet::Activations &function) {
+	m_iIndex = index;
+	//Creates connections between layers
+	for ( int numConnections = 0; numConnections < numOutputs; numConnections++ ) {
+		//Adds new connection
+		m_vOutputWeight.push_back( Connections() );
+		// assigns random weight to connection
+		m_vOutputWeight.back().m_dWeight = randWeight();
+
+	}
+	m_dEta   = 0.25;
+	m_dAlpha = 0.4;
+	this->m_activation = function;
 }
 
 double Neuron::activation (double val) {
-	return val / (1 + fabs( val ));
+	return SkyNet::activation( this->m_activation, val );
 }
 
 double Neuron::activationDerivative (double val) {
-	return val * (1 - val);
+	return SkyNet::activationDerivative( this->m_activation, val );
 }
 
 void Neuron::setOutput (double val) {

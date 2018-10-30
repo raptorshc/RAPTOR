@@ -3,26 +3,30 @@
 typedef vector < Neuron > Layer;
 
 Skynet::Skynet (vector < unsigned int > &topology) {
-	int                numOutputs;
-	unsigned int       numLayers = topology.size();
+	int                 numOutputs;
+	unsigned int        numLayers          = topology.size();
+	SkyNet::Activations activationFunction = SkyNet::Activations::ReLU;
+
 	//where i is the current layer
-	for ( unsigned int i         = 0; i < numLayers; i++ ) {
+	for ( unsigned int i = 0; i < numLayers; i++ ) {
 		m_vLayers.push_back( Layer() );
 		//if current layer is the final layer
-		if ( i == topology.size() - 1 ) {
-			numOutputs = 0;
+		if ( i == numLayers - 1 ) {
+			numOutputs         = 0;
+			activationFunction = SkyNet::Activations::Softmax;
 		} else {
 			numOutputs = topology[ i + 1 ];
 		}
 
 		//where n is the current neuron
 		for ( int n = 0; n <= topology[ i ]; n++ ) {
-			m_vLayers.back().push_back( Neuron( numOutputs, n ) );
+			m_vLayers.back().push_back( Neuron( numOutputs, n, activationFunction ) );
 			//cout << "Made a neuron" << endl;
 		}
 		//set bias
 		m_vLayers.back().back().setOutput( 1.0 );
 	}
+
 }
 
 void Skynet::feedForward (vector < double > &inputVals) {
@@ -119,7 +123,7 @@ std::ofstream &operator << (std::ofstream &ofs, const Skynet &skynet) {
 }
 
 std::ifstream &operator >> (std::ifstream &ifs, Skynet &skynet) {
-	// For each layer in Skynet...
+	// For each layer in SkyNet...
 	for ( auto &layer : skynet.m_vLayers ) {
 		// For each node in the current layer...
 		for ( auto &node : layer ) {
