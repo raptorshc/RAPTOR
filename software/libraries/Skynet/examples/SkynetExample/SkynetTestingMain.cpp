@@ -31,10 +31,12 @@ int main ( ) {
 	}
 	inFile.close();
 
-	for ( int k = 0; k < 10; k++ ) {
+	int totalEpochs = 10000;
+
+	for ( int k = 0; k < totalEpochs; k++ ) {
 
 		if ( k % 1000 == 0 ) {
-			cout << k / 100 * 2 << "% finished" << endl;
+			cout << ( double ) k / ( double ) totalEpochs * 100 << "% finished" << endl;
 		}
 
 		//Set 1
