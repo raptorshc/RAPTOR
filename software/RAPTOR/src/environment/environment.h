@@ -28,8 +28,6 @@ public:
   BMP *bmp;
   BNO *bno;
   GPS *gps;
-
-private:
 };
 
 #endif

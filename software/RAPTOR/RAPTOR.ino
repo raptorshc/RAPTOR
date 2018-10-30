@@ -101,6 +101,7 @@ void loop()
         environment.bmp->update();
       }
       parafoil_deploy(); // deploy parafoil
+      delay(1200);       //delay before trying to turn after deploying parafoil
       if (parafoil_switch())
       { // make sure the parafoil has deployed
         Serial << F("\n!!!! PARAFOIL DEPLOYMENT ERROR !!!!\n");
@@ -185,8 +186,8 @@ void print_data()
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << F(",")
          << environment.bmp->temperature << F(",") << environment.bmp->pressure << F(",") << environment.bmp->altitude << F(",")
-         << _FLOAT(environment.gps->latitude,7) << F(",") << _FLOAT(environment.gps->longitude,7) << F(",") << _FLOAT(environment.gps->angle,7) << F(",") << environment.gps->altitude << F(",")
-         << _FLOAT(environment.bno->data.orientation.x,4) << F(",") << _FLOAT(environment.bno->data.orientation.y,4) << F(",") << _FLOAT(environment.bno->data.orientation.z,4) << F(",")
+         << _FLOAT(environment.gps->latitude, 7) << F(",") << _FLOAT(environment.gps->longitude, 7) << F(",") << _FLOAT(environment.gps->angle, 7) << F(",") << environment.gps->altitude << F(",")
+         << _FLOAT(environment.bno->data.orientation.x, 4) << F(",") << _FLOAT(environment.bno->data.orientation.y, 4) << F(",") << _FLOAT(environment.bno->data.orientation.z, 4) << F(",")
          << cutdown_switch() << F(",") << parafoil_switch() << F(",")
          << pilot.get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
 }
