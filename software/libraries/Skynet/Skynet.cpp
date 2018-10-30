@@ -13,7 +13,7 @@ Skynet::Skynet (vector < unsigned int > &topology) {
 		//if current layer is the final layer
 		if ( i == numLayers - 1 ) {
 			numOutputs         = 0;
-			activationFunction = SkyNet::Activations::Softmax;
+			activationFunction = SkyNet::Activations::Sigmoid;
 		} else {
 			numOutputs = topology[ i + 1 ];
 		}
