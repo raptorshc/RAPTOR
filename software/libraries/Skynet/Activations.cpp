@@ -3,6 +3,7 @@
 //
 
 #include "Activations.h"
+#include "Functions.h"
 
 double SkyNet::activation (const SkyNet::Activations &function, const double &value, const double &sum) {
 	switch ( function ) {
