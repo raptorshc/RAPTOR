@@ -38,8 +38,8 @@ double Neuron::randWeight ( ) {
 void Neuron::feedForward (Layer &prevLayer) {
 	double sum = 0;
 
-	for ( int n = 0; n < prevLayer.size(); n++ ) {
-		sum += prevLayer[ n ].getOutput() * prevLayer[ n ].m_vOutputWeight[ m_iIndex ].m_dWeight;
+	for ( auto node : prevLayer ) {
+		sum += node.getOutput() * node.m_vOutputWeight[ m_iIndex ].m_dWeight;
 	}
 
 	m_dOutput = activation( sum );
@@ -60,6 +60,7 @@ double Neuron::getHiddenGradient (Layer &nextLayer) {
 double Neuron::sumLayer (Layer &nextLayer) {
 	double sum = 0.0;
 
+	// TODO: Why -1?
 	for ( unsigned n = 0; n < nextLayer.size() - 1; ++n ) {
 		sum += m_vOutputWeight[ n ].m_dWeight * nextLayer[ n ].m_dGradient;
 	}
@@ -69,8 +70,7 @@ double Neuron::sumLayer (Layer &nextLayer) {
 
 void Neuron::updateWeights (Layer &prevLayer) {
 	//for each neuron in prevLayer including bias
-	for ( unsigned n = 0; n < prevLayer.size(); ++n ) {
-		Neuron &neuron        = prevLayer[ n ];
+	for ( auto &neuron : prevLayer ) {
 		double oldDeltaWeight = neuron.m_vOutputWeight[ m_iIndex ].m_dDeltaWeight;
 
 		// train rate *gradient * initial value + momentm + a fraction of previous deltaWeight;
