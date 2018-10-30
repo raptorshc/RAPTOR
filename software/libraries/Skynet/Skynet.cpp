@@ -119,8 +119,11 @@ std::ofstream &operator << (std::ofstream &ofs, const Skynet &skynet) {
 }
 
 std::ifstream &operator >> (std::ifstream &ifs, Skynet &skynet) {
+	// For each layer in Skynet...
 	for ( auto &layer : skynet.m_vLayers ) {
+		// For each node in the current layer...
 		for ( auto &node : layer ) {
+			// Load the node with the weights provided in the file.
 			ifs >> node;
 		}
 	}
