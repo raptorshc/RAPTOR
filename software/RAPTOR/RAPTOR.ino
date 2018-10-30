@@ -107,7 +107,7 @@ void loop()
         Serial << F("\n!!!! PARAFOIL DEPLOYMENT ERROR !!!!\n");
         parafoil_deploy(); // try deploying parafoil again, probably won't do much
       }
-
+      delay_ms(1500); // Delays the starting of the guidence until the parafoil has compleatly opened. 
       flight_state = 2;
       write_EEPROM();
     }
