@@ -7,8 +7,8 @@
 
 #include "Layer.h"
 
-double relu (const double &input, const bool &derivative);
-double relu (const double &input);
+double leaky_relu (const double &input, const bool &derivative);
+double leaky_relu (const double &input);
 
 double sigmoid (const double &input, const bool &derivative);
 double sigmoid (const double &input);

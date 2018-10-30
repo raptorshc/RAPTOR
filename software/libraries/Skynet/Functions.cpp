@@ -14,12 +14,13 @@ double sum (const Layer &layer) {
 	return out;
 }
 
-// Relu activation function.
-double relu (const double &input, const bool &derivative) {
+// Leaky Relu activation function.
+// With our negative slope defined to be 0.5
+double leaky_relu (const double &input, const bool &derivative) {
 	// If our input is not positive...
 	if ( input <= 0 ) {
-		// Output 0 in the case of our derivative and not.
-		return 0;
+
+		return (derivative) ? 0.5 : input * 0.5;
 	}
 	// If we want the derivative for our positive input...
 	// output 1 for the derivative
@@ -29,8 +30,8 @@ double relu (const double &input, const bool &derivative) {
 
 // Wrapper function around the other relu function.
 // Use this one if you don't want the derivative.
-double relu (const double &input) {
-	return relu( input, false );
+double leaky_relu (const double &input) {
+	return leaky_relu( input, false );
 }
 
 // Sigmoid activation function.

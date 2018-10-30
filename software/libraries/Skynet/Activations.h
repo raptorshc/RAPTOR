@@ -7,7 +7,7 @@
 
 namespace SkyNet {
 	enum Activations {
-		ReLU, Sigmoid, Softmax
+		Leaky_ReLU, Sigmoid, Softmax
 	};
 
 	double activation (const Activations &function, const double &value, const double &sum);

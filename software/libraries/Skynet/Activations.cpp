@@ -7,8 +7,8 @@
 
 double SkyNet::activation (const SkyNet::Activations &function, const double &value, const double &sum) {
 	switch ( function ) {
-		case ReLU:
-			return relu( value );
+		case Leaky_ReLU:
+			return leaky_relu( value );
 		case Sigmoid:
 			return sigmoid( value );
 		case Softmax:
@@ -27,8 +27,8 @@ double SkyNet::activation (const SkyNet::Activations &function, const double &va
 
 double SkyNet::activationDerivative (const SkyNet::Activations &function, const double &value, const double &sum) {
 	switch ( function ) {
-		case ReLU:
-			return relu( value, true );
+		case Leaky_ReLU:
+			return leaky_relu( value, true );
 		case Sigmoid:
 			return sigmoid( value, true );
 		case Softmax:

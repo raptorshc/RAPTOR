@@ -13,7 +13,7 @@ Neuron::Neuron (int numOutputs, int index) {
 	}
 	m_dEta   = 0.25;
 	m_dAlpha = 0.4;
-	this->m_activation = SkyNet::Activations::ReLU;
+	this->m_activation = SkyNet::Activations::Leaky_ReLU;
 }
 
 Neuron::Neuron (const int &numOutputs, const int &index, const SkyNet::Activations &function) {

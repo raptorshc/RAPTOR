@@ -5,7 +5,7 @@ typedef vector < Neuron > Layer;
 Skynet::Skynet (vector < unsigned int > &topology) {
 	int                 numOutputs;
 	unsigned int        numLayers          = topology.size();
-	SkyNet::Activations activationFunction = SkyNet::Activations::ReLU;
+	SkyNet::Activations activationFunction = SkyNet::Activations::Leaky_ReLU;
 
 	//where i is the current layer
 	for ( unsigned int i = 0; i < numLayers; i++ ) {
