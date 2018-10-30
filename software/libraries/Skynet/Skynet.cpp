@@ -17,7 +17,7 @@ Skynet::Skynet(vector<unsigned int> &topology)
 		for (int n = 0; n <= topology[i]; n++) //where n is the current neuron
 		{
 			m_vLayers.back().push_back(Neuron(numOutputs, n));
-			cout << "Made a neuron" << endl;
+			//cout << "Made a neuron" << endl;
 		}
 		m_vLayers.back().back().setOutput(1.0); //set bias
 	}

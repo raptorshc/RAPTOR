@@ -85,6 +85,8 @@ void Neuron::updateWeights(Layer &prevLayer)
 
 		// train rate *gradient * initial value + momentm + a fraction of previous deltaWeight;
 		double newDeltaWeight = m_dEta * neuron.getOutput() * m_dGradient + m_dAlpha * oldDeltaWeight;
+		
+
 
 		neuron.m_vOutputWeight[m_iIndex].m_dDeltaWeight = newDeltaWeight;
 		neuron.m_vOutputWeight[m_iIndex].m_dWeight += newDeltaWeight;
