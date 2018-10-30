@@ -117,3 +117,12 @@ std::ofstream &operator << (std::ofstream &ofs, const Skynet &skynet) {
 	}
 	return ofs;
 }
+
+std::ifstream &operator >> (std::ifstream &ifs, Skynet &skynet) {
+	for ( auto &layer : skynet.m_vLayers ) {
+		for ( auto &node : layer ) {
+			ifs >> node;
+		}
+	}
+	return ifs;
+}

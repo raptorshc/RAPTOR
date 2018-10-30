@@ -21,4 +21,5 @@ public:
 	void backProp (vector < double > &targetVals);          //training
 	void getResults (vector < double > &resultVals);        //output
 	friend std::ofstream &operator << (std::ofstream &of, const Skynet &skynet);
+	friend std::ifstream &operator >> (std::ifstream &ifs, Skynet &skynet);
 };

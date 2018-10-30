@@ -23,6 +23,14 @@ int main ( ) {
 	vector < double > targetVals;
 	vector < double > resultVals;
 
+	std::cout << "Loading network from file." << std::endl;
+	std::ifstream inFile( "network.dat" );
+	if ( inFile.good() ) {
+		std::cout << "The old file exists." << std::endl;
+		inFile >> testNet;
+	}
+	inFile.close();
+
 	for ( int k = 0; k < 10; k++ ) {
 
 		if ( k % 1000 == 0 ) {

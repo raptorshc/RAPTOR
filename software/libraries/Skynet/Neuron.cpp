@@ -89,3 +89,12 @@ std::ofstream &operator << (std::ofstream &ofs, const Neuron &node) {
 	ofs << std::endl;
 	return ofs;
 }
+
+std::ifstream &operator >> (std::ifstream &ifs, Neuron &node) {
+	double    temp_weight;
+	for ( int i = 0; i < node.m_vOutputWeight.size(); i++ ) {
+		ifs >> temp_weight;
+		node.m_vOutputWeight[ i ].m_dWeight = temp_weight;
+	}
+	return ifs;
+}

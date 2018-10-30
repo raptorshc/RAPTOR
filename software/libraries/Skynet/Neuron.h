@@ -34,5 +34,6 @@ public:
 	double sumLayer (Layer &nextLayer);            //training stuff, don't worry abouut it
 	void updateWeights (Layer &prevLayer);        //updates weights for training
 	friend std::ofstream &operator << (std::ofstream &ofs, const Neuron &node);
+	friend std::ifstream &operator >> (std::ifstream &ifs, Neuron &node);
 };
 
