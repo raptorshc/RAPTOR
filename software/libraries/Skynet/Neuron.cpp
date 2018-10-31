@@ -11,7 +11,7 @@ Neuron::Neuron (int numOutputs, int index) {
 		m_vOutputWeight.back().m_dWeight = randWeight();
 
 	}
-	m_dEta   = 0.25;
+	m_dEta   = 0.0025;
 	m_dAlpha = 0.4;
 	this->m_activation = SkyNet::Activations::Leaky_ReLU;
 }
