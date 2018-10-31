@@ -13,9 +13,9 @@ int main ( ) {
 
 	vector < unsigned int > topology;
 	topology.push_back( 10 );
-	topology.push_back( 5 );
+	topology.push_back( 7 );
 
-	topology.push_back( 5 );
+	topology.push_back( 7 );
 	topology.push_back( 10 );
 
 	Skynet            testNet( topology );
