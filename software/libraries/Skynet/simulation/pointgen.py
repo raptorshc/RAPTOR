@@ -45,9 +45,9 @@ class PointGenerator:
         res = ""
         for x in self.vectors:
             # print location #, area, and distance
-            res += f"{x}: <{self.vectors[x][0]:.3f}>({self.vectors[x][1]:.3f})\n"
+            res += f"{x}:{self.vectors[x][0]:.3f}:{self.vectors[x][1]:.3f}\n"
 
-        res += f"\nExpected output: {self.find_best()}\n"
+        res += f">{self.find_best()}\n"
         return res
 
     def find_best(self):
