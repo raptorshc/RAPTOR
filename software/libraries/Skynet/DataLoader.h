@@ -35,6 +35,7 @@ public:
 
 	void getDataFromFile ( );
 	Data getData ( );
+	bool givenAllData ( );
 
 };
 

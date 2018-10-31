@@ -112,3 +112,7 @@ Data DataLoader::getData ( ) {
 	// Return our data to give out.
 	return output;
 }
+
+bool DataLoader::givenAllData ( ) {
+	return this->data.size() == 0;
+}
