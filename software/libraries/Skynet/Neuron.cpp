@@ -47,9 +47,9 @@ double Neuron::getOutput ( ) {
 	return m_dOutput;
 }
 
-//returns random double between 0 and 1
+//returns random double between -0.5 and 0.5
 double Neuron::randWeight ( ) {
-	return rand() / double( RAND_MAX );
+	return ( double ) (rand()) / double( RAND_MAX ) - 0.5;
 }
 
 void Neuron::feedForward (Layer &prevLayer) {
