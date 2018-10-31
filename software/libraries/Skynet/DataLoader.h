@@ -20,6 +20,9 @@ struct Data {
 	int                             bestLandingSite;
 };
 
+std::ostream &operator << (std::ostream &ofs, const Data &data);
+std::ostream &operator << (std::ostream &ofs, const LandingSiteData &data);
+
 class DataLoader {
 private:
 	std::string          filename;
@@ -29,14 +32,14 @@ private:
 	// Data that this->data is to be resetted to.
 	std::vector < Data > totalData;
 
-
 public:
-	DataLoader (const std::string &filename);
+	explicit DataLoader (const std::string &filename);
 
 	void getDataFromFile ( );
 	Data getData ( );
 	bool givenAllData ( );
 
+	friend std::ostream &operator << (std::ostream &ofs, const DataLoader &database);
 };
 
 

@@ -94,6 +94,7 @@ void DataLoader::getDataFromFile ( ) {
 	this->totalData = this->data;
 }
 
+
 // Get a random data that we haven't already given out.
 // If we've given out all of our data, then reset
 // this->data to this->totalData
@@ -109,10 +110,31 @@ Data DataLoader::getData ( ) {
 	Data output = this->data[ index ];
 	// Remove the data that we have just received.
 	this->data.erase( this->data.begin() + index );
+
 	// Return our data to give out.
 	return output;
 }
 
 bool DataLoader::givenAllData ( ) {
 	return this->data.size() == 0;
+}
+
+std::ostream &operator << (std::ostream &ofs, const DataLoader &database) {
+	for ( auto d : database.totalData ) {
+		ofs << d << std::endl;
+	}
+	return ofs;
+}
+
+std::ostream &operator << (std::ostream &ofs, const Data &data) {
+	for ( auto d : data.landingSites ) {
+		ofs << d << std::endl;
+	}
+	ofs << "Best Landing Site: " << data.bestLandingSite << std::endl;
+	return ofs;
+}
+
+std::ostream &operator << (std::ostream &ofs, const LandingSiteData &data) {
+	ofs << data.landingSite << ": <" << data.area << "> (" << data.distance << ")";
+	return ofs;
 }
