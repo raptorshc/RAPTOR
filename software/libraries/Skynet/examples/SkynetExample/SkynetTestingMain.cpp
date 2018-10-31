@@ -24,6 +24,10 @@ int main ( ) {
 	vector < double > resultVals;
 
 	std::cout << "Loading network from file." << std::endl;
+	/*
+	 * If you are getting -nan's as results and as your saved weights,
+	 * create network.dat as an empty text file and then rerun the program.
+	 */
 	std::ifstream inFile( "network.dat" );
 	if ( inFile.good() ) {
 		std::cout << "The old file exists." << std::endl;
