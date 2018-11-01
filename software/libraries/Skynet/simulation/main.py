@@ -5,8 +5,8 @@ import mapplot
 def main ( ):
 	gen = pointgen.PointGenerator ( )
 
-	with open ( "generatedOutputs.txt", 'w+' ) as f:
-		for i in range ( 10 ):
+	with open ( "../data/generatedOutputs.txt", 'w+' ) as f:
+		for i in range ( 25 ):
 			gen.generate ( 10 )
 			f.write ( str ( gen ) )
 
