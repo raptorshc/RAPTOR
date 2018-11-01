@@ -10,7 +10,34 @@ DataLoader::DataLoader (const std::string &filename) {
 	this->filename = filename;
 }
 
+LandingSiteData DataLoader::parseDataLine (const std::string &line) {
+	const char      delimiter = ':';
+	LandingSiteData out;
+
+	// Find the first colon
+	auto        firstColon = line.find( delimiter );
+	// Get the data that we haven't processed yet.
+	std::string restOfData = line.substr( firstColon + 1, std::string::npos );
+	// Parse the landing site from the line.
+	out.landingSite = std::stoi( line.substr( 0, firstColon + 1 ) );
+
+	// Find the next colon.
+	auto secondColon = restOfData.find( delimiter );
+
+	// Parse the area from that data.
+	out.area = std::stod( restOfData.substr( 0, secondColon ) );
+	// Get the remaining data that we need.
+	restOfData = restOfData.substr( secondColon + 1, std::string::npos );
+
+	// We have all the data that we need to parse distance.
+	out.distance = std::stod( restOfData );
+
+	return out;
+}
+
 void DataLoader::getDataFromFile ( ) {
+	// TODO: Fix this function so that it actually works.
+	// Cuz that's important!
 	this->dataFile.open( this->filename );
 	assert( this->dataFile.good() );
 
@@ -18,80 +45,47 @@ void DataLoader::getDataFromFile ( ) {
 	this->totalData.clear();
 	this->data.clear();
 
-	// The beginning words for when the best spot is about
-	// to be announced in the file.
-	const std::string bestSpotBeginning = "Expected";
-
 	char                            c;
 	double                          area, distance;
 	int                             landingSiteIndex, bestSpotIndex;
 	std::string                     s;
 	std::vector < LandingSiteData > landingSites;
 	Data                            currData;
-	double                          temp;
-	while ( this->dataFile.good() ) {
+	std::string                     line;
+	while ( std::getline( this->dataFile, line ) ) {
 		// Get the next character without taking it away from
 		// the input buffer.
-		c = this->dataFile.peek();
-		// If it's a letter...
-		if ( isalpha( c ) ) {
-			// Get a full string.
-			// This shouldn't hurt us as the only thing that has a letter is
-			// when the file tells us it's about to announce the best landing site.
-			this->dataFile >> s;
-			// If it is telling us the best landing site...
-			if ( s == bestSpotBeginning ) {
-				// An ideal solution would be to going until
-				// there is a number in the string, since
-				// that means the string is now our best
-				// landing site.
-				// But oh well. We'll hard code it for now.
+//		std::getline( this->dataFile, line );
 
-				// Get the junk text (output: )
-				this->dataFile >> s;
-				// Get the best landing site.
-				this->dataFile >> bestSpotIndex;
-				// Setup current data
-				currData = {landingSites, bestSpotIndex};
-				// Add the current data to our database.
-				this->data.push_back( currData );
-				// Clear our landing sites.
-				landingSites.clear();
-			}
-		} else if ( isdigit( c ) ) {
-			// If we have a number, it's probably the
-			// current landing site's data
-			// (meaning which landing site it is, its area, and distance)
-
-			// Get the actual number.
-			this->dataFile >> temp;
-			// Get the character after the number.
-			c = this->dataFile.peek();
-			// If it's something like xx:
-			// where x is a number
-			if ( c == ':' ) {
-				// We are at the landing site index.
-				landingSiteIndex = static_cast<int>(temp);
-			} else if ( c == '>' ) {
-				// If it's something like xxx>,
-				// then we are at our area.
-				area = temp;
-			} else if ( c == ')' ) {
-				// If it's something like xxx),
-				// we're getting our distance.
-				distance = temp;
-				// Since distance is the last metric of the line,
-				// we'll just save everything we have right now to our
-				// current list of landing sites.
-				landingSites.push_back( {landingSiteIndex, area, distance} );
-			}
-		} else {
-			// If none of these are true...
-			// Just keep on going along.
-			this->dataFile >> c;
+		// If we don't have a lot of data...
+		if ( line.size() <= 1 ) {
+			// Skip this line.
+			continue;
 		}
+
+		c = line.at( 0 );
+		// If our current character is the beginning of
+		// our landing site data...
+		if ( isdigit( c ) ) {
+			landingSites.push_back( this->parseDataLine( line ) );
+		} else if ( c == '>' ) {
+			// If our current character is the beginning of our
+			// declaration of what the best landing site would be...
+
+			// Get the index of the best landing spot.
+			bestSpotIndex = std::stoi( line.substr( 1, std::string::npos ) );
+			// Save all of the information for our current data.
+			currData      = {landingSites, bestSpotIndex};
+			// Save our current data to our big database.
+			this->totalData.push_back( currData );
+
+			// Clear the landing sites that we have already saved.
+			landingSites.clear();
+
+		}
+
 	}
-	this->totalData = this->data;
+	this->data = this->totalData;
 }
 
 
@@ -137,4 +131,10 @@ std::ostream &operator << (std::ostream &ofs, const Data &data) {
 std::ostream &operator << (std::ostream &ofs, const LandingSiteData &data) {
 	ofs << data.landingSite << ": <" << data.area << "> (" << data.distance << ")";
 	return ofs;
+}
+
+void DataLoader::printData (std::ostream &ofs) {
+	for ( auto d : this->totalData ) {
+		ofs << d;
+	}
 }

@@ -32,12 +32,16 @@ private:
 	// Data that this->data is to be resetted to.
 	std::vector < Data > totalData;
 
+	LandingSiteData parseDataLine (const std::string &line);
+
 public:
 	explicit DataLoader (const std::string &filename);
 
 	void getDataFromFile ( );
 	Data getData ( );
 	bool givenAllData ( );
+
+	void printData (std::ostream &ofs);
 
 	friend std::ostream &operator << (std::ostream &ofs, const DataLoader &database);
 };
