@@ -24,16 +24,24 @@ int main ( ) {
 	 * If you are getting -nan's as results and as your saved weights,
 	 * create network.dat as an empty text file and then rerun the program.
 	 */
-	std::ifstream inFile( "network.dat" );
+	// The filename that the network is to be saved to.
+	const std::string networkFileName = "network.dat";
+
+	// Load the network from file.
+	std::ifstream inFile( networkFileName );
 	if ( inFile.good() ) {
 		std::cout << "The old file exists." << std::endl;
 		inFile >> testNet;
 	}
 	inFile.close();
 
+	// Set up saving for the network.
+
+	std::ofstream outFile( networkFileName );
+
 	std::vector < double > inputVals, targetVals, resultVals;
 
-	int  totalEpochs = 10000;
+	int  totalEpochs = 1000;
 	Data currData;
 
 	for ( int epoch = 0; epoch < totalEpochs; epoch++ ) {
@@ -54,10 +62,26 @@ int main ( ) {
 
 			inputVals.clear();
 			targetVals.clear();
+		}
 
 
+		// Save the network every 500 epochs.
+		if ( epoch % 500 == 0 ) {
+			if ( !outFile.is_open() ) {
+				outFile.open( networkFileName );
+			}
+			outFile << testNet;
+			outFile.close();
 		}
 	}
+
+	// Final save the network to file.
+	if ( !outFile.is_open() ) {
+		outFile.open( networkFileName );
+	}
+	outFile << testNet;
+	outFile.close();
+
 
 	//test set 1
 	inputVals.push_back( utility( 0.548, 2.214 ) );        //1
@@ -84,7 +108,6 @@ int main ( ) {
 
 	//test 1
 	testNet.feedForward( inputVals );
-	//testNet.backProp(targetVals);
 	testNet.getResults( resultVals );
 
 
@@ -102,7 +125,7 @@ int main ( ) {
 	cout << "Actual landing site: 2" << endl;
 
 	std::cout << "Saving network to file." << std::endl;
-	std::ofstream outFile( "network.dat" );
+
 	outFile << testNet;
 	outFile.close();
 }

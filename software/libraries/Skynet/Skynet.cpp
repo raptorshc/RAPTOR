@@ -9,8 +9,7 @@ Skynet::Skynet (vector < unsigned int > &topology) {
 
 	//where i is the current layer
 	for ( unsigned int i = 0; i < numLayers; i++ ) {
-		// Push back a new Layer.
-		this->m_vLayers.emplace_back();
+		m_vLayers.push_back( Layer() );
 		//if current layer is the final layer
 		if ( i == numLayers - 1 ) {
 			numOutputs         = 0;
@@ -47,8 +46,8 @@ void Skynet::feedForward (vector < double > &inputVals) {
 		Layer &prevLayer = m_vLayers.at( i - 1 );
 
 		//where n is the current neuron
-		for ( auto &node : this->m_vLayers[ i ] ) {
-			node.feedForward( prevLayer );
+		for ( int n = 0; n < m_vLayers.at( i ).size() - 1; n++ ) {
+			m_vLayers.at( i ).at( n ).feedForward( prevLayer );
 		}
 	}
 }
@@ -106,8 +105,8 @@ void Skynet::backProp (vector < double > &targetVals) {
 
 void Skynet::getResults (vector < double > &resultVals) {
 	resultVals.clear();
-	for ( auto &node : this->m_vLayers.back() ) {
-		resultVals.push_back( node.getOutput() );
+	for ( int n = 0; n < m_vLayers.back().size() - 1; n++ ) {
+		resultVals.push_back( m_vLayers.back().at( n ).getOutput() );
 	}
 }
 
