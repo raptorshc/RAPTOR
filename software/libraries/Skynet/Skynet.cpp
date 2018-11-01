@@ -9,7 +9,8 @@ Skynet::Skynet (vector < unsigned int > &topology) {
 
 	//where i is the current layer
 	for ( unsigned int i = 0; i < numLayers; i++ ) {
-		m_vLayers.push_back( Layer() );
+		// Push back a new Layer.
+		this->m_vLayers.emplace_back();
 		//if current layer is the final layer
 		if ( i == numLayers - 1 ) {
 			numOutputs         = 0;
@@ -19,7 +20,7 @@ Skynet::Skynet (vector < unsigned int > &topology) {
 		}
 
 		//where n is the current neuron
-		for ( int n = 0; n <= topology[ i ]; n++ ) {
+		for ( unsigned int n = 0; n <= topology[ i ]; n++ ) {
 			m_vLayers.back().push_back( Neuron( numOutputs, n, activationFunction ) );
 			//cout << "Made a neuron" << endl;
 		}
@@ -33,19 +34,21 @@ void Skynet::feedForward (vector < double > &inputVals) {
 	assert( inputVals.size() == m_vLayers[ 0 ].size() - 1 );
 
 	//assign inputVals to input neurons
-	for ( int i = 0; i < inputVals.size(); i++ ) {
+	for ( unsigned int i = 0; i < inputVals.size(); i++ ) {
 		m_vLayers.at( 0 ).at( i ).setOutput( inputVals[ i ] );
 	}
 
 	//forward propogation step
 	//loops through each neuron in each layer
 	//where i is the current layer
-	for ( int i = 1; i < m_vLayers.size(); i++ ) {
+	for ( unsigned int i = 1; i < m_vLayers.size(); i++ ) {
+
 		//reference to previous layer for Neuron to use in its feedForward
-		Layer     &prevLayer = m_vLayers.at( i - 1 );
+		Layer &prevLayer = m_vLayers.at( i - 1 );
+
 		//where n is the current neuron
-		for ( int n          = 0; n < m_vLayers.at( i ).size() - 1; n++ ) {
-			m_vLayers.at( i ).at( n ).feedForward( prevLayer );
+		for ( auto &node : this->m_vLayers[ i ] ) {
+			node.feedForward( prevLayer );
 		}
 	}
 }
@@ -57,14 +60,14 @@ void Skynet::backProp (vector < double > &targetVals) {
 	Layer &output = m_vLayers.back();
 
 	//loop through neurons in layer excluding bias neuron
-	for ( int n = 0; n < output.size() - 1; n++ ) {
+	for ( unsigned int n = 0; n < output.size() - 1; n++ ) {
 		double delta = targetVals[ n ] - output[ n ].getOutput();
 		m_dError += delta * delta;
 	}
 
 	//get root mean square
 	m_dError /= output.size();
-	m_dError    = sqrt( m_dError );
+	m_dError             = sqrt( m_dError );
 
 	//stuff for observing training
 	recentAverageError = (recentAverageError * recentAverageErrorSmoothing + m_dError)
@@ -72,7 +75,7 @@ void Skynet::backProp (vector < double > &targetVals) {
 
 	//Calculate output layer gradients
 	//loop through neurons in layer excluding bias neuron
-	for ( int n = 0; n < output.size() - 1; n++ ) {
+	for ( unsigned int n = 0; n < output.size() - 1; n++ ) {
 		output[ n ].getOutputGradient( targetVals[ n ] );
 	}
 
@@ -84,8 +87,8 @@ void Skynet::backProp (vector < double > &targetVals) {
 		Layer &hiddenLayer = m_vLayers[ i ];
 		Layer &nextLayer   = m_vLayers[ i + 1 ];
 
-		for ( int n = 0; n < hiddenLayer.size(); n++ ) {
-			hiddenLayer[ n ].getHiddenGradient( nextLayer );
+		for ( auto &node : hiddenLayer ) {
+			node.getHiddenGradient( nextLayer );
 		}
 	}
 
@@ -95,7 +98,7 @@ void Skynet::backProp (vector < double > &targetVals) {
 		Layer &prevLayer    = m_vLayers[ i - 1 ];
 		Layer &currentLayer = m_vLayers[ i ];
 
-		for ( int n = 0; n < currentLayer.size() - 1; n++ ) {
+		for ( unsigned int n = 0; n < currentLayer.size() - 1; n++ ) {
 			currentLayer[ n ].updateWeights( prevLayer );
 		}
 	}
@@ -103,8 +106,8 @@ void Skynet::backProp (vector < double > &targetVals) {
 
 void Skynet::getResults (vector < double > &resultVals) {
 	resultVals.clear();
-	for ( int n = 0; n < m_vLayers.back().size() - 1; n++ ) {
-		resultVals.push_back( m_vLayers.back().at( n ).getOutput() );
+	for ( auto &node : this->m_vLayers.back() ) {
+		resultVals.push_back( node.getOutput() );
 	}
 }
 
