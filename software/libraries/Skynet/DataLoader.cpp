@@ -52,11 +52,8 @@ void DataLoader::getDataFromFile ( ) {
 	std::vector < LandingSiteData > landingSites;
 	Data                            currData;
 	std::string                     line;
+	// Get the next line in the data file.
 	while ( std::getline( this->dataFile, line ) ) {
-		// Get the next character without taking it away from
-		// the input buffer.
-//		std::getline( this->dataFile, line );
-
 		// If we don't have a lot of data...
 		if ( line.size() <= 1 ) {
 			// Skip this line.
@@ -67,6 +64,7 @@ void DataLoader::getDataFromFile ( ) {
 		// If our current character is the beginning of
 		// our landing site data...
 		if ( isdigit( c ) ) {
+			// Parse the line and add it to landingSites.
 			landingSites.push_back( this->parseDataLine( line ) );
 		} else if ( c == '>' ) {
 			// If our current character is the beginning of our
@@ -81,9 +79,7 @@ void DataLoader::getDataFromFile ( ) {
 
 			// Clear the landing sites that we have already saved.
 			landingSites.clear();
-
 		}
-
 	}
 	this->data = this->totalData;
 }
@@ -94,7 +90,7 @@ void DataLoader::getDataFromFile ( ) {
 // this->data to this->totalData
 Data DataLoader::getData ( ) {
 	// If we have run out of data to give out...
-	if ( this->data.size() == 0 ) {
+	if ( this->data.empty() ) {
 		// reset data to our total data.
 		this->data = this->totalData;
 	}
