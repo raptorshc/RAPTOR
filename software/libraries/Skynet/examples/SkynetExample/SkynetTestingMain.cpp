@@ -13,15 +13,10 @@ int main ( ) {
 	double maxActivation     = 0;            //double to hold highest activation value of an output layer
 	int    outputNeuronIndex = 0;            //index of highest activation neuron
 
-	vector < unsigned int > topology;
-	topology.push_back( 10 );
-	topology.push_back( 7 );
-
-	topology.push_back( 7 );
-	topology.push_back( 10 );
+	vector < unsigned int > topology = {10, 7, 7, 10};
 
 	Skynet     testNet( topology );
-	DataLoader database      = DataLoader( "generatedOutputs.txt" );
+	DataLoader database              = DataLoader( "generatedOutputs.txt" );
 	database.getDataFromFile();
 
 	std::cout << "Loading network from file." << std::endl;
