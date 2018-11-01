@@ -90,7 +90,7 @@ void DataLoader::getDataFromFile ( ) {
 // this->data to this->totalData
 Data DataLoader::getData ( ) {
 	// If we have run out of data to give out...
-	if ( this->data.empty() ) {
+	if ( this->givenAllData() ) {
 		// reset data to our total data.
 		this->data = this->totalData;
 	}
