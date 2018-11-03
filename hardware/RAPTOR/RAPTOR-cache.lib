@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# Connector_Generic_Conn_01x01
+# Connector_Generic:Conn_01x01
 #
-DEF Connector_Generic_Conn_01x01 J 0 40 Y N 1 F N
+DEF Connector_Generic:Conn_01x01 J 0 40 Y N 1 F N
 F0 "J" 0 100 50 H V C CNN
-F1 "Connector_Generic_Conn_01x01" 0 -100 50 H V C CNN
+F1 "Connector_Generic:Conn_01x01" 0 -100 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -18,11 +18,11 @@ X Pin_1 1 -200 0 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# Connector_Generic_Conn_01x06
+# Connector_Generic:Conn_01x06
 #
-DEF Connector_Generic_Conn_01x06 J 0 40 Y N 1 F N
+DEF Connector_Generic:Conn_01x06 J 0 40 Y N 1 F N
 F0 "J" 0 300 50 H V C CNN
-F1 "Connector_Generic_Conn_01x06" 0 -400 50 H V C CNN
+F1 "Connector_Generic:Conn_01x06" 0 -400 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -45,11 +45,11 @@ X Pin_6 6 -200 -300 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# Connector_Generic_Conn_01x08
+# Connector_Generic:Conn_01x08
 #
-DEF Connector_Generic_Conn_01x08 J 0 40 Y N 1 F N
+DEF Connector_Generic:Conn_01x08 J 0 40 Y N 1 F N
 F0 "J" 0 400 50 H V C CNN
-F1 "Connector_Generic_Conn_01x08" 0 -500 50 H V C CNN
+F1 "Connector_Generic:Conn_01x08" 0 -500 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -76,11 +76,11 @@ X Pin_8 8 -200 -400 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# Connector_Generic_Conn_01x10
+# Connector_Generic:Conn_01x10
 #
-DEF Connector_Generic_Conn_01x10 J 0 40 Y N 1 F N
+DEF Connector_Generic:Conn_01x10 J 0 40 Y N 1 F N
 F0 "J" 0 500 50 H V C CNN
-F1 "Connector_Generic_Conn_01x10" 0 -600 50 H V C CNN
+F1 "Connector_Generic:Conn_01x10" 0 -600 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -111,11 +111,32 @@ X Pin_9 9 -200 -400 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# SparkFun-Sensors_BMP280
+# adafruitgps:AdafruitGPS
 #
-DEF SparkFun-Sensors_BMP280 U 0 40 Y Y 1 F N
+DEF adafruitgps:AdafruitGPS U 0 40 Y Y 1 F N
+F0 "U" 0 400 50 H V C CNN
+F1 "adafruitgps:AdafruitGPS" -350 -450 50 H V C CNN
+F2 "" 100 -50 50 H I C CNN
+F3 "" 100 -50 50 H I C CNN
+DRAW
+S -600 350 600 -400 0 1 0 f
+X 3.3V 1 -700 150 100 R 50 50 1 1 w
+X EN 2 700 300 100 L 50 50 1 1 I
+X VBAT 3 -700 0 100 R 50 50 1 1 B
+X FIX 4 700 -300 100 L 50 50 1 1 O
+X TX 5 700 150 100 L 50 50 1 1 O
+X RX 6 700 0 100 L 50 50 1 1 I
+X GND 7 -700 -350 100 R 50 50 1 1 B
+X VIN 8 -700 250 100 R 50 50 1 1 W
+X PPS 9 700 -150 100 L 50 50 1 1 O
+ENDDRAW
+ENDDEF
+#
+# bmp280:BMP280
+#
+DEF bmp280:BMP280 U 0 40 Y Y 1 F N
 F0 "U" -450 350 45 H V L BNN
-F1 "SparkFun-Sensors_BMP280" -450 -500 45 H V L BNN
+F1 "bmp280:BMP280" -450 -500 45 H V L BNN
 F2 "LGA-8-2.5X2.5" 0 450 20 H I C CNN
 F3 "" 0 0 60 H I C CNN
 DRAW
@@ -131,11 +152,11 @@ X VIN 8 -550 200 100 R 40 40 1 1 W
 ENDDRAW
 ENDDEF
 #
-# SparkFun-Sensors_BNO055
+# bno055:BNO055
 #
-DEF SparkFun-Sensors_BNO055 U 0 40 Y Y 1 F N
+DEF bno055:BNO055 U 0 40 Y Y 1 F N
 F0 "U" -450 350 45 H V L BNN
-F1 "SparkFun-Sensors_BNO055" -450 -500 45 H V L BNN
+F1 "bno055:BNO055" -450 -500 45 H V L BNN
 F2 "LGA-8-2.5X2.5" 0 450 20 H I C CNN
 F3 "" 0 0 60 H I C CNN
 DRAW
@@ -150,11 +171,29 @@ X VIN 8 -550 200 100 R 40 40 1 1 W
 ENDDRAW
 ENDDEF
 #
-# power_+3.3V
+# openlog:OpenLog
 #
-DEF power_+3.3V #PWR 0 0 Y Y 1 F P
+DEF openlog:OpenLog U 0 40 Y Y 1 F N
+F0 "U" -450 350 45 H V L BNN
+F1 "openlog:OpenLog" -450 -500 45 H V L BNN
+F2 "LGA-8-2.5X2.5" 0 450 20 H I C CNN
+F3 "" 0 0 60 H I C CNN
+DRAW
+P 5 1 1 0 -450 300 450 300 450 -400 -450 -400 -450 300 f
+X GND 1 -550 -300 100 R 40 40 1 1 B
+X BLK 2 -550 -200 100 R 40 40 1 1 B
+X GRN 3 -550 -100 100 R 40 40 1 1 I
+X TXO 4 550 -250 100 L 40 40 1 1 O
+X VCC 4 -550 150 100 R 40 40 1 1 W
+X RXI 5 550 150 100 L 40 40 1 1 I
+ENDDRAW
+ENDDEF
+#
+# power:+3.3V
+#
+DEF power:+3.3V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power_+3.3V" 0 140 50 H V C CNN
+F1 "power:+3.3V" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 ALIAS +3.3V
@@ -166,11 +205,11 @@ X +3V3 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# power_+5V
+# power:+5V
 #
-DEF power_+5V #PWR 0 0 Y Y 1 F P
+DEF power:+5V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power_+5V" 0 140 50 H V C CNN
+F1 "power:+5V" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -181,11 +220,11 @@ X +5V 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# power_GND
+# power:GND
 #
-DEF power_GND #PWR 0 0 Y Y 1 F P
+DEF power:GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -250 50 H I C CNN
-F1 "power_GND" 0 -150 50 H V C CNN
+F1 "power:GND" 0 -150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
