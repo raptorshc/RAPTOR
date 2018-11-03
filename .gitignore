@@ -1,3 +1,5 @@
 #vscode things
 .vscode
 build/
+__pycache__/
+*.MP4
