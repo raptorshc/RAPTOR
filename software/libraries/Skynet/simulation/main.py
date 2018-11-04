@@ -6,7 +6,7 @@ def main ( ):
 	gen = pointgen.PointGenerator ( )
 
 	with open ( "../data/generatedOutputs.txt", 'w+' ) as f:
-		for i in range ( 25 ):
+		for i in range ( 50 ):
 			gen.generate ( 10 )
 			f.write ( str ( gen ) )
 
