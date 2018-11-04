@@ -41,7 +41,7 @@ int main ( ) {
 
 	std::vector < double > inputVals, targetVals, resultVals;
 
-	int  totalEpochs = 1000;
+	int  totalEpochs = 100000;
 	Data currData;
 
 	for ( int epoch = 0; epoch < totalEpochs; epoch++ ) {
