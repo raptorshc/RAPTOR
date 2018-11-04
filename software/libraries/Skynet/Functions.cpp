@@ -53,7 +53,7 @@ double sigmoid (const double &input) {
 }
 
 double softmax (const double &input, const double &sum, const bool &derivative) {
-	return 0;
+	return input / sum;
 }
 
 double softmax (const double &input, const double &sum) {
