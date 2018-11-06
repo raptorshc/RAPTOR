@@ -63,3 +63,20 @@ void GPS::calc_agl(void)
 {
     this->agl = this->altitude - this->init_alt;
 }
+
+void GPS::parse_NMEA(void)
+{
+  if (newNMEAreceived())
+  {
+    if (parse(lastNMEA()))
+    {
+      if (first_gps){
+        first_gps = false;
+        set_initalt();
+      }
+
+      correct_coords();
+      calc_agl();
+    }
+  }
+}

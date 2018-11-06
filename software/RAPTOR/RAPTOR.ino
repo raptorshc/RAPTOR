@@ -22,7 +22,6 @@ elapsedMillis timeElapsed;
 
 uint8_t flight_state = 0;
 volatile long fly_time = 0;
-volatile bool first_gps = true;
 bool didwake = false;
 
 /* 
@@ -53,7 +52,7 @@ void setup()
 
   /* GPS */
   environment.gps->init();
-
+  
   delay(10);
   Serial.print(F("TIME,"
                  "TEMPERATURE, PRESSURE, ALTITUDE, "
@@ -107,7 +106,7 @@ void loop()
         Serial << F("\n!!!! PARAFOIL DEPLOYMENT ERROR !!!!\n");
         parafoil_deploy(); // try deploying parafoil again, probably won't do much
       }
-      delay_ms(1500); // Delays the starting of the guidence until the parafoil has compleatly opened. 
+      delay(1500); // Delays the starting of the guidence until the parafoil has compleatly opened. 
       flight_state = 2;
       write_EEPROM();
     }
@@ -165,23 +164,11 @@ void loop()
 SIGNAL(TIMER0_COMPA_vect)
 {
   environment.gps->read(); // Check to see if we have new data
-
-  if (environment.gps->newNMEAreceived())
-  {
-    if (environment.gps->parse(environment.gps->lastNMEA()))
-    {
-      if (first_gps)
-        environment.gps->set_initalt();
-
-      environment.gps->correct_coords();
-      environment.gps->calc_agl();
-    }
-  }
 }
 
 void print_data()
 {
-  environment.bno->update();
+  environment.update();
 
   /* Let's spray the OpenLog with a hose of data */
   Serial << timeElapsed << F(",")
