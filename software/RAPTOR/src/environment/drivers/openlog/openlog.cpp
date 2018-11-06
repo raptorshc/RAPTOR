@@ -1,4 +1,5 @@
 // This came from https://github.com/sparkfun/OpenLog/blob/master/firmware/Arduino_Examples/Example3_ReadFile/Example3_ReadFile.ino
+#include <SoftwareSerial.h> // This allows it to communicate with the Arduino's Serial Ports
 //This function pushes OpenLog into command mode
 void gotoCommandMode(void) {
   //Send three control z to enter OpenLog command mode
