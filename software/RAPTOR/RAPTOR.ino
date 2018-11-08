@@ -7,8 +7,9 @@
 #include "src/guidance/drivers/solenoid/solenoid.h"
 
 #define CUTDOWN_ALT 304.8 // altitude to cut down at in meters. =900ft
-#define TARGET_LONG -86.635738;
-#define TARGET_LAT 34.720197; // HARD CODED TARGET COORDINATES
+#define TARGET_LONG -86.635738
+#define TARGET_LAT 34.720197 // HARD CODED TARGET COORDINATES
+#define DEPLOY_DELAY 1200
 
 #define BZZ_DTA 11  // Buzzer
 #define LEDS_DTA 12 // External flight LEDs
@@ -52,7 +53,7 @@ void setup()
 
   /* GPS */
   environment.gps->init();
-  
+
   delay(10);
   Serial.print(F("TIME,"
                  "TEMPERATURE, PRESSURE, ALTITUDE, "
@@ -89,24 +90,25 @@ void loop()
       cutdown(); // cutdown
 
       if (!cutdown_switch())
-      { // we want to make sure that we have cut down and we are falling
-        Serial << F("\n!!!! CUTDOWN ERROR !!!!\n");
-        cutdown(); // try cutdown again
+      { // we want to make sure that we have cut down
+        Serial << F("\n!!!! CUTDOWN ERROR DETECTED !!!!\n");
+        cutdown(); // try cutdown again, probably won't do much
       }
 
       while (environment.bmp->altitude > CUTDOWN_ALT - 3.048) // deploy parafoil after 3 meters
       {
         delay(1);
         environment.bmp->update();
+        print_data();
       }
       parafoil_deploy(); // deploy parafoil
-      delay(1200);       //delay before trying to turn after deploying parafoil
       if (parafoil_switch())
       { // make sure the parafoil has deployed
-        Serial << F("\n!!!! PARAFOIL DEPLOYMENT ERROR !!!!\n");
+        Serial << F("\n!!!! PARAFOIL DEPLOYMENT ERROR DETECTED !!!!\n");
         parafoil_deploy(); // try deploying parafoil again, probably won't do much
       }
-      delay(1500); // Delays the starting of the guidence until the parafoil has compleatly opened. 
+      delay(DEPLOY_DELAY); // Delays the starting of the guidence until the parafoil has compleatly opened.
+
       flight_state = 2;
       write_EEPROM();
     }
@@ -180,22 +182,26 @@ void print_data()
 }
 
 /* 
- *  startup_sequence gives us a nice little sequences that indicates board power,
- *    solenoid power, servo power, and successful sensor initialization
+ *  startup_sequence intitializes our solenoids, servos, and sensors.
+ *   If in flight state 0 (launch), performs a sequence that indicates board power,
+ *   solenoid power, servo power, and successful sensor initialization.
  */
 void startup_sequence(void)
 {
+  // indicate board power with a buzzer beep if in flight state 0
   if (flight_state == 0)
   {
-    analogWrite(BZZ_DTA, 200); // turn on the buzzer for a second to indicate board power
+    analogWrite(BZZ_DTA, 200); // turn on the buzzer for half a second
     delay(500);
     analogWrite(BZZ_DTA, 0);
   }
 
-  sol_init(); // initialize solenoids, should hear them click
+  // intialize solenoids, should hear them click and see the indicator LEDs turn on
+  sol_init();
   cutdown_switch();
   parafoil_switch();
 
+  // initialize servos, if we're in flight state 0 we'll test them as well
   pilot.servo_init();
   if (flight_state == 0)
   {
@@ -203,17 +209,16 @@ void startup_sequence(void)
     delay(200);
   }
 
+  // initialize sensors, then indicate if we were successful or not
   if (environment.init(flight_state))
-  { // check to see if our sensors are working, if they are blink once, if not blink 15 times
+  { // if the initialization was successful blink 5 times
     if (flight_state == 0)
     {
-      digitalWrite(LEDS_DTA, HIGH);
-      delay(3000);
-      digitalWrite(LEDS_DTA, LOW);
+      for(int i = 0; i < 5; i++) blink_led(500);
     }
   }
   else
-  {
+  { // if the initialization was unsucessful blink 15 times
     if (flight_state == 0)
     {
       for (int i = 0; i < 15; i++)
@@ -225,6 +230,9 @@ void startup_sequence(void)
   }
 }
 
+/* 
+ * write_EEPROM deposits flight state and baseline pressure into the EEPROM. 
+ */
 void write_EEPROM()
 {
   Serial << "Write EEPROM\n";
@@ -232,19 +240,30 @@ void write_EEPROM()
   EEPROM.put(100, environment.bmp->baseline); // baseline pressure always at address 100
 }
 
+/* 
+ * read_EEPROM retrieves flight state and baseline pressure from the EEPROM. 
+ */
 void read_EEPROM()
 {
   Serial << "Read EEPROM\n";
+
+  // retrive flight state from address 0
   EEPROM.get(0, flight_state);
   if (flight_state == 1)
-    flight_state = 2; // this makes sense cause we'll be falling!
+    flight_state = 2; // if the read flight state is 1, transition immediately to 2 as the solenoids fail open
 
+  // retrieve baseline pressure from address 100
   EEPROM.get(100, environment.bmp->baseline);
 
+  // print retrieved data
   Serial << "Saved flight state: " << flight_state;
   Serial << "\nSaved baseline: " << environment.bmp->baseline << "\n";
 }
 
+/* 
+ * blink_led toggles the LED, then delays for a certain length of time.
+ *  Can be used to achieve a blink rate, but will delay the entire execution.
+ */
 void blink_led(int length)
 {
   digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
@@ -252,13 +271,12 @@ void blink_led(int length)
 }
 
 /*
-* custom_angle returns an angle parsed from user input 
-*/
+ * custom_angle returns an angle parsed from user input 
+ */
 float custom_angle(void)
 {
   Serial << "\nPlease input an angle: ";
-  while (Serial.available() == 0)
-    ;
+  while (Serial.available() == 0); // wait for user input
   float angle = Serial.parseFloat();
   Serial << "\nAngle: " << angle << "\n";
   return angle;
