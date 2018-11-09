@@ -52,5 +52,6 @@ public:
 	friend std::ofstream &operator << (std::ofstream &ofs, const Neuron &node);
 	// Saving neuron to file
 	friend std::ifstream &operator >> (std::ifstream &ifs, Neuron &node);
+	friend std::ostream &operator << (std::ostream &os, const Neuron &node);
 };
 

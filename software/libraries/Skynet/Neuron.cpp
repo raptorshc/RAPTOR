@@ -77,7 +77,6 @@ double Neuron::getHiddenGradient (Layer &nextLayer) {
 double Neuron::sumLayer (Layer &nextLayer) {
 	double sum = 0.0;
 
-	// TODO: Why -1?
 	for ( unsigned n = 0; n < nextLayer.size() - 1; ++n ) {
 		sum += m_vOutputWeight[ n ].m_dWeight * nextLayer[ n ].m_dGradient;
 	}
@@ -114,4 +113,12 @@ std::ifstream &operator >> (std::ifstream &ifs, Neuron &node) {
 		node.m_vOutputWeight[ i ].m_dWeight = temp_weight;
 	}
 	return ifs;
+}
+
+std::ostream &operator << (std::ostream &os, const Neuron &node) {
+	for ( auto weight : node.m_vOutputWeight ) {
+		os << weight.m_dWeight << " ";
+	}
+	os << std::endl;
+	return os;
 }
