@@ -10,23 +10,24 @@
  *	init begins the BMP measurements and 
  *   grabs a baseline pressure for alt calculations.
  */
-bool BMP::init(uint8_t fs)
+bool BMP::init(uint8_t flight_state)
 {
+  // check to make sure it initializes properly
   if (!this->begin())
-  { // Begin bmp measurements
+  { // begin bmp measurements
     Serial.print(F("No BMP detected!"));
     return false;
   }
 
+  // if it does and we're in FS0 [LAUNCH], grab a new baseline
   uint8_t counter = 0;
-
-  if (fs == 0)
+  if (flight_state == 0)
   {
-    // gather a baseline
-    baseline = 1013.25; // put in a fake baseline for the initial calculation, which won't be used
+    this->baseline = 1013.25; // put in a fake baseline for the initial calculation, which won't be used
 
-    while (!update() && counter++ < 50); // until we can get a good pressure reading or we've tried more than 50 times
-    baseline = pressure; // grab a baseline pressure
+    while (!update() && counter++ < 50)
+      ;                              // until we can get a good pressure reading or we've tried more than 50 times
+    this->baseline = this->pressure; // grab a baseline pressure
   }
   return true;
 }

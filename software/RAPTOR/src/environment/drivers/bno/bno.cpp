@@ -8,6 +8,9 @@
 #include "Arduino.h"
 #include <Adafruit_BNO055.h>
 
+/*
+ *	init begins the BNO measurements
+ */
 bool BNO::init(void)
 {
     if (!this->begin())
@@ -19,6 +22,9 @@ bool BNO::init(void)
     return true;
 }
 
+/*
+ *	update reads data from the sensor
+ */
 bool BNO::update()
 {
     return this->getEvent(&this->data);

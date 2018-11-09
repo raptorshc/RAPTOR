@@ -14,7 +14,8 @@ class GPS
     : public Adafruit_GPS
 {
   public:
-    GPS(SoftwareSerial &mySerial) : Adafruit_GPS(&mySerial) {
+    GPS(SoftwareSerial &mySerial) : Adafruit_GPS(&mySerial)
+    {
         first_gps = true;
     }
 
