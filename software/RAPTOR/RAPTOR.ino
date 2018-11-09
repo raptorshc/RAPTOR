@@ -60,11 +60,11 @@ void setup()
 
   delay(10);
   Serial.print(F("TIME,"
-                 "TEMPERATURE, PRESSURE, ALTITUDE, "
-                 "LATITUDE, LONGITUDE, ANGLE, GPS_ALT,"
-                 "X, Y, Z, "
-                 "SWC, SWP, "
-                 "TURN, FLIGHT_STATE\n")); // data header
+                 "TEMPERATURE,PRESSURE,ALTITUDE,"
+                 "LATITUDE,LONGITUDE,ANGLE,GPS_ALT,"
+                 "X,Y,Z, "
+                 "SWC,SWP,"
+                 "TURN,FLIGHT_STATE\n")); // data header
 }
 
 /* 
