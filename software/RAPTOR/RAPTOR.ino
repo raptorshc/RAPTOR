@@ -68,7 +68,7 @@ void setup()
 }
 
 /* 
- * Arduino loop function, always runs.
+ * arduino loop function, always runs.
  */
 void loop()
 {
@@ -265,7 +265,11 @@ void startup_sequence(void)
     if (flight_state == 0)
     {
       for (int i = 0; i < 15; i++)
+      {
+        analogWrite(BZZ_DTA, 200);
         blink_led(500);
+        analogWrite(BZZ_DTA, 0);
+      }
     }
   }
 }
