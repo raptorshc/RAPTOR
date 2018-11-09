@@ -56,6 +56,5 @@ class MapPlotter():
                         color='blue', zorder=2, transform=ccrs.Geodetic())
 
     def show(self, filename):
-        plt.tight_layout()
         plt.savefig(filename)
         plt.show()

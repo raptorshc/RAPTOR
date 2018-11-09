@@ -6,6 +6,7 @@
 #ifndef ENVIRONMENT_h
 #define ENVIRONMENT_h
 
+#include <elapsedMillis.h>
 #include "drivers/bmp/bmp.h"
 #include "drivers/bno/bno.h"
 #include "drivers/gps/gps.h"
@@ -22,14 +23,11 @@ public:
 
   bool landing_check(void);
   bool cutdown_check(void);
-
-  void print_data();
-
+  
   BMP *bmp;
   BNO *bno;
   GPS *gps;
-
-private:
+  elapsedMillis *timeElapsed;
 };
 
 #endif
