@@ -6,24 +6,28 @@
 #include "src/environment/environment.h"
 #include "src/guidance/drivers/solenoid/solenoid.h"
 
-#define CUTDOWN_ALT 304.8 // altitude to cut down at in meters. =900ft
+#define GROUND_ALT 15.24  // altitude to transition to FS1 [ASCENT] or FS3 [LANDED], =50ft
+#define CUTDOWN_ALT 304.8 // altitude to transition to FS2 [DESCENT], =1000ft
+
 #define TARGET_LONG -86.635738
 #define TARGET_LAT 34.720197 // HARD CODED TARGET COORDINATES
-#define DEPLOY_DELAY 1200
 
-#define BZZ_DTA 11  // Buzzer
-#define LEDS_DTA 12 // External flight LEDs
+#define DEPLOY_DELAY 1200 // time to wait between deployment and guidance [ms]
+#define FLY_DELAY 1000    // time to wait between calling fly [ms]
 
-#define SET_BTN 7
+#define BZZ_DTA 11  // buzzer
+#define LEDS_DTA 12 // external flight LEDs
 
-Environment environment;
-Pilot pilot;
+#define SET_BTN 7 // eeprom write button
 
-elapsedMillis timeElapsed;
+Environment environment; // contains all of our sensors in one nice class
+Pilot pilot;             // takes environmental input and makes all decisions regarding flight control
 
-uint8_t flight_state = 0;
-volatile long fly_time = 0;
-bool didwake = false;
+elapsedMillis timeElapsed; // time elapsed in milliseconds
+
+uint8_t flight_state = 0; // current flight state
+long fly_time = 0;        // amount of time passed between flight controlling
+bool didwake = false;     // whether or not we have woken the pilot yet
 
 /* 
  * Arduino setup function, first function to be run.
@@ -70,24 +74,29 @@ void loop()
 {
   switch (flight_state)
   {
-  case 0: // flight state 0 is launch
+  // FS0 [LAUNCH]
+  case 0:
     environment.bmp->update();
 
-    if (environment.bmp->altitude > 9.144) //Altitude converted to meters. =30ft
-    {
-      flight_state = 1; // transition to flight state 1
+    if (environment.bmp->altitude > GROUND_ALT)
+    { // at 50ft (15.24 meters), transition to FS1 [ASCENT]
+      flight_state = 1;
       write_EEPROM();
     }
 
+    // blink the LEDs and print data at a rate of 1Hz
     blink_led(1000);
     print_data();
     break;
-  case 1: // flight state 1 is ascent
+
+  // FS1 [ASCENT]
+  case 1:
     environment.bmp->update();
 
     if (environment.bmp->altitude > CUTDOWN_ALT)
-    {
-      cutdown(); // cutdown
+    { // at the cutdown altiude perform cutdown, deploy, and transition to FS2 [DESCENT]
+      // CUTDOWN
+      cutdown();
 
       if (!cutdown_switch())
       { // we want to make sure that we have cut down
@@ -95,89 +104,122 @@ void loop()
         cutdown(); // try cutdown again, probably won't do much
       }
 
-      while (environment.bmp->altitude > CUTDOWN_ALT - 3.048) // deploy parafoil after 3 meters
-      {
+      // PARAFOIL DEPLOY
+      while (environment.bmp->altitude > CUTDOWN_ALT - 3.048)
+      { // wait 3 meters to deploy the parafoil
         delay(1);
         environment.bmp->update();
         print_data();
       }
-      parafoil_deploy(); // deploy parafoil
+
+      parafoil_deploy();
+
       if (parafoil_switch())
       { // make sure the parafoil has deployed
         Serial << F("\n!!!! PARAFOIL DEPLOYMENT ERROR DETECTED !!!!\n");
         parafoil_deploy(); // try deploying parafoil again, probably won't do much
       }
-      delay(DEPLOY_DELAY); // Delays the starting of the guidence until the parafoil has compleatly opened.
+
+      delay(DEPLOY_DELAY); // wait for the parafoil to deploy/inflate before we begin guidance
 
       flight_state = 2;
       write_EEPROM();
     }
-    print_data();
+
+    // blink the LEDs and print data at a rate of 5Hz
     blink_led(200);
+    print_data();
     break;
-  case 2: // flight state 2 is descent
+
+  // FS2 [DESCENT]
+  case 2:
+
+    // if we have yet to wake the pilot, do so
     if (!didwake)
     {
+      // first set up our coordinates
       Coordinate current, target;
 
       current.latitude = environment.gps->latitude;
       current.longitude = environment.gps->longitude;
 
       target.latitude = TARGET_LAT;
-      target.longitude = TARGET_LONG; // HARD CODED TARGET COORDINATES, Baseball Field!
+      target.longitude = TARGET_LONG;
 
+      // then wake the pilot and give it the coordinates
       Serial << "Waking pilot\n";
       pilot.wake(current, target);
       didwake = true;
     }
+
     environment.bmp->update();
+
     fly_time = timeElapsed;
-    if (fly_time > 1000)
-    {
+    if (fly_time > FLY_DELAY)
+    {                                    // don't want to constantly call fly
       pilot.fly(environment.gps->angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
-    if (environment.bmp->altitude < 15.24) //correct_alt_descending() < 30.0) // Altitude converted to meters. =50ft
-    {
+
+    if (environment.bmp->altitude < GROUND_ALT)
+    { // at 50ft (15.24 meters), transition to FS3 [LANDED]
       if (environment.landing_check())
-      {
+      { // make sure that we have landed by checking the altitude constantly
         pilot.sleep();
         flight_state = 3;
         Serial << "\n!!!! LANDED !!!!\n";
       }
     }
-    print_data();
+
+    // blink the LEDs and print data at 10Hz
     blink_led(100);
+    print_data();
     break;
-  case 3:                      // flight state 3 is landed
-    blink_led(500);            // toggle LEDs every 1.5 second
-    analogWrite(BZZ_DTA, 200); // turn on buzzer for 500 ms, off for 1000 ms
-    delay(500);
+
+  // FS3 [LANDED]
+  case 3:
+    // in the landed state, only toggle the LEDs and buzzer every 2 seconds, then print data
+    analogWrite(BZZ_DTA, 200);
+    blink_led(2000);
     analogWrite(BZZ_DTA, 0);
-    delay(500);
+
+    print_data();
+
     break;
   }
 }
 
 /* 
- *  Interrupt on millisecond,
- *    check if we have a new GPS NMEA string, if we do grab bmp data and fly
+ *  interrupt each millisecond to read from the GPS.
  */
 SIGNAL(TIMER0_COMPA_vect)
 {
-  environment.gps->read(); // Check to see if we have new data
+  environment.gps->read();
 }
 
+/*
+ * print_data updates sensor readings then prints all relevant data to the serial pins.
+ */
 void print_data()
 {
   environment.update();
 
-  /* Let's spray the OpenLog with a hose of data */
-  Serial << timeElapsed << F(",")
-         << environment.bmp->temperature << F(",") << environment.bmp->pressure << F(",") << environment.bmp->altitude << F(",")
-         << _FLOAT(environment.gps->latitude, 7) << F(",") << _FLOAT(environment.gps->longitude, 7) << F(",") << _FLOAT(environment.gps->angle, 7) << F(",") << environment.gps->altitude << F(",")
-         << _FLOAT(environment.bno->data.orientation.x, 4) << F(",") << _FLOAT(environment.bno->data.orientation.y, 4) << F(",") << _FLOAT(environment.bno->data.orientation.z, 4) << F(",")
-         << cutdown_switch() << F(",") << parafoil_switch() << F(",")
+  /* Let's spray the serial port with a hose of data */
+
+  // time, temperature, pressure, altitude,
+  Serial << timeElapsed << F(",") << environment.bmp->temperature << F(",") << environment.bmp->pressure
+         << F(",") << environment.bmp->altitude << F(",");
+
+  // latitude, longitude, angle, (gps) altitude,
+  Serial << _FLOAT(environment.gps->latitude, 7) << F(",") << _FLOAT(environment.gps->longitude, 7)
+         << F(",") << _FLOAT(environment.gps->angle, 7) << F(",") << environment.gps->altitude << F(",");
+
+  // x orientation, y orientation, z orientation,
+  Serial << _FLOAT(environment.bno->data.orientation.x, 4) << F(",") << _FLOAT(environment.bno->data.orientation.y, 4)
+         << F(",") << _FLOAT(environment.bno->data.orientation.z, 4) << F(",");
+
+  // cutdown switch, parafoil switch, turn status, flight state
+  Serial << cutdown_switch() << F(",") << parafoil_switch() << F(",")
          << pilot.get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
 }
 
@@ -211,21 +253,19 @@ void startup_sequence(void)
 
   // initialize sensors, then indicate if we were successful or not
   if (environment.init(flight_state))
-  { // if the initialization was successful blink 5 times
+  { // if the initialization was successful and we're in flight state 0 blink 5 times
     if (flight_state == 0)
     {
-      for(int i = 0; i < 5; i++) blink_led(500);
+      for (int i = 0; i < 5; i++)
+        blink_led(500);
     }
   }
   else
-  { // if the initialization was unsucessful blink 15 times
+  { // if the initialization was unsucessful and we're in flight state 1 blink 15 times
     if (flight_state == 0)
     {
       for (int i = 0; i < 15; i++)
-      {
-        digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
-        delay(200);
-      }
+        blink_led(500);
     }
   }
 }
@@ -235,7 +275,6 @@ void startup_sequence(void)
  */
 void write_EEPROM()
 {
-  Serial << "Write EEPROM\n";
   EEPROM.put(0, flight_state);                // flight state is always at address 0
   EEPROM.put(100, environment.bmp->baseline); // baseline pressure always at address 100
 }
@@ -276,7 +315,8 @@ void blink_led(int length)
 float custom_angle(void)
 {
   Serial << "\nPlease input an angle: ";
-  while (Serial.available() == 0); // wait for user input
+  while (Serial.available() == 0)
+    ; // wait for user input
   float angle = Serial.parseFloat();
   Serial << "\nAngle: " << angle << "\n";
   return angle;
