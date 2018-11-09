@@ -119,7 +119,7 @@ std::ofstream &operator << (std::ofstream &ofs, const Skynet &skynet) {
 			ofs << node;
 		}
 		// Print an end line signifying the end of the layer.
-		ofs << std::endl;
+		//ofs << std::endl;
 	}
 	return ofs;
 }
@@ -134,4 +134,38 @@ std::ifstream &operator >> (std::ifstream &ifs, Skynet &skynet) {
 		}
 	}
 	return ifs;
+}
+
+// This requires the file to be opened again after this function is called.
+bool Skynet::goodNetworkFile (std::ifstream &ifs) {
+	std::string temp;
+
+	// Lines that are not just blank.
+	int lines = 0;
+
+	while ( std::getline( ifs, temp ) ) {
+		if ( temp.size() > 0 ) {
+			lines++;
+		}
+	}
+
+	int       numOfNodes = 0;
+	// TODO: For some reason, the final nodes are not being saved when saving the network.
+	for ( int layer      = 0; layer < this->m_vLayers.size() - 1; layer++ ) {
+		numOfNodes += this->m_vLayers[ layer ].size();
+	}
+
+	std::cout << numOfNodes << " Lines: " << lines << std::endl;
+	return lines == numOfNodes;
+}
+
+std::ostream &operator << (std::ostream &os, const Skynet &skynet) {
+	for ( auto layer : skynet.m_vLayers ) {
+		for ( auto node : layer ) {
+			os << node;
+		}
+		os << std::endl;
+	}
+
+	return os;
 }

@@ -22,4 +22,7 @@ public:
 	void getResults (vector < double > &resultVals);        //output
 	friend std::ofstream &operator << (std::ofstream &of, const Skynet &skynet);
 	friend std::ifstream &operator >> (std::ifstream &ifs, Skynet &skynet);
+	friend std::ostream &operator << (std::ostream &os, const Skynet &skynet);
+	bool goodNetworkFile (std::ifstream &ifs);
+
 };
