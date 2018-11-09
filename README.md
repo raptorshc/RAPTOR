@@ -44,6 +44,11 @@ Kestrel was designed and built to be a testing payload, where we could fly our e
 
 ![alt text](https://lh3.googleusercontent.com/5NEBB_IN66aADD8gVesJaUCWdb867f5fqQqcLy4GLZlCQvyXMMzAeoCJIVlz9DaSMwfq8yvq75xX2S32eSA2aUrFGHVeaQfilVyWKIKQhVMiaCQMRvjygylbysD2_IuR_qYD-yVYmDMRgYuOcTZqpBc72WcPrk61C2MFL6y4U4deJUnDy3k-_Vt4oSqk8UV3Gi4Cy6NLGP6pc4r56cdbB_oz8zaU3To_kvJVzvkHG-edpz9sEdex469MfbhWYxn7zSzdf_ULMe2hmKUT1Jl9ElcvvFhgkPS8XkG_Ln9uK_cCheCHhqK8AA-M47GPGyPQ1Z1R7Kh-4KDt0aD96zqOZOSrELtEydvk809B2evDbGKQKpu4Yrs5egNlsEguUiOS_33DcNpIEs5SEpjD5ZSTudhrpzj_77DZRZ23Sf8n5Pu5s58V_JVRcOfQb6ieYZJPw7966cbnYQJiViO1n6QoPUIqt2PKJKo-KAOjKYhyid7oeS0C2XUlqcRCxAsD41Ye13YNIbZHx-1l7ZGuJfxQdtHrh5wdzZg7fvCZLMXZnsBpbLtAVtSkC_K76j4hTMmp0bVdTCqAXRNUSvIgoLTFFcnFc3zld9tIdX5t2Q38Qa-OqhqdxeFUwVJHNWx_GisNrIGrjfOGCndxnQ7qL0WOhOF6yhU5_vznrhjJHDz56C57zfakUSOm7O0MCw=w960-h540-no "Team Photo 10/6 Launch")
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/master
 #### *Falcon Testing*
 
 [Parafoil Testing with Fake Load](https://photos.google.com/share/AF1QipOYNhcAF_VKSpH8EsGm9p09tWBEW8-P44Ib4esdOKR__pPn4U8IfVZbABBhkwzWkA/photo/AF1QipNYzDb1yor08mGMRFYyb5cecjjzEDNiWGI3c_8m?key=WWdJMzROREthYmZQbkcxRUtCUmRyaXJHUGVhZjln)

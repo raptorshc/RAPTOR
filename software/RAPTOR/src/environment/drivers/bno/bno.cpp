@@ -1,14 +1,16 @@
 /*
- * imu.cpp - 
- * Library written for use with Adafruit BMP180 sensor.
- * Utilizes Adafruit BMP library, details: https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor?view=all
+ * bno.cpp - 
+ * Library written for use with Adafruit BNO055 sensor.
  * Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
-#include "imu.h"
+#include "bno.h"
 
 #include "Arduino.h"
 #include <Adafruit_BNO055.h>
 
+/*
+ *	init begins the BNO measurements
+ */
 bool BNO::init(void)
 {
     if (!this->begin())
@@ -20,7 +22,10 @@ bool BNO::init(void)
     return true;
 }
 
-void BNO::update()
+/*
+ *	update reads data from the sensor
+ */
+bool BNO::update()
 {
-    this->getEvent(&this->data);
+    return this->getEvent(&this->data);
 }
