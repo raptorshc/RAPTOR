@@ -183,6 +183,7 @@ void loop()
     blink_led(2000);
     analogWrite(BZZ_DTA, 0);
 
+    delay(200);
     print_data();
 
     break;
