@@ -20,10 +20,6 @@ int main ( ) {
 	database.getDataFromFile();
 
 	std::cout << "Loading network from file." << std::endl;
-	/*
-	 * If you are getting -nan's as results and as your saved weights,
-	 * create network.dat as an empty text file and then rerun the program.
-	 */
 	// The filename that the network is to be saved to.
 	const std::string networkFileName = "network.dat";
 
@@ -48,7 +44,7 @@ int main ( ) {
 
 	std::vector < double > inputVals, targetVals, resultVals;
 
-	int  totalEpochs = 100000;
+	int  totalEpochs = 1;
 	Data currData;
 
 	for ( int epoch = 0; epoch < totalEpochs; epoch++ ) {
@@ -122,7 +118,7 @@ int main ( ) {
 			outputNeuronIndex = i;
 			maxActivation     = resultVals[ i ];
 		}
-		cout << resultVals[ i ] << endl;
+		cout << "Landing Site #" << i << ": " << resultVals[ i ] << endl;
 	}
 
 	cout << endl;
