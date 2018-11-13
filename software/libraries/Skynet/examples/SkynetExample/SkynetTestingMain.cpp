@@ -31,9 +31,16 @@ int main ( ) {
 	std::ifstream inFile( networkFileName );
 	if ( inFile.good() ) {
 		std::cout << "The old file exists." << std::endl;
-		inFile >> testNet;
+		if ( testNet.goodNetworkFile( inFile ) ) {
+			inFile.close();
+			inFile.open( networkFileName );
+			inFile >> testNet;
+		} else {
+			std::cout << "The old network file does not fit the current model." << std::endl;
+		}
 	}
 	inFile.close();
+
 
 	// Set up saving for the network.
 
@@ -81,7 +88,6 @@ int main ( ) {
 	}
 	outFile << testNet;
 	outFile.close();
-
 
 	//test set 1
 	inputVals.push_back( utility( 0.548, 2.214 ) );        //1

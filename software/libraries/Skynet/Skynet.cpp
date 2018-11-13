@@ -149,13 +149,12 @@ bool Skynet::goodNetworkFile (std::ifstream &ifs) {
 		}
 	}
 
-	int       numOfNodes = 0;
-	// TODO: For some reason, the final nodes are not being saved when saving the network.
-	for ( int layer      = 0; layer < this->m_vLayers.size() - 1; layer++ ) {
+	int numOfNodes = 0;
+
+	for ( int layer = 0; layer < this->m_vLayers.size() - 1; layer++ ) {
 		numOfNodes += this->m_vLayers[ layer ].size();
 	}
 
-	std::cout << numOfNodes << " Lines: " << lines << std::endl;
 	return lines == numOfNodes;
 }
 
