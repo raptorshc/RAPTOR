@@ -49,7 +49,8 @@ int main ( ) {
 
 	for ( int epoch = 0; epoch < totalEpochs; epoch++ ) {
 
-		if ( epoch % 1000 == 0 ) {
+		if ( int( double( epoch ) / double( totalEpochs ) * 100 ) % 10 == 0 ) {
+
 			std::cout << double( epoch ) / double( totalEpochs ) * 100 << "% finished" << std::endl;
 		}
 
