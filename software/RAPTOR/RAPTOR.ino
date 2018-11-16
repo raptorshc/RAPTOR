@@ -9,8 +9,8 @@
 #define GROUND_ALT 15.24  // altitude to transition to FS1 [ASCENT] or FS3 [LANDED], =50ft
 #define CUTDOWN_ALT 304.8 // altitude to transition to FS2 [DESCENT], =1000ft
 
-#define TARGET_LONG -86.635738
-#define TARGET_LAT 34.720197 // HARD CODED TARGET COORDINATES
+#define TARGET_LONG -86.635042
+#define TARGET_LAT 34.722152 // HARD CODED TARGET COORDINATES
 
 #define DEPLOY_DELAY 1200 // time to wait between deployment and guidance [ms]
 #define FLY_DELAY 1000    // time to wait between calling fly [ms]
