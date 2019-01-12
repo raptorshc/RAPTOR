@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 1 1
 Title "RAPTOR Schematic"
 Date "2019-01-12"
-Rev "PHOENIX 0.5"
+Rev "PHOENIX 0.5.5"
 Comp ""
 Comment1 ""
 Comment2 ""
@@ -1159,17 +1159,11 @@ Wire Wire Line
 $Comp
 L RAPTOR-rescue:U3V12F12 U7
 U 1 1 5C40F0AB
-P 8100 4100
-F 0 "U7" H 8100 4342 50  0000 C CNN
-F 1 "U3V12F12" H 8100 4251 50  0000 C CNN
-F 2 "RAPTOR_footprints:U3V12F12" H 8100 4350 50  0001 C CNN
-F 3 "" H 8100 4350 50  0001 C CNN
-	1    8100 4100
 P 6600 5000
-F 0 "U7" H 6600 5242 50  0000 C CNN
-F 1 "U3V12F12" H 6600 5151 50  0000 C CNN
-F 2 "" H 6600 5250 50  0001 C CNN
-F 3 "https://www.robotshop.com/media/files/PDF/datasheet-2117.pdf" H 6600 5250 50  0001 C CNN
+F 0 "U7" H 5100 6142 50  0000 C CNN
+F 1 "U3V12F12" H 5100 6051 50  0000 C CNN
+F 2 "" H 5100 6150 50  0001 C CNN
+F 3 "https://www.robotshop.com/media/files/PDF/datasheet-2117.pdf" H 5100 6150 50  0001 C CNN
 	1    6600 5000
 	1    0    0    -1  
 $EndComp
