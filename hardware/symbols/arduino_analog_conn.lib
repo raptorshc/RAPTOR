@@ -1,0 +1,28 @@
+EESchema-LIBRARY Version 2.4
+#encoding utf-8
+#
+# Arduino_Analog_Conn
+#
+DEF Arduino_Analog_Conn P 0 40 Y Y 1 F N
+F0 "P" 0 -400 50 H V C CNN
+F1 "Arduino_Analog_Conn" 150 -50 50 V V C CNN
+F2 "" 0 -400 50 H I C CNN
+F3 "" 0 -400 50 H I C CNN
+DRAW
+S -50 -295 0 -305 1 1 6 N
+S -50 -195 0 -205 1 1 6 N
+S -50 -95 0 -105 1 1 6 N
+S -50 5 0 -5 1 1 6 N
+S -50 105 0 95 1 1 6 N
+S -50 205 0 195 1 1 6 N
+S -50 250 50 -350 1 1 10 f
+X ~ A0 -200 200 150 R 50 50 1 1 P
+X ~ A1 -200 100 150 R 50 50 1 1 P
+X ~ A2 -200 0 150 R 50 50 1 1 P
+X ~ A3 -200 -100 150 R 50 50 1 1 P
+X ~ A4(SDA) -200 -200 150 R 50 50 1 1 P
+X ~ A5(SCL) -200 -300 150 R 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+#End Library
