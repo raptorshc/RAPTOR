@@ -1,5 +1,5 @@
 /*
-  environment.cpp - 
+  this->cpp - 
 	DESCRIPTION NEEDED.
 	Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
@@ -37,10 +37,10 @@ bool Environment::init(uint8_t flight_state)
 
 /*
  *  updates/queries all sensors, returns false if any fail
- */
+ *///Wener
 bool Environment::update()
 {
-    this->gps->read();
+    this->gps->parse_NMEA();
     if (this->bmp->update() && this->bno->update())
         return true;
     else
@@ -57,9 +57,9 @@ float Environment::correct_alt(uint8_t flight_state)
     {
     case 0: // both flight state 0 and 1 are ascending
     case 1:
-        if (this->bmp->altitude - this->gps->agl > 15.24)//Altitude converted to meters. =50ft
+        if (this->bmp->altitude - this->gps->agl > 15.24) //Altitude converted to meters. =50ft
             return this->bmp->altitude;
-        else if (this->gps->agl - this->bmp->altitude > 15.24)//Altitude converted to meters. =50ft
+        else if (this->gps->agl - this->bmp->altitude > 15.24) //Altitude converted to meters. =50ft
             return this->gps->agl;
         else
             return (this->bmp->altitude + this->gps->agl) / 2;
@@ -72,9 +72,9 @@ float Environment::correct_alt(uint8_t flight_state)
         if (this->gps->agl == 0)
             return this->bmp->altitude;
 
-        if (this->gps->agl - this->bmp->altitude > 15.24)//Altitude converted to meters. =50ft
+        if (this->gps->agl - this->bmp->altitude > 15.24) //Altitude converted to meters. =50ft
             return this->bmp->altitude;
-        else if (this->bmp->altitude - this->gps->agl > 15.24)//Altitude converted to meters. =50ft
+        else if (this->bmp->altitude - this->gps->agl > 15.24) //Altitude converted to meters. =50ft
             return this->gps->agl;
         else
             return (this->bmp->altitude + this->gps->agl) / 2;
@@ -87,8 +87,8 @@ float Environment::correct_alt(uint8_t flight_state)
 bool Environment::landing_check(void)
 {
     uint8_t counter = 0;
-    while (counter++ < 4 && this->bmp->altitude < 15.24)//Altitude converted to meters. =50ft
-    { // check our altitude 4 times, if we're below 50ft in all of them we're landed
+    while (counter++ < 4 && this->bmp->altitude < 15.24) //Altitude converted to meters. =50ft
+    {                                                    // check our altitude 4 times, if we're below 50ft in all of them we're landed
         delay(100);
         this->bmp->update();
     }
@@ -117,21 +117,3 @@ bool Environment::cutdown_check(void)
     }
     return true; //Falling
 }
-
-/*
-* print_data  
-*/
-void Environment::print_data()
-{
-    this->bno->update();
-
-    /* Let's spray the OpenLog with a hose of data */
-    // Serial << timeElapsed << F(",")
-    Serial << this->bmp->temperature << F(",") << this->bmp->pressure << F(",") << this->bmp->altitude << F(",")
-           << this->gps->latitude << F(",") << this->gps->longitude << F(",") << this->gps->angle << F(",")
-           << this->bno->data.orientation.x << F(",") << this->bno->data.orientation.y << F(",") << this->bno->data.orientation.z << F(",");
-    //    << cutdown_switch() << F(",") << parafoil_switch() << F(",")
-    //    << pilot.get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
-}
-
-/* PRIVATE METHODS */
