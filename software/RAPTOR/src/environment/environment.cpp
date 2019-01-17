@@ -40,7 +40,7 @@ bool Environment::init(uint8_t flight_state)
  *///Wener
 bool Environment::update()
 {
-    this->gps->parse_NMEA();
+    this->gps->update();
     if (this->bmp->update() && this->bno->update())
         return true;
     else

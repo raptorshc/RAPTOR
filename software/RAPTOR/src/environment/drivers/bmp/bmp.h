@@ -7,15 +7,15 @@
 #ifndef BMP_H_
 #define BMP_H_
 
-#include <Adafruit_BMP085_U.h> // external adafruit library
+#include <Adafruit_BMP280.h>
 #include <Adafruit_Sensor.h>
 #include "Arduino.h"
 
 class BMP
-    : public Adafruit_BMP085_Unified
+    : public Adafruit_BMP280
 {
 public:
-  BMP() : Adafruit_BMP085_Unified(10085) {}
+  BMP() : Adafruit_BMP280() {}
   bool init(uint8_t fs);
   bool update(void);
 

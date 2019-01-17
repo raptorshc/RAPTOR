@@ -25,9 +25,32 @@ void GPS::init(void)
 }
 
 /*
+ * update performs all needed actions for parsing 
+ *  a new set of data collected by the GPS
+ */
+void GPS::update(void)
+{
+  if (newNMEAreceived())
+  { // if we have a new nmea, parse it
+    if (parse(lastNMEA()))
+    {
+      if (this->first_gps)
+      { // set the ground level altitude on our first reading
+        this->first_gps = false;
+        this->init_alt = this->altitude;
+      }
+
+      // correct the coordinates to decimal-degrees and altitude to AGL
+      dms_to_dec();
+      this->agl = this->altitude - this->init_alt;
+    }
+  }
+}
+
+/*
  * converts lat/long from Adafruit degree-minute format to decimal-degrees 
  */
-void GPS::correct_coords(void)
+void GPS::dms_to_dec(void)
 // from http://arduinodev.woofex.net/2013/02/06/adafruit_gps_forma/
 {
   float min_long = this->longitude;
@@ -45,44 +68,4 @@ void GPS::correct_coords(void)
 
   min_lat = (int)(min_lat / 100);
   this->latitude = min_lat + (minla / 60);
-}
-
-/*
- * sets our initial altitude to current altitude, triggered externally
- */
-void GPS::set_initalt(void)
-{
-  this->init_alt = this->altitude;
-}
-
-/*
- * calculates above ground level altitude using the GPS MSL altitude 
- * and our initial altitude then stores it in agl
- */
-void GPS::calc_agl(void)
-{
-  this->agl = this->altitude - this->init_alt;
-}
-
-/*
- * parse_NMEA performs all needed actions for parsing 
- *  a new set of data collected by the GPS
- */
-void GPS::parse_NMEA(void)
-{
-  if (newNMEAreceived())
-  { // if we have a new nmea, parse it
-    if (parse(lastNMEA()))
-    {
-      if (this->first_gps)
-      { // set the ground level altitude on our first reading
-        this->first_gps = false;
-        set_initalt();
-      }
-
-      // correct the coordinates to decimal-degrees and altitude to AGL
-      correct_coords();
-      calc_agl();
-    }
-  }
 }
