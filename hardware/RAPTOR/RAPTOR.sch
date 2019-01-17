@@ -1402,7 +1402,7 @@ F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b
 	1    0    0    -1  
 $EndComp
 $Comp
-L SparkFun-Resistors:100OHM-0603-1_10W-1% R?
+L RAPTOR-rescue:100OHM-0603-1_10W-1%-SparkFun-Resistors R?
 U 1 1 5C409EAA
 P 6000 6650
 F 0 "R?" H 6000 6950 45  0000 C CNN
@@ -1414,7 +1414,7 @@ F 4 "RES-07863" H 6000 6771 60  0000 C CNN "Field4"
 	1    0    0    -1  
 $EndComp
 $Comp
-L SparkFun-Resistors:100OHM-0603-1_10W-1% R?
+L RAPTOR-rescue:100OHM-0603-1_10W-1%-SparkFun-Resistors R?
 U 1 1 5C409F6D
 P 6000 5950
 F 0 "R?" H 6000 6250 45  0000 C CNN
@@ -1426,7 +1426,7 @@ F 4 "RES-07863" H 6000 6071 60  0000 C CNN "Field4"
 	1    0    0    -1  
 $EndComp
 $Comp
-L SparkFun-Resistors:100OHM-0603-1_10W-1% R?
+L RAPTOR-rescue:100OHM-0603-1_10W-1%-SparkFun-Resistors R?
 U 1 1 5C411D44
 P 6000 5200
 F 0 "R?" H 6000 5500 45  0000 C CNN
@@ -1438,7 +1438,7 @@ F 4 "RES-07863" H 6000 5321 60  0000 C CNN "Field4"
 	1    0    0    -1  
 $EndComp
 $Comp
-L SparkFun-Resistors:20OHM-0603-1_10W-1% R?
+L RAPTOR-rescue:20OHM-0603-1_10W-1%-SparkFun-Resistors R?
 U 1 1 5C41AD57
 P 1600 5700
 F 0 "R?" V 1505 5768 45  0000 L CNN
@@ -1449,4 +1449,35 @@ F 4 "RES-07862" V 1684 5768 60  0000 L CNN "Field4"
 	1    1600 5700
 	0    1    1    0   
 $EndComp
+$Comp
+L RAPTOR-rescue:MOSFET-NCH-2N7002PW-SparkFun-DiscreteSemi Q?
+U 1 1 5C4073ED
+P 7200 3050
+F 0 "Q?" H 7365 3145 45  0000 L CNN
+F 1 "MOSFET-NCH-2N7002PW" H 7365 3061 45  0000 L CNN
+F 2 "SOT323" H 7200 3350 20  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/ds11303.pdf" H 7200 3050 50  0001 C CNN
+F 4 "TRANS-11151" H 7365 2966 60  0000 L CNN "Field4"
+	1    7200 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5C417257
+P 7300 3350
+F 0 "#PWR?" H 7300 3100 50  0001 C CNN
+F 1 "GND" H 7305 3177 50  0000 C CNN
+F 2 "" H 7300 3350 50  0001 C CNN
+F 3 "" H 7300 3350 50  0001 C CNN
+	1    7300 3350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7300 3250 7300 3350
+Wire Wire Line
+	7300 2850 7300 2400
+Text Label 7000 3150 2    50   ~ 0
+HOTWIRE
+Text Label 7300 2400 2    50   ~ 0
+PWR_HOTWIRE
 $EndSCHEMATC
