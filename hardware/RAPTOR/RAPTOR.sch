@@ -771,17 +771,6 @@ F 3 "" H 5550 850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Regulator_Linear:L7805 U6
-U 1 1 5C49E003
-P 3550 850
-F 0 "U6" H 3550 1092 50  0000 C CNN
-F 1 "L7805" H 3550 1001 50  0000 C CNN
-F 2 "Package_TO_SOT_THT:TO-220-3_Horizontal_TabDown" H 3575 700 50  0001 L CIN
-F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 3550 800 50  0001 C CNN
-	1    3550 850 
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:C C4
 U 1 1 5C49E00A
 P 4100 1150
@@ -1449,4 +1438,15 @@ Wire Wire Line
 Connection ~ 1750 5950
 Wire Wire Line
 	1300 6950 1150 6950
+$Comp
+L Regulator_Linear:L7805 U6
+U 1 1 5C49E003
+P 3550 850
+F 0 "U6" H 3550 1092 50  0000 C CNN
+F 1 "L4940V5" H 3550 1001 50  0000 C CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Horizontal_TabDown" H 3575 700 50  0001 L CIN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 3550 800 50  0001 C CNN
+	1    3550 850 
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
