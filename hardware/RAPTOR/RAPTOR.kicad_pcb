@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 27)
+    (drawings 24)
     (tracks 0)
     (zones 0)
     (modules 46)
@@ -429,7 +429,7 @@
   )
 
   (module Socket_Arduino_Uno:Arduino_1pin locked (layer F.Cu) (tedit 5524FC41) (tstamp 5524FC4E)
-    (at 175.768 88.265)
+    (at 177.038 89.789)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
     (path /56D712DB)
@@ -1363,7 +1363,7 @@
   )
 
   (module RAPTOR_footprints:AdafruitGPS (layer F.Cu) (tedit 5BE64CF1) (tstamp 5C5DB4D9)
-    (at 175.768 103.505 270)
+    (at 215.138 102.997 270)
     (descr "A footprint for the Adafruit GPS Breakout Board")
     (path /5BDE25E6)
     (fp_text reference U4 (at 0 3.81 270) (layer F.SilkS)
@@ -1854,6 +1854,9 @@
     )
   )
 
+  (gr_line (start 199.898 73.025) (end 175.514 73.025) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 199.898 126.365) (end 199.898 73.025) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 177.038 126.365) (end 199.898 126.365) (layer Edge.Cuts) (width 0.15))
   (gr_text 1 (at 138.938 121.285 90) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
@@ -1863,12 +1866,6 @@
   (gr_line (start 120.269 74.93) (end 120.269 78.994) (angle 90) (layer Dwgs.User) (width 0.15))
   (gr_line (start 114.427 74.93) (end 120.269 74.93) (angle 90) (layer Dwgs.User) (width 0.15))
   (gr_line (start 120.523 93.98) (end 104.648 93.98) (angle 90) (layer Dwgs.User) (width 0.15))
-  (gr_line (start 177.038 74.549) (end 175.514 73.025) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 177.038 85.979) (end 177.038 74.549) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 179.578 88.519) (end 177.038 85.979) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 179.578 121.285) (end 179.578 88.519) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 177.038 123.825) (end 179.578 121.285) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 177.038 126.365) (end 177.038 123.825) (angle 90) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 110.998 126.365) (end 177.038 126.365) (angle 90) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 110.998 73.025) (end 110.998 126.365) (angle 90) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 175.514 73.025) (end 110.998 73.025) (angle 90) (layer Edge.Cuts) (width 0.15))
