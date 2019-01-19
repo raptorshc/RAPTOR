@@ -1102,7 +1102,7 @@ Wire Wire Line
 Wire Wire Line
 	4600 5200 4950 5200
 Text Label 6450 5950 0    50   ~ 0
-SOLP_LED
+LEDP_DTA
 $Comp
 L power:GND #PWR019
 U 1 1 5C5D41CC
@@ -1133,7 +1133,7 @@ Wire Wire Line
 Wire Wire Line
 	4600 5950 4950 5950
 Text Label 6450 6650 0    50   ~ 0
-SOLC_LED
+LEDC_DTA
 $Comp
 L power:GND #PWR020
 U 1 1 5C5E2576
