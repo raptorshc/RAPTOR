@@ -16,10 +16,10 @@ class BMP
 {
 public:
   BMP() : Adafruit_BMP280() {}
-  bool init(uint8_t fs);
-  bool update(void);
+  bool init(bool set_baseline);
+  float getAltitude(void);
 
-  float baseline, pressure, temperature, altitude;
+  float baseline;
 };
 
 #endif /* BMP_H_ */

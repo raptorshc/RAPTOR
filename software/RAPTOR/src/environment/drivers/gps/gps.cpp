@@ -69,3 +69,11 @@ void GPS::dms_to_dec(void)
   min_lat = (int)(min_lat / 100);
   this->latitude = min_lat + (minla / 60);
 }
+
+/* 
+ *  interrupt each millisecond to read from the GPS.
+ */
+SIGNAL(TIMER0_COMPA_vect)
+{
+  environment.gps->read();
+}

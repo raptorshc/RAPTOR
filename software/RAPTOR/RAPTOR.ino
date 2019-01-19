@@ -190,14 +190,6 @@ void loop()
   }
 }
 
-/* 
- *  interrupt each millisecond to read from the GPS.
- */
-SIGNAL(TIMER0_COMPA_vect)
-{
-  environment.gps->read();
-}
-
 /*
  * print_data updates sensor readings then prints all relevant data to the serial pins.
  */

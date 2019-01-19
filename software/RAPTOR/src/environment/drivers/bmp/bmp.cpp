@@ -10,7 +10,7 @@
  *	init begins the BMP measurements and 
  *   grabs a baseline pressure for alt calculations.
  */
-bool BMP::init(uint8_t flight_state)
+bool BMP::init(bool set_baseline)
 {
   // check to make sure it initializes properly
   if (!this->begin())
@@ -21,7 +21,7 @@ bool BMP::init(uint8_t flight_state)
 
   // if it does and we're in FS0 [LAUNCH], grab a new baseline
   uint8_t counter = 0;
-  if (flight_state == 0)
+  if (set_baseline)
   {
     this->baseline = 1013.25; // put in a fake baseline for the initial calculation, which won't be used
 
@@ -33,7 +33,7 @@ bool BMP::init(uint8_t flight_state)
 /*
  * might or might not work
  */
-float readAltitude(void)
+float getAltitude(void)
 {
   return readAltitude(this->baseline);
 }
