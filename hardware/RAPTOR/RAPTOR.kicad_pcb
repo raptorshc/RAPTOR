@@ -1,9 +1,9 @@
-(kicad_pcb (version 20171130) (host pcbnew "(5.0.2)-1")
+(kicad_pcb (version 20171130) (host pcbnew "(5.0.0)")
 
   (general
     (thickness 1.6)
     (drawings 24)
-    (tracks 0)
+    (tracks 2)
     (zones 0)
     (modules 47)
     (nets 63)
@@ -1944,5 +1944,8 @@
   (gr_line (start 104.648 93.98) (end 104.648 82.55) (angle 90) (layer Dwgs.User) (width 0.15))
   (gr_line (start 120.523 82.55) (end 120.523 93.98) (angle 90) (layer Dwgs.User) (width 0.15))
   (gr_line (start 104.648 82.55) (end 120.523 82.55) (angle 90) (layer Dwgs.User) (width 0.15))
+
+  (segment (start 116.078 102.235) (end 121.158 97.155) (width 0.25) (layer F.Cu) (net 4))
+  (segment (start 114.268 102.235) (end 116.078 102.235) (width 0.25) (layer F.Cu) (net 4))
 
 )
