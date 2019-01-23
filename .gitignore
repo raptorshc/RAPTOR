@@ -7,3 +7,6 @@ build/
 
 #python
 __pycache__/
+
+#kicad
+*.bck
