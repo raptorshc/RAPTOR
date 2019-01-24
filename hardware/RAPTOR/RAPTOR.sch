@@ -576,17 +576,6 @@ Wire Wire Line
 Wire Wire Line
 	4950 2100 4950 2200
 $Comp
-L Device:Buzzer BZ1
-U 1 1 5BEADE3C
-P 3600 5300
-F 0 "BZ1" H 3753 5329 50  0000 L CNN
-F 1 "Buzzer" H 3753 5238 50  0000 L CNN
-F 2 "Buzzer_Beeper:Buzzer_12x9.5RM7.6" V 3575 5400 50  0001 C CNN
-F 3 "~" V 3575 5400 50  0001 C CNN
-	1    3600 5300
-	1    0    0    -1  
-$EndComp
-$Comp
 L RAPTOR-rescue:MOSFET-NCH-2N7002PW-SparkFun-DiscreteSemi Q3
 U 1 1 5BEB292C
 P 3400 5750
@@ -602,8 +591,6 @@ Text Label 2800 5850 0    50   ~ 0
 BZZ_DTA
 Wire Wire Line
 	3200 5850 2800 5850
-Wire Wire Line
-	3500 5400 3500 5550
 $Comp
 L power:GND #PWR0116
 U 1 1 5BEBE024
@@ -617,8 +604,6 @@ F 3 "" H 3500 6100 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	3500 5950 3500 6100
-Wire Wire Line
-	3500 5200 3500 5100
 Text Label 6450 5200 0    50   ~ 0
 FIX_LED
 $Comp
@@ -1556,4 +1541,20 @@ Connection ~ 3550 1400
 Wire Wire Line
 	3550 1400 3650 1400
 NoConn ~ 3250 900 
+$Comp
+L RAPTOR-rescue:CONN_02-SparkFun-Connectors J18
+U 1 1 5C4A4245
+P 3600 5250
+F 0 "J18" V 3461 5428 45  0000 L CNN
+F 1 "CONN_BUZZER" V 3545 5428 45  0000 L CNN
+F 2 "Connectors:1X02" H 3600 5500 20  0001 C CNN
+F 3 "" H 3600 5250 50  0001 C CNN
+F 4 "XXX-00000" V 3640 5428 60  0001 L CNN "Field4"
+	1    3600 5250
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3500 5100 3500 5250
+Wire Wire Line
+	3500 5350 3500 5550
 $EndSCHEMATC
