@@ -11,7 +11,9 @@
 
   (page A4)
   (title_block
-    (date "lun. 30 mars 2015")
+    (title "RAPTOR PCB")
+    (date 2019-01-23)
+    (rev "Phoenix 0.6")
   )
 
   (layers
@@ -412,7 +414,7 @@
   )
 
   (module Socket_Arduino_Uno:Arduino_1pin locked (layer F.Cu) (tedit 5524FC41) (tstamp 5524FC4E)
-    (at 177.038 89.789)
+    (at 177.038 90.805)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
     (path /56D712DB)
@@ -2303,7 +2305,7 @@
   (segment (start 145.932999 91.430001) (end 145.932999 102.860001) (width 0.25) (layer F.Cu) (net 62))
   (segment (start 147.828 89.535) (end 145.932999 91.430001) (width 0.25) (layer F.Cu) (net 62))
 
-  (zone (net 4) (net_name GND) (layer B.Cu) (tstamp 5C492ED5) (hatch edge 0.508)
+  (zone (net 4) (net_name GND) (layer B.Cu) (tstamp 5C492EE6) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
@@ -2850,7 +2852,7 @@
       )
     )
   )
-  (zone (net 4) (net_name GND) (layer F.Cu) (tstamp 5C492ED2) (hatch edge 0.508)
+  (zone (net 4) (net_name GND) (layer F.Cu) (tstamp 5C492EE3) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
