@@ -3,7 +3,7 @@
   (general
     (thickness 1.6)
     (drawings 29)
-    (tracks 0)
+    (tracks 1)
     (zones 0)
     (modules 47)
     (nets 63)
@@ -1981,5 +1981,7 @@
   (gr_line (start 104.648 93.98) (end 104.648 82.55) (angle 90) (layer Dwgs.User) (width 0.15))
   (gr_line (start 120.523 82.55) (end 120.523 93.98) (angle 90) (layer Dwgs.User) (width 0.15))
   (gr_line (start 104.648 82.55) (end 120.523 82.55) (angle 90) (layer Dwgs.User) (width 0.15))
+
+  (segment (start 138.938 116.84) (end 138.938 111.76) (width 0.25) (layer F.Cu) (net 4))
 
 )
