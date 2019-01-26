@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew "(5.0.1)-4")
+(kicad_pcb (version 20171130) (host pcbnew "(5.0.2)-1")
 
   (general
     (thickness 1.6)
@@ -17,8 +17,8 @@
   )
 
   (layers
-    (0 F.Cu signal hide)
-    (31 B.Cu signal hide)
+    (0 F.Cu signal)
+    (31 B.Cu signal)
     (32 B.Adhes user hide)
     (33 F.Adhes user)
     (34 B.Paste user)
@@ -1304,7 +1304,7 @@
     (fp_text reference Q1 (at 0 2.54 180) (layer F.SilkS)
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
-    (fp_text value MOSFET-NCH-2N7002PW (at 1.27 -5.08 180) (layer F.SilkS) hide
+    (fp_text value MOSFET-NCH-STQ2NK60ZR-AP (at 1.27 -5.08 180) (layer F.SilkS) hide
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
     (fp_arc (start 0 0) (end 0.78486 -2.54762) (angle 111) (layer F.SilkS) (width 0.2032))
@@ -1330,7 +1330,7 @@
     (fp_text reference Q2 (at 0 -3.429 180) (layer F.SilkS)
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
-    (fp_text value MOSFET-NCH-2N7002PW (at 0 2.286 180) (layer F.SilkS) hide
+    (fp_text value MOSFET-NCH-STQ2NK60ZR-AP (at 0 2.286 180) (layer F.SilkS) hide
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
     (fp_line (start -2.09296 1.651) (end 2.09296 1.651) (layer F.SilkS) (width 0.2032))
@@ -1356,7 +1356,7 @@
     (fp_text reference Q3 (at 0 2.54 180) (layer F.SilkS)
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
-    (fp_text value MOSFET-NCH-2N7002PW (at -6.35 -5.08 180) (layer F.SilkS) hide
+    (fp_text value MOSFET-NCH-STQ2NK60ZR-AP (at -6.35 -5.08 180) (layer F.SilkS) hide
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
     (fp_arc (start 0 0) (end 0.78486 -2.54762) (angle 111) (layer F.SilkS) (width 0.2032))
@@ -1382,7 +1382,7 @@
     (fp_text reference Q4 (at 0 -3.81) (layer F.SilkS)
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
-    (fp_text value MOSFET-NCH-2N7002PW (at 0 2.286 270) (layer F.SilkS) hide
+    (fp_text value MOSFET-NCH-STQ2NK60ZR-AP (at 0 2.286 270) (layer F.SilkS) hide
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
     (fp_line (start -2.09296 1.651) (end 2.09296 1.651) (layer F.SilkS) (width 0.2032))
@@ -1408,7 +1408,7 @@
     (fp_text reference Q5 (at 0 -3.81 180) (layer F.SilkS)
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
-    (fp_text value MOSFET-NCH-2N7002PW (at 0 2.286 180) (layer F.SilkS) hide
+    (fp_text value MOSFET-NCH-STQ2NK60ZR-AP (at 0 2.286 180) (layer F.SilkS) hide
       (effects (font (size 0.6096 0.6096) (thickness 0.127)))
     )
     (fp_line (start -2.09296 1.651) (end 2.09296 1.651) (layer F.SilkS) (width 0.2032))

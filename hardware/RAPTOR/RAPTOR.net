@@ -1,8 +1,8 @@
 (export (version D)
   (design
-    (source C:\Users\Sean\Documents\GitHub\RAPTOR\hardware\RAPTOR\RAPTOR.sch)
-    (date "1/23/2019 7:28:15 PM")
-    (tool "Eeschema (5.0.0)")
+    (source C:\Users\Dell_Owner\Documents\RAPTOR\hardware\RAPTOR\RAPTOR.sch)
+    (date "1/26/2019 3:04:04 PM")
+    (tool "Eeschema (5.0.2)-1")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
         (title "RAPTOR Schematic")
@@ -92,7 +92,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 5BDE25E6))
     (comp (ref Q1)
-      (value MOSFET-NCH-2N7002PW)
+      (value MOSFET-NCH-STQ2NK60ZR-AP)
       (footprint Silicon-Standard:TO-92)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
@@ -101,7 +101,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 5BE8A581))
     (comp (ref Q3)
-      (value MOSFET-NCH-2N7002PW)
+      (value MOSFET-NCH-STQ2NK60ZR-AP)
       (footprint Silicon-Standard:TO-92)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
@@ -110,7 +110,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 5BEB292C))
     (comp (ref Q4)
-      (value MOSFET-NCH-2N7002PW)
+      (value MOSFET-NCH-STQ2NK60ZR-AP)
       (footprint Silicon-Standard:TO-92)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
@@ -141,7 +141,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 5C4D5A1A))
     (comp (ref Q2)
-      (value MOSFET-NCH-2N7002PW)
+      (value MOSFET-NCH-STQ2NK60ZR-AP)
       (footprint Silicon-Standard:TO-92)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
@@ -276,7 +276,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 5C41AD57))
     (comp (ref Q5)
-      (value MOSFET-NCH-2N7002PW)
+      (value MOSFET-NCH-STQ2NK60ZR-AP)
       (footprint Silicon-Standard:TO-92)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
@@ -652,7 +652,7 @@
     (library (logical Connector_Generic)
       (uri "C:\\Program Files\\KiCad\\share\\kicad\\library/Connector_Generic.lib"))
     (library (logical RAPTOR-rescue)
-      (uri C:\Users\Sean\Documents\GitHub\RAPTOR\hardware\RAPTOR/RAPTOR-rescue.lib)))
+      (uri C:\Users\Dell_Owner\Documents\RAPTOR\hardware\RAPTOR/RAPTOR-rescue.lib)))
   (nets
     (net (code 1) (name +5V)
       (node (ref U2) (pin 1))
