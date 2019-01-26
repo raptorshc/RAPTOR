@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# Connector_Generic:Conn_01x01
+# Connector_Generic_Conn_01x01
 #
-DEF Connector_Generic:Conn_01x01 J 0 40 Y N 1 F N
+DEF Connector_Generic_Conn_01x01 J 0 40 Y N 1 F N
 F0 "J" 0 100 50 H V C CNN
-F1 "Connector_Generic:Conn_01x01" 0 -100 50 H V C CNN
+F1 "Connector_Generic_Conn_01x01" 0 -100 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -18,11 +18,11 @@ X Pin_1 1 -200 0 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# Connector_Generic:Conn_01x08
+# Connector_Generic_Conn_01x08
 #
-DEF Connector_Generic:Conn_01x08 J 0 40 Y N 1 F N
+DEF Connector_Generic_Conn_01x08 J 0 40 Y N 1 F N
 F0 "J" 0 400 50 H V C CNN
-F1 "Connector_Generic:Conn_01x08" 0 -500 50 H V C CNN
+F1 "Connector_Generic_Conn_01x08" 0 -500 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -49,11 +49,11 @@ X Pin_8 8 -200 -400 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:100OHM-0603-1_10W-1%-SparkFun-Resistors
+# RAPTOR-rescue_100OHM-0603-1_10W-1%-SparkFun-Resistors
 #
-DEF RAPTOR-rescue:100OHM-0603-1_10W-1%-SparkFun-Resistors R 0 40 N N 1 L N
+DEF RAPTOR-rescue_100OHM-0603-1_10W-1%-SparkFun-Resistors R 0 40 N N 1 L N
 F0 "R" -200 50 45 H V L BNN
-F1 "RAPTOR-rescue:100OHM-0603-1_10W-1%-SparkFun-Resistors" -200 -150 45 H V L BNN
+F1 "RAPTOR-rescue_100OHM-0603-1_10W-1%-SparkFun-Resistors" -200 -150 45 H V L BNN
 F2 "0603" 0 150 20 H I C CNN
 F3 "" 0 0 60 H I C CNN
 F4 "RES-07863" 0 200 60 H V C CNN
@@ -75,11 +75,11 @@ X 2 2 200 0 100 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:20OHM-0603-1_10W-1%-SparkFun-Resistors
+# RAPTOR-rescue_20OHM-0603-1_10W-1%-SparkFun-Resistors
 #
-DEF RAPTOR-rescue:20OHM-0603-1_10W-1%-SparkFun-Resistors R 0 40 N N 1 L N
+DEF RAPTOR-rescue_20OHM-0603-1_10W-1%-SparkFun-Resistors R 0 40 N N 1 L N
 F0 "R" -200 50 45 H V L BNN
-F1 "RAPTOR-rescue:20OHM-0603-1_10W-1%-SparkFun-Resistors" -200 -150 45 H V L BNN
+F1 "RAPTOR-rescue_20OHM-0603-1_10W-1%-SparkFun-Resistors" -200 -150 45 H V L BNN
 F2 "0603" 0 150 20 H I C CNN
 F3 "" 0 0 60 H I C CNN
 F4 "RES-07862" 0 200 60 H V C CNN
@@ -101,11 +101,11 @@ X 2 2 200 0 100 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:4.7KOHM-0603-1_10W-1%-SparkFun-Resistors
+# RAPTOR-rescue_4.7KOHM-0603-1_10W-1%-SparkFun-Resistors
 #
-DEF RAPTOR-rescue:4.7KOHM-0603-1_10W-1%-SparkFun-Resistors R 0 40 N N 1 L N
+DEF RAPTOR-rescue_4.7KOHM-0603-1_10W-1%-SparkFun-Resistors R 0 40 N N 1 L N
 F0 "R" -200 50 45 H V L BNN
-F1 "RAPTOR-rescue:4.7KOHM-0603-1_10W-1%-SparkFun-Resistors" -200 -150 45 H V L BNN
+F1 "RAPTOR-rescue_4.7KOHM-0603-1_10W-1%-SparkFun-Resistors" -200 -150 45 H V L BNN
 F2 "0603" 0 150 20 H I C CNN
 F3 "" 0 0 60 H I C CNN
 F4 "RES-07857" 0 200 60 H V C CNN
@@ -127,11 +127,11 @@ X 2 2 200 0 100 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:AdafruitGPS-adafruitgps
+# RAPTOR-rescue_AdafruitGPS-adafruitgps
 #
-DEF RAPTOR-rescue:AdafruitGPS-adafruitgps U 0 40 Y Y 1 F N
+DEF RAPTOR-rescue_AdafruitGPS-adafruitgps U 0 40 Y Y 1 F N
 F0 "U" 0 400 50 H V C CNN
-F1 "RAPTOR-rescue:AdafruitGPS-adafruitgps" -350 -450 50 H V C CNN
+F1 "RAPTOR-rescue_AdafruitGPS-adafruitgps" -350 -450 50 H V C CNN
 F2 "" 100 -50 50 H I C CNN
 F3 "" 100 -50 50 H I C CNN
 DRAW
@@ -148,11 +148,11 @@ X PPS 9 700 -150 100 L 50 50 1 1 O
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:Arduino_Analog_Conn
+# RAPTOR-rescue_Arduino_Analog_Conn
 #
-DEF RAPTOR-rescue:Arduino_Analog_Conn P 0 40 Y Y 1 F N
+DEF RAPTOR-rescue_Arduino_Analog_Conn P 0 40 Y Y 1 F N
 F0 "P" 0 -400 50 H V C CNN
-F1 "RAPTOR-rescue:Arduino_Analog_Conn" 150 -50 50 V V C CNN
+F1 "RAPTOR-rescue_Arduino_Analog_Conn" 150 -50 50 V V C CNN
 F2 "" 0 -400 50 H I C CNN
 F3 "" 0 -400 50 H I C CNN
 DRAW
@@ -172,11 +172,11 @@ X ~ A5(SCL) -200 -300 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:Arduino_Digital_01x10_Conn
+# RAPTOR-rescue_Arduino_Digital_01x10_Conn
 #
-DEF RAPTOR-rescue:Arduino_Digital_01x10_Conn P 0 40 Y Y 1 F N
+DEF RAPTOR-rescue_Arduino_Digital_01x10_Conn P 0 40 Y Y 1 F N
 F0 "P" 0 -500 50 H V C CNN
-F1 "RAPTOR-rescue:Arduino_Digital_01x10_Conn" 150 50 50 V V C CNN
+F1 "RAPTOR-rescue_Arduino_Digital_01x10_Conn" 150 50 50 V V C CNN
 F2 "" 0 -500 50 H I C CNN
 F3 "" 0 -500 50 H I C CNN
 DRAW
@@ -204,11 +204,11 @@ X ~ GND -200 200 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:Arduino_Digital_8
+# RAPTOR-rescue_Arduino_Digital_8
 #
-DEF RAPTOR-rescue:Arduino_Digital_8 P 0 40 Y Y 1 F N
+DEF RAPTOR-rescue_Arduino_Digital_8 P 0 40 Y Y 1 F N
 F0 "P" 0 -500 50 H V C CNN
-F1 "RAPTOR-rescue:Arduino_Digital_8" 100 -50 50 V V C CNN
+F1 "RAPTOR-rescue_Arduino_Digital_8" 100 -50 50 V V C CNN
 F2 "" 0 -500 50 H I C CNN
 F3 "" 0 -500 50 H I C CNN
 DRAW
@@ -232,11 +232,11 @@ X ~ 7 -200 300 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:BMP280-bmp280
+# RAPTOR-rescue_BMP280-bmp280
 #
-DEF RAPTOR-rescue:BMP280-bmp280 U 0 40 Y Y 1 F N
+DEF RAPTOR-rescue_BMP280-bmp280 U 0 40 Y Y 1 F N
 F0 "U" -450 350 45 H V L BNN
-F1 "RAPTOR-rescue:BMP280-bmp280" -450 -500 45 H V L BNN
+F1 "RAPTOR-rescue_BMP280-bmp280" -450 -500 45 H V L BNN
 F2 "LGA-8-2.5X2.5" 0 450 20 H I C CNN
 F3 "" 0 0 60 H I C CNN
 DRAW
@@ -251,11 +251,11 @@ X ~CS 7 550 200 100 L 40 40 1 1 B
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:BNO055-bno055
+# RAPTOR-rescue_BNO055-bno055
 #
-DEF RAPTOR-rescue:BNO055-bno055 U 0 40 Y Y 1 F N
+DEF RAPTOR-rescue_BNO055-bno055 U 0 40 Y Y 1 F N
 F0 "U" -450 350 45 H V L BNN
-F1 "RAPTOR-rescue:BNO055-bno055" -450 -500 45 H V L BNN
+F1 "RAPTOR-rescue_BNO055-bno055" -450 -500 45 H V L BNN
 F2 "LGA-8-2.5X2.5" 0 450 20 H I C CNN
 F3 "" 0 0 60 H I C CNN
 DRAW
@@ -269,11 +269,11 @@ X RST 6 550 -300 100 L 40 40 1 1 B
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:CONN_02-SparkFun-Connectors
+# RAPTOR-rescue_CONN_02-SparkFun-Connectors
 #
-DEF RAPTOR-rescue:CONN_02-SparkFun-Connectors J 0 40 N Y 1 L N
+DEF RAPTOR-rescue_CONN_02-SparkFun-Connectors J 0 40 N Y 1 L N
 F0 "J" -200 200 45 H V L BNN
-F1 "RAPTOR-rescue:CONN_02-SparkFun-Connectors" -200 -150 45 H V L BNN
+F1 "RAPTOR-rescue_CONN_02-SparkFun-Connectors" -200 -150 45 H V L BNN
 F2 "1X02" 0 250 20 H I C CNN
 F3 "" 0 0 50 H I C CNN
 F4 "XXX-00000" 0 300 60 H V C CNN
@@ -304,11 +304,11 @@ X 2 2 100 100 100 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:CONN_03-SparkFun-Connectors
+# RAPTOR-rescue_CONN_03-SparkFun-Connectors
 #
-DEF RAPTOR-rescue:CONN_03-SparkFun-Connectors J 0 40 N Y 1 L N
+DEF RAPTOR-rescue_CONN_03-SparkFun-Connectors J 0 40 N Y 1 L N
 F0 "J" -200 300 45 H V L BNN
-F1 "RAPTOR-rescue:CONN_03-SparkFun-Connectors" -200 -150 45 H V L BNN
+F1 "RAPTOR-rescue_CONN_03-SparkFun-Connectors" -200 -150 45 H V L BNN
 F2 "1X03" 0 400 20 H I C CNN
 F3 "" 0 0 50 H I C CNN
 F4 "XXX-00000" 0 450 60 H V C CNN
@@ -345,11 +345,11 @@ X 3 3 100 200 100 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:D24V50F5
+# RAPTOR-rescue_D24V50F5
 #
-DEF RAPTOR-rescue:D24V50F5 U 0 40 Y Y 1 F N
+DEF RAPTOR-rescue_D24V50F5 U 0 40 Y Y 1 F N
 F0 "U" 0 100 50 H V C CNN
-F1 "RAPTOR-rescue:D24V50F5" 0 50 39 H V C CNN
+F1 "RAPTOR-rescue_D24V50F5" 0 50 39 H V C CNN
 F2 "" -50 100 50 H I C CNN
 F3 "" -50 100 50 H I C CNN
 DRAW
@@ -362,11 +362,11 @@ X VOUT 5 -300 -200 100 R 50 39 1 1 w
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:DIODE-1N4148-SparkFun-DiscreteSemi
+# RAPTOR-rescue_DIODE-1N4148-SparkFun-DiscreteSemi
 #
-DEF RAPTOR-rescue:DIODE-1N4148-SparkFun-DiscreteSemi D 0 40 N N 1 L N
+DEF RAPTOR-rescue_DIODE-1N4148-SparkFun-DiscreteSemi D 0 40 N N 1 L N
 F0 "D" -100 100 45 H V L BNN
-F1 "RAPTOR-rescue:DIODE-1N4148-SparkFun-DiscreteSemi" -100 -150 45 H V L BNN
+F1 "RAPTOR-rescue_DIODE-1N4148-SparkFun-DiscreteSemi" -100 -150 45 H V L BNN
 F2 "DIODE-1N4148" 0 200 20 H I C CNN
 F3 "" 0 0 50 H I C CNN
 F4 "DIO-08378" 0 250 60 H V C CNN
@@ -388,11 +388,11 @@ X C C 100 0 0 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:JST_2MM_MALE-SparkFun-Connectors
+# RAPTOR-rescue_JST_2MM_MALE-SparkFun-Connectors
 #
-DEF ~RAPTOR-rescue:JST_2MM_MALE-SparkFun-Connectors J 0 40 N N 1 L N
+DEF ~RAPTOR-rescue_JST_2MM_MALE-SparkFun-Connectors J 0 40 N N 1 L N
 F0 "J" -150 250 45 H V L BNN
-F1 "RAPTOR-rescue:JST_2MM_MALE-SparkFun-Connectors" 100 -200 45 H I L BNN
+F1 "RAPTOR-rescue_JST_2MM_MALE-SparkFun-Connectors" 100 -200 45 H I L BNN
 F2 "JST-2-SMD" 0 350 20 H I C CNN
 F3 "" 0 0 50 H I C CNN
 F4 "CONN-11443" 0 400 60 H V C CNN
@@ -425,11 +425,11 @@ X PAD2 NC2 150 100 0 U 40 40 1 1 B
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:MOSFET-NCH-2N7002PW-SparkFun-DiscreteSemi
+# RAPTOR-rescue_MOSFET-NCH-2N7002PW-SparkFun-DiscreteSemi
 #
-DEF RAPTOR-rescue:MOSFET-NCH-2N7002PW-SparkFun-DiscreteSemi Q 0 40 N N 1 L N
+DEF RAPTOR-rescue_MOSFET-NCH-2N7002PW-SparkFun-DiscreteSemi Q 0 40 N N 1 L N
 F0 "Q" 150 150 45 H V L BNN
-F1 "RAPTOR-rescue:MOSFET-NCH-2N7002PW-SparkFun-DiscreteSemi" 150 -200 45 H V L BNN
+F1 "RAPTOR-rescue_MOSFET-NCH-2N7002PW-SparkFun-DiscreteSemi" 150 -200 45 H V L BNN
 F2 "SOT323" 0 300 20 H I C CNN
 F3 "" 0 0 50 H I C CNN
 F4 "TRANS-11151" 0 350 60 H V C CNN
@@ -466,11 +466,11 @@ X D 3 100 200 100 D 40 40 1 1 B
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:OpenLog-openlog
+# RAPTOR-rescue_OpenLog-openlog
 #
-DEF RAPTOR-rescue:OpenLog-openlog U 0 40 Y Y 1 F N
+DEF RAPTOR-rescue_OpenLog-openlog U 0 40 Y Y 1 F N
 F0 "U" -450 350 45 H V L BNN
-F1 "RAPTOR-rescue:OpenLog-openlog" -450 -500 45 H V L BNN
+F1 "RAPTOR-rescue_OpenLog-openlog" -450 -500 45 H V L BNN
 F2 "LGA-8-2.5X2.5" 0 450 20 H I C CNN
 F3 "" 0 0 60 H I C CNN
 DRAW
@@ -484,11 +484,11 @@ X BLK 6 -550 -200 100 R 40 40 1 1 B
 ENDDRAW
 ENDDEF
 #
-# RAPTOR-rescue:U3V12F12
+# RAPTOR-rescue_U3V12F12
 #
-DEF RAPTOR-rescue:U3V12F12 U 0 40 Y Y 1 F N
+DEF RAPTOR-rescue_U3V12F12 U 0 40 Y Y 1 F N
 F0 "U" 0 250 50 H V C CNN
-F1 "RAPTOR-rescue:U3V12F12" 0 150 50 H V C CNN
+F1 "RAPTOR-rescue_U3V12F12" 0 150 50 H V C CNN
 F2 "" 0 250 50 H I C CNN
 F3 "" 0 250 50 H I C CNN
 DRAW
@@ -499,11 +499,11 @@ X IN 3 -300 0 100 R 50 50 1 1 W
 ENDDRAW
 ENDDEF
 #
-# power:+12V
+# power_+12V
 #
-DEF power:+12V #PWR 0 0 Y Y 1 F P
+DEF power_+12V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power:+12V" 0 140 50 H V C CNN
+F1 "power_+12V" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -514,11 +514,11 @@ X +12V 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# power:+3.3V
+# power_+3.3V
 #
-DEF power:+3.3V #PWR 0 0 Y Y 1 F P
+DEF power_+3.3V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power:+3.3V" 0 140 50 H V C CNN
+F1 "power_+3.3V" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 ALIAS +3.3V
@@ -530,11 +530,11 @@ X +3V3 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# power:+5V
+# power_+5V
 #
-DEF power:+5V #PWR 0 0 Y Y 1 F P
+DEF power_+5V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power:+5V" 0 140 50 H V C CNN
+F1 "power_+5V" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -545,11 +545,11 @@ X +5V 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# power:+7.5V
+# power_+7.5V
 #
-DEF power:+7.5V #PWR 0 0 Y Y 1 F P
+DEF power_+7.5V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power:+7.5V" 0 140 50 H V C CNN
+F1 "power_+7.5V" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -560,11 +560,11 @@ X +7.5V 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# power:GND
+# power_GND
 #
-DEF power:GND #PWR 0 0 Y Y 1 F P
+DEF power_GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -250 50 H I C CNN
-F1 "power:GND" 0 -150 50 H V C CNN
+F1 "power_GND" 0 -150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
