@@ -26,10 +26,10 @@ Environment::Environment()
 /*
  * initializes all sensors, returns false if any initializations fail return false
  */
-bool Environment::init(uint8_t flight_state)
+bool Environment::init(bool set_baseline)
 {
     this->gps->init();
-    if (this->bmp->init(flight_state) && this->bno->init())
+    if (this->bmp->init(set_baseline) && this->bno->init())
         return true;
     else
         return false;
@@ -37,10 +37,10 @@ bool Environment::init(uint8_t flight_state)
 
 /*
  *  updates/queries all sensors, returns false if any fail
- *///Wener
+ */
 bool Environment::update()
 {
-    this->gps->parse_NMEA();
+    this->gps->update();
     if (this->bmp->update() && this->bno->update())
         return true;
     else

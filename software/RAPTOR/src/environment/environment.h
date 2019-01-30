@@ -16,7 +16,7 @@ class Environment
 public:
   Environment(); // constructor
 
-  bool init(uint8_t flight_state);
+  bool init(bool set_baseline);
   bool update();
 
   float correct_alt(uint8_t flight_state);
@@ -27,7 +27,7 @@ public:
   BMP *bmp;
   BNO *bno;
   GPS *gps;
-  elapsedMillis *timeElapsed;
+  elapsedMillis *time_elapsed;
 };
 
 #endif
