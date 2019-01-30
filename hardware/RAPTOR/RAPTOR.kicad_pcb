@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew "(5.0.2)-1")
+(kicad_pcb (version 20171130) (host pcbnew 5.0.2-bee76a0~70~ubuntu18.04.1)
 
   (general
     (thickness 1.6)
@@ -19,10 +19,10 @@
   (layers
     (0 F.Cu signal)
     (31 B.Cu signal)
-    (32 B.Adhes user hide)
+    (32 B.Adhes user)
     (33 F.Adhes user)
     (34 B.Paste user)
-    (35 F.Paste user hide)
+    (35 F.Paste user)
     (36 B.SilkS user)
     (37 F.SilkS user)
     (38 B.Mask user)
@@ -36,7 +36,7 @@
     (46 B.CrtYd user)
     (47 F.CrtYd user)
     (48 B.Fab user)
-    (49 F.Fab user hide)
+    (49 F.Fab user)
   )
 
   (setup
@@ -240,7 +240,7 @@
     (descr "Footprint for the Voltage Regulator")
     (tags Regulator)
     (path /5C3DF905)
-    (fp_text reference U5 (at 0 0 270) (layer F.SilkS)
+    (fp_text reference U5 (at 1.27 -3.81) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value U3V12F12 (at 7.62 -5) (layer F.Fab)
@@ -271,7 +271,7 @@
     (at 201.168 100.965)
     (descr "A footprint for the BMP280 Adafruit Breakout Board")
     (path /5BD31CAC)
-    (fp_text reference U1 (at 0 3.81) (layer F.SilkS)
+    (fp_text reference U1 (at 0 -17.78) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value "BMP280 Breakout" (at 0 -11.43) (layer F.Fab)
