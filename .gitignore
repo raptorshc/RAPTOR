@@ -10,3 +10,5 @@ __pycache__/
 
 #kicad
 *.bck
+*.bak
+*.kicad_pcb-bak
