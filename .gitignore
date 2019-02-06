@@ -1,6 +1,5 @@
 #vscode things
 .vscode
-build/
 
 #don't bloat it
 *.MP4
