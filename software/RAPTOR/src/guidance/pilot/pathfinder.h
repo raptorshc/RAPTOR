@@ -12,29 +12,29 @@
 
 struct Coordinate
 {
-    double latitude, longitude;
+  double latitude, longitude;
 };
 
 struct Path
 {
-    Coordinate current, target;
+  Coordinate current, target;
 
-    double lat_vec, long_vec;
-    float angle, distance;
+  double lat_vec, long_vec;
+  float angle, distance;
 };
 
 class Pathfinder
 {
-  public:
-    Pathfinder(Coordinate current, Coordinate target);
+public:
+  Pathfinder(Coordinate current, Coordinate target);
 
-    void find_path(void);
+  void find_path(void);
 
-    float get_angle(void);
-    float get_distance(void);
+  float get_angle(void);
+  float get_distance(void);
 
-  private:
-    Path path;
+private:
+  Path path;
 };
 
 #endif

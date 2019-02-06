@@ -88,7 +88,7 @@ bool Environment::landing_check(void)
 {
     uint8_t counter = 0;
     while (counter++ < 4 && this->bmp->getAltitude() < 15.24) //Altitude converted to meters. =50ft
-    {                                                    // check our altitude 4 times, if we're below 50ft in all of them we're landed
+    {                                                         // check our altitude 4 times, if we're below 50ft in all of them we're landed
         delay(100);
     }
     if (counter < 3)
@@ -107,8 +107,8 @@ bool Environment::cutdown_check(void)
     for (int i = 0; i < 10; i++)
     {
         uint16_t prevAltitude = this->bmp->getAltitude(); //Update previous altitude
-        delay(200);                                  //.2 second delay
-        if (this->bmp->getAltitude() > prevAltitude) //Are we falling (is our current altitude higher or lower than our previous altitude)?
+        delay(200);                                       //.2 second delay
+        if (this->bmp->getAltitude() > prevAltitude)      //Are we falling (is our current altitude higher or lower than our previous altitude)?
         {
             return false; //Ascending
         }

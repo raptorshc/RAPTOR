@@ -23,7 +23,7 @@ public:
 
   bool landing_check(void);
   bool cutdown_check(void);
-  
+
   BMP *bmp;
   BNO *bno;
   GPS *gps;
