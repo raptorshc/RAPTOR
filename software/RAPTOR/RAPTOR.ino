@@ -32,7 +32,7 @@ bool didwake = false;     // whether or not we have woken the pilot yet
  */
 void setup()
 {
-  environment.time_elapsed = 0;
+  *environment.time_elapsed = 0;
 
   /* Buzzer and LEDs */
   pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
@@ -74,9 +74,7 @@ void loop()
   {
   // FS0 [LAUNCH]
   case 0:
-    environment.bmp->update();
-
-    if (environment.bmp->altitude > GROUND_ALT)
+    if (environment.bmp->getAltitude() > GROUND_ALT)
     { // at 50ft (15.24 meters), transition to FS1 [ASCENT]
       flight_state = 1;
       write_EEPROM();
@@ -89,9 +87,7 @@ void loop()
 
   // FS1 [ASCENT]
   case 1:
-    environment.bmp->update();
-
-    if (environment.bmp->altitude > CUTDOWN_ALT)
+    if (environment.bmp->getAltitude() > CUTDOWN_ALT)
     { // at the cutdown altiude perform cutdown, deploy, and transition to FS2 [DESCENT]
       // CUTDOWN
       cutdown();
@@ -103,10 +99,9 @@ void loop()
       }
 
       // PARAFOIL DEPLOY
-      while (environment.bmp->altitude > CUTDOWN_ALT - 3.048)
+      while (environment.bmp->getAltitude() > CUTDOWN_ALT - 3.048)
       { // wait 3 meters to deploy the parafoil
         delay(1);
-        environment.bmp->update();
         print_data();
       }
 
@@ -150,16 +145,14 @@ void loop()
       didwake = true;
     }
 
-    environment.bmp->update();
-
-    fly_time = timeElapsed;
+    fly_time = *environment.time_elapsed;
     if (fly_time > FLY_DELAY)
     {                                    // don't want to constantly call fly
       pilot.fly(environment.gps->angle); // the pilot just needs our current angle to do his calculations
       fly_time = 0;
     }
 
-    if (environment.bmp->altitude < GROUND_ALT)
+    if (environment.bmp->getAltitude() < GROUND_ALT)
     { // at 50ft (15.24 meters), transition to FS3 [LANDED]
       if (environment.landing_check())
       { // make sure that we have landed by checking the altitude constantly
@@ -198,8 +191,8 @@ void print_data()
   /* Let's spray the serial port with a hose of data */
 
   // time, temperature, pressure, altitude,
-  Serial << time_elapsed << F(",") << environment.bmp->temperature << F(",") << environment.bmp->pressure
-         << F(",") << environment.bmp->altitude << F(",");
+  Serial << *environment.time_elapsed << F(",") << environment.bmp->readTemperature() << F(",") << environment.bmp->readPressure()
+         << F(",") << environment.bmp->getAltitude() << F(",");
 
   // latitude, longitude, angle, (gps) altitude,
   Serial << _FLOAT(environment.gps->latitude, 7) << F(",") << _FLOAT(environment.gps->longitude, 7)
@@ -315,4 +308,12 @@ float custom_angle(void)
   float angle = Serial.parseFloat();
   Serial << "\nAngle: " << angle << "\n";
   return angle;
+}
+
+/* 
+ *  interrupt each millisecond to read from the GPS.
+ */
+SIGNAL(TIMER0_COMPA_vect)
+{
+  environment.gps->read();
 }

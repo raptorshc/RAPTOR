@@ -16,7 +16,7 @@ void ContinuousServo::turn(bool reset /*= false*/)
 	delay(10);
 	if (servo == RIGHT)
 	{
-		if (reset)`
+		if (reset)
 			this->writeMicroseconds(CCW);
 		else
 			this->writeMicroseconds(CW); // based on the turn, we will rotate CW or CCW

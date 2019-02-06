@@ -33,7 +33,7 @@ bool BMP::init(bool set_baseline)
 /*
  * might or might not work
  */
-float getAltitude(void)
+float BMP::getAltitude(void)
 {
   return readAltitude(this->baseline);
 }
