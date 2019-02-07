@@ -1,11 +1,12 @@
+#include "Arduino.h"
 #include <SoftwareSerial.h> // This allows it to communicate with the Arduino's Serial Ports
 
-class Openlog()
+class Openlog
 {
     public:
         Openlog();
         void readDisk();
     private:
-        void goToCommandMode(void)
+        void goToCommandMode(void);
         void setupOpenLog(void);
-}
+};
