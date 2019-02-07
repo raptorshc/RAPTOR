@@ -7,10 +7,10 @@
 #include "src/guidance/drivers/solenoid/solenoid.h"
 
 #define GROUND_ALT 15.24  // altitude to transition to FS1 [ASCENT] or FS3 [LANDED], =50ft
-#define CUTDOWN_ALT 304.8 // altitude to transition to FS2 [DESCENT], =1000ft
+#define CUTDOWN_ALT 609.6 // altitude to transition to FS2 [DESCENT], =1000ft
 
-#define TARGET_LONG -86.635738
-#define TARGET_LAT 34.720197 // HARD CODED TARGET COORDINATES
+#define TARGET_LONG -86.633730
+#define TARGET_LAT 34.722988 // HARD CODED TARGET COORDINATES
 
 #define DEPLOY_DELAY 1200 // time to wait between deployment and guidance [ms]
 #define FLY_DELAY 1000    // time to wait between calling fly [ms]
@@ -23,8 +23,6 @@
 Environment environment; // contains all of our sensors in one nice class
 Pilot pilot;             // takes environmental input and makes all decisions regarding flight control
 
-elapsedMillis timeElapsed; // time elapsed in milliseconds
-
 uint8_t flight_state = 0; // current flight state
 long fly_time = 0;        // amount of time passed between flight controlling
 bool didwake = false;     // whether or not we have woken the pilot yet
@@ -34,7 +32,7 @@ bool didwake = false;     // whether or not we have woken the pilot yet
  */
 void setup()
 {
-  timeElapsed = 0;
+  environment.time_elapsed = 0;
 
   /* Buzzer and LEDs */
   pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
@@ -183,18 +181,11 @@ void loop()
     blink_led(2000);
     analogWrite(BZZ_DTA, 0);
 
+    delay(200);
     print_data();
 
     break;
   }
-}
-
-/* 
- *  interrupt each millisecond to read from the GPS.
- */
-SIGNAL(TIMER0_COMPA_vect)
-{
-  environment.gps->read();
 }
 
 /*
@@ -207,7 +198,7 @@ void print_data()
   /* Let's spray the serial port with a hose of data */
 
   // time, temperature, pressure, altitude,
-  Serial << timeElapsed << F(",") << environment.bmp->temperature << F(",") << environment.bmp->pressure
+  Serial << time_elapsed << F(",") << environment.bmp->temperature << F(",") << environment.bmp->pressure
          << F(",") << environment.bmp->altitude << F(",");
 
   // latitude, longitude, angle, (gps) altitude,
