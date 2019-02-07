@@ -4,8 +4,8 @@ class Openlog()
 {
     public:
         Openlog();
-        void Read_Disk();
+        void readDisk();
     private:
-        void Go_To_CommandMode(void)
-        void Setup_OpenLog(void);
+        void goToCommandMode(void)
+        void setupOpenLog(void);
 }

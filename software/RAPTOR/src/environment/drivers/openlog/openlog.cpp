@@ -1,36 +1,36 @@
-// // This came from https://github.com/sparkfun/OpenLog/blob/master/firmware/Arduino_Examples/Example3_ReadFile/Example3_ReadFile.ino
-// #include <SoftwareSerial.h> // This allows it to communicate with the Arduino's Serial Ports
-// //This function pushes OpenLog into command mode
-// void gotoCommandMode(void) {
-//   //Send three control z to enter OpenLog command mode
-//   //Works with Arduino v1.0
-//   OpenLog.write(26);
-//   OpenLog.write(26);
-//   OpenLog.write(26);
+#include "openlog.h"
 
-//   //Wait for OpenLog to respond with '>' to indicate we are in command mode
-//   while(1) {
-//     if(OpenLog.available())
-//       if(OpenLog.read() == '>') break;
-//   }
-// }
+ //This function pushes OpenLog into command mode
+ void gotoCommandMode(void) {
+   //Send three control z to enter OpenLog command mode
+   //Works with Arduino v1.0
+   OpenLog.write(26);
+   OpenLog.write(26);
+   OpenLog.write(26);
 
-// void setupOpenLog(void) {
-//   pinMode(resetOpenLog, OUTPUT);
-//   OpenLog.begin(9600);
+   //Wait for OpenLog to respond with '>' to indicate we are in command mode
+   while(1) {
+     if(OpenLog.available())
+       if(OpenLog.read() == '>') break;
+   }
+ }
 
-//   //Reset OpenLog
-//   digitalWrite(resetOpenLog, LOW);
-//   delay(100);
-//   digitalWrite(resetOpenLog, HIGH);
+ void setupOpenLog(void) {
+   pinMode(resetOpenLog, OUTPUT);
+   OpenLog.begin(9600);
 
-//   //Wait for OpenLog to respond with '<' to indicate it is alive and recording to a file
-//   while(1) {
-//     if(OpenLog.available())
-//       if(OpenLog.read() == '<') break;
-//   }
-// }
-// void readDisk() {
+   //Reset OpenLog
+   digitalWrite(resetOpenLog, LOW);
+   delay(100);
+   digitalWrite(resetOpenLog, HIGH);
+
+   //Wait for OpenLog to respond with '<' to indicate it is alive and recording to a file
+   while(1) {
+     if(OpenLog.available())
+       if(OpenLog.read() == '<') break;
+   }
+ }
+ void readDisk() {
 
 //   //Old way
 //   OpenLog.print("disk");
