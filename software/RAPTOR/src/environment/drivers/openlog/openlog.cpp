@@ -16,7 +16,7 @@ Openlog::Openlog(int rx, int tx) : SoftwareSerial (rx, tx) {
    //Wait for OpenLog to respond with '<' to indicate it is alive and recording to a file
    while (count++ < 5 || !(OpenLog.available() && OpenLog.read() == '<'));
  }
- }
+ 
 
  //This function pushes OpenLog into command mode
  void Openlog::command(void) {
