@@ -1,27 +1,8 @@
 #include "openlog.h"
 
-//Connect TXO of OpenLog to pin 3, RXI to pin 2
-SoftwareSerial OpenLog(3, 2); //Soft RX on 3, Soft TX out on 2
-//SoftwareSerial(rxPin, txPin)
+Openlog::Openlog(int rx, int tx) : SoftwareSerial (rx, tx) {
+   //int resetOpenLog = 4; //This pin resets OpenLog. Connect pin 4 to pin GRN on OpenLog.
 
-int resetOpenLog = 4; //This pin resets OpenLog. Connect pin 4 to pin GRN on OpenLog.
-
- //This function pushes OpenLog into command mode
- void Openlog::goToCommandMode(void) {
-   //Send three control z to enter OpenLog command mode
-   //Works with Arduino v1.0
-   OpenLog.write(26);
-   OpenLog.write(26);
-   OpenLog.write(26);
-
-   //Wait for OpenLog to respond with '>' to indicate we are in command mode
-   while(1) {
-     if(OpenLog.available())
-       if(OpenLog.read() == '>') break;
-   }
- }
-
- void Openlog::setupOpenLog(void) {
    pinMode(resetOpenLog, OUTPUT);
    OpenLog.begin(9600);
 
@@ -30,13 +11,26 @@ int resetOpenLog = 4; //This pin resets OpenLog. Connect pin 4 to pin GRN on Ope
    delay(100);
    digitalWrite(resetOpenLog, HIGH);
 
+   uint8_t count = 0;
+      
    //Wait for OpenLog to respond with '<' to indicate it is alive and recording to a file
-   while(1) {
-     if(OpenLog.available())
-       if(OpenLog.read() == '<') break;
-   }
+   while (count++ < 5 || !(OpenLog.available() && OpenLog.read() == '<'));
  }
- void Openlog::readDisk() {
+ }
+
+ //This function pushes OpenLog into command mode
+ void Openlog::command(void) {
+   //Send three control z to enter OpenLog command mode
+   //Works with Arduino v1.0
+   OpenLog.write(26);
+   OpenLog.write(26);
+   OpenLog.write(26);
+
+   //Wait for OpenLog to respond with '>' to indicate we are in command mode
+   while (count++ < 5 || !(OpenLog.available() && OpenLog.read() == '<'));
+ }
+
+char[] Openlog::read(char *request) {
 
    OpenLog.print("disk");
    OpenLog.write(13); //This is \r
@@ -47,9 +41,5 @@ int resetOpenLog = 4; //This pin resets OpenLog. Connect pin 4 to pin GRN on Ope
 
    //The OpenLog echos the commands we send it by default so we have 'disk\r' sitting 
    //in the RX buffer. Let's try to not print this.
-   while(1) {
-     if(OpenLog.available())
-       if(OpenLog.read() == '\r') break;
-   }  
+   while (count++ < 5 || !(OpenLog.available() && OpenLog.read() == '<'));  
  }
-
