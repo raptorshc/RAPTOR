@@ -1,0 +1,8 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP BNO055
+D Adafruit BNO055 Breakout Board https://www.adafruit.com/product/2472. Symbol adapted from BME280
+K BNO055, IMU
+$ENDCMP
+#
+#End Doc Library
