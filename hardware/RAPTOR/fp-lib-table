@@ -1,0 +1,6 @@
+(fp_lib_table
+  (lib (name RAPTOR_footprints)(type KiCad)(uri /home/sean/Documents/shc/RAPTOR/hardware/RAPTOR_footprints.pretty)(options "")(descr ""))
+  (lib (name Connectors)(type KiCad)(uri ${KIPRJMOD}/Connectors.pretty)(options "")(descr ""))
+  (lib (name Silicon-Standard)(type KiCad)(uri ${KIPRJMOD}/Silicon-Standard.pretty)(options "")(descr ""))
+  (lib (name Silicon-Custom)(type KiCad)(uri ${KIPRJMOD}/Silicon-Custom.pretty)(options "")(descr ""))
+)
