@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source "E:\\UAH\\Space Hardware Club\\RAPTOR\\Electrical\\RAPTOR\\hardware\\RAPTOR\\RAPTOR.sch")
-    (date "2/27/2019 7:50:01 PM")
+    (date "2/27/2019 8:37:40 PM")
     (tool "Eeschema (5.0.1)-3")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -17,7 +17,7 @@
   (components
     (comp (ref P1)
       (value Power)
-      (footprint Socket_Arduino_Uno:Socket_Strip_Arduino_1x08)
+      (footprint RAPTOR_footprints:Socket_Strip_Arduino_1x08)
       (libsource (lib Connector_Generic) (part Conn_01x08) (description "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)"))
       (sheetpath (names /) (tstamps /))
       (tstamp 56D70129))
