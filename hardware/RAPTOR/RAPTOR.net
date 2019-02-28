@@ -1,8 +1,8 @@
 (export (version D)
   (design
-    (source /home/sean/Documents/shc/RAPTOR/hardware/RAPTOR/RAPTOR.sch)
-    (date "Wed 27 Feb 2019 09:25:23 PM CST")
-    (tool "Eeschema 5.0.2-bee76a0~70~ubuntu18.04.1")
+    (source "E:\\UAH\\Space Hardware Club\\RAPTOR\\Electrical\\RAPTOR\\hardware\\RAPTOR\\RAPTOR.sch")
+    (date "2/27/2019 10:16:08 PM")
+    (tool "Eeschema (5.0.1)-3")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
         (title "RAPTOR Schematic")
@@ -17,7 +17,7 @@
   (components
     (comp (ref P1)
       (value Power)
-      (footprint Socket_Arduino_Uno:Socket_Strip_Arduino_1x08)
+      (footprint RAPTOR_footprints:Socket_Strip_Arduino_1x08)
       (libsource (lib Connector_Generic) (part Conn_01x08) (description "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)"))
       (sheetpath (names /) (tstamps /))
       (tstamp 56D70129))
@@ -134,7 +134,7 @@
       (tstamp 5C415339))
     (comp (ref J2)
       (value SOLP_CONN)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -159,7 +159,7 @@
       (tstamp 5C55625B))
     (comp (ref J1)
       (value SOLC_CONN)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -199,7 +199,7 @@
       (tstamp 5C54A1C7))
     (comp (ref J4)
       (value CONN_LED_FIX)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -207,7 +207,7 @@
       (tstamp 5C5736A6))
     (comp (ref J5)
       (value CONN_SOLP_LED)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -215,7 +215,7 @@
       (tstamp 5C5D41DD))
     (comp (ref J6)
       (value CONN_SOLC_LED)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -223,7 +223,7 @@
       (tstamp 5C5E2587))
     (comp (ref J12)
       (value SRVOR_CONN)
-      (footprint Connectors:1X03)
+      (footprint RAPTOR_footprints:Molex-MOTOR)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_03-SparkFun-Connectors) (description ""))
@@ -231,7 +231,7 @@
       (tstamp 5C6A99EC))
     (comp (ref J11)
       (value SRVOL_CONN)
-      (footprint Connectors:1X03)
+      (footprint RAPTOR_footprints:Molex-MOTOR)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_03-SparkFun-Connectors) (description ""))
@@ -286,7 +286,7 @@
       (tstamp 5C45C6C5))
     (comp (ref J13)
       (value HOTWIRE_CONN)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -302,7 +302,7 @@
       (tstamp 5C476CBF))
     (comp (ref J10)
       (value EXT_LED3)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -310,7 +310,7 @@
       (tstamp 5C53EBAE))
     (comp (ref J9)
       (value EXT_LED2)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -318,7 +318,7 @@
       (tstamp 5C54F806))
     (comp (ref J8)
       (value EXT_LED1)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -326,7 +326,7 @@
       (tstamp 5C557DC0))
     (comp (ref J7)
       (value EXT_LED0)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -334,7 +334,7 @@
       (tstamp 5C5688B4))
     (comp (ref J15)
       (value EEPROM_BTN_CONN)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -342,7 +342,7 @@
       (tstamp 5C767459))
     (comp (ref J18)
       (value CONN_BUZZER)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -350,7 +350,7 @@
       (tstamp 5C4A4245))
     (comp (ref J17)
       (value SOLP_SW_CONN)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -358,7 +358,7 @@
       (tstamp 5C787D91))
     (comp (ref J16)
       (value SOLC_SW_CONN)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -366,7 +366,7 @@
       (tstamp 5C7915D5))
     (comp (ref J14)
       (value RBF_CONN)
-      (footprint Connectors:1X02)
+      (footprint RAPTOR_footprints:Molex-2pin)
       (fields
         (field (name Field4) XXX-00000))
       (libsource (lib RAPTOR-rescue) (part CONN_02-SparkFun-Connectors) (description ""))
@@ -647,9 +647,9 @@
         (pin (num 3) (name IN) (type power_in)))))
   (libraries
     (library (logical Connector_Generic)
-      (uri /usr/share/kicad/library/Connector_Generic.lib))
+      (uri "C:\\Program Files\\KiCad\\share\\kicad\\library/Connector_Generic.lib"))
     (library (logical RAPTOR-rescue)
-      (uri /home/sean/Documents/shc/RAPTOR/hardware/RAPTOR/RAPTOR-rescue.lib)))
+      (uri "E:\\UAH\\Space Hardware Club\\RAPTOR\\Electrical\\RAPTOR\\hardware\\RAPTOR/RAPTOR-rescue.lib")))
   (nets
     (net (code 1) (name /EEPROM_BTN)
       (node (ref P4) (pin 7))
