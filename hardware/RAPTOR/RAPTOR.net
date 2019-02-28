@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source "E:\\UAH\\Space Hardware Club\\RAPTOR\\Electrical\\RAPTOR\\hardware\\RAPTOR\\RAPTOR.sch")
-    (date "2/27/2019 10:16:08 PM")
+    (date "2/27/2019 10:45:50 PM")
     (tool "Eeschema (5.0.1)-3")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -175,7 +175,7 @@
       (tstamp 5C3E91F1))
     (comp (ref R5)
       (value 4.7KOHM-0603-1_10W-1%)
-      (footprint Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal)
+      (footprint RAPTOR_footprints:Resistor)
       (fields
         (field (name Field4) RES-07857))
       (libsource (lib RAPTOR-rescue) (part 4.7KOHM-0603-1_10W-1%-SparkFun-Resistors) (description ""))
@@ -183,7 +183,7 @@
       (tstamp 5C539DD3))
     (comp (ref R7)
       (value 4.7KOHM-0603-1_10W-1%)
-      (footprint Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal)
+      (footprint RAPTOR_footprints:Resistor)
       (fields
         (field (name Field4) RES-07857))
       (libsource (lib RAPTOR-rescue) (part 4.7KOHM-0603-1_10W-1%-SparkFun-Resistors) (description ""))
@@ -191,7 +191,7 @@
       (tstamp 5C542035))
     (comp (ref R6)
       (value 4.7KOHM-0603-1_10W-1%)
-      (footprint Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal)
+      (footprint RAPTOR_footprints:Resistor)
       (fields
         (field (name Field4) RES-07857))
       (libsource (lib RAPTOR-rescue) (part 4.7KOHM-0603-1_10W-1%-SparkFun-Resistors) (description ""))
@@ -245,7 +245,7 @@
       (tstamp 5C49E003))
     (comp (ref R4)
       (value 100OHM-0603-1_10W-1%)
-      (footprint Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal)
+      (footprint RAPTOR_footprints:Resistor)
       (fields
         (field (name Field4) RES-07863))
       (libsource (lib RAPTOR-rescue) (part 100OHM-0603-1_10W-1%-SparkFun-Resistors) (description ""))
@@ -253,7 +253,7 @@
       (tstamp 5C409EAA))
     (comp (ref R3)
       (value 100OHM-0603-1_10W-1%)
-      (footprint Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal)
+      (footprint RAPTOR_footprints:Resistor)
       (fields
         (field (name Field4) RES-07863))
       (libsource (lib RAPTOR-rescue) (part 100OHM-0603-1_10W-1%-SparkFun-Resistors) (description ""))
@@ -261,7 +261,7 @@
       (tstamp 5C409F6D))
     (comp (ref R2)
       (value 100OHM-0603-1_10W-1%)
-      (footprint Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal)
+      (footprint RAPTOR_footprints:Resistor)
       (fields
         (field (name Field4) RES-07863))
       (libsource (lib RAPTOR-rescue) (part 100OHM-0603-1_10W-1%-SparkFun-Resistors) (description ""))
@@ -269,7 +269,7 @@
       (tstamp 5C411D44))
     (comp (ref R1)
       (value 20OHM-0603-1_10W-1%)
-      (footprint Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal)
+      (footprint RAPTOR_footprints:Resistor)
       (fields
         (field (name Field4) RES-07862))
       (libsource (lib RAPTOR-rescue) (part 20OHM-0603-1_10W-1%-SparkFun-Resistors) (description ""))
@@ -294,7 +294,7 @@
       (tstamp 5C45C6DE))
     (comp (ref R8)
       (value 4.7KOHM-0603-1_10W-1%)
-      (footprint Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal)
+      (footprint RAPTOR_footprints:Resistor)
       (fields
         (field (name Field4) RES-07857))
       (libsource (lib RAPTOR-rescue) (part 4.7KOHM-0603-1_10W-1%-SparkFun-Resistors) (description ""))
