@@ -1,8 +1,8 @@
 (export (version D)
   (design
-    (source "E:\\UAH\\Space Hardware Club\\RAPTOR\\Electrical\\RAPTOR\\hardware\\RAPTOR\\RAPTOR.sch")
-    (date "2/27/2019 8:37:40 PM")
-    (tool "Eeschema (5.0.1)-3")
+    (source /home/sean/Documents/shc/RAPTOR/hardware/RAPTOR/RAPTOR.sch)
+    (date "Wed 27 Feb 2019 09:25:23 PM CST")
+    (tool "Eeschema 5.0.2-bee76a0~70~ubuntu18.04.1")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
         (title "RAPTOR Schematic")
@@ -17,7 +17,7 @@
   (components
     (comp (ref P1)
       (value Power)
-      (footprint RAPTOR_footprints:Socket_Strip_Arduino_1x08)
+      (footprint Socket_Arduino_Uno:Socket_Strip_Arduino_1x08)
       (libsource (lib Connector_Generic) (part Conn_01x08) (description "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)"))
       (sheetpath (names /) (tstamps /))
       (tstamp 56D70129))
@@ -93,7 +93,7 @@
       (tstamp 5BDE25E6))
     (comp (ref Q1)
       (value MOSFET-NCH-STQ2NK60ZR-AP)
-      (footprint Silicon-Standard:TO-92)
+      (footprint RAPTOR_footprints:MOSFET)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
         (field (name Field4) TRANS-11151))
@@ -102,7 +102,7 @@
       (tstamp 5BE8A581))
     (comp (ref Q3)
       (value MOSFET-NCH-STQ2NK60ZR-AP)
-      (footprint Silicon-Standard:TO-92)
+      (footprint RAPTOR_footprints:MOSFET)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
         (field (name Field4) TRANS-11151))
@@ -111,7 +111,7 @@
       (tstamp 5BEB292C))
     (comp (ref Q4)
       (value MOSFET-NCH-STQ2NK60ZR-AP)
-      (footprint Silicon-Standard:TO-92)
+      (footprint RAPTOR_footprints:MOSFET)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
         (field (name Field4) TRANS-11151))
@@ -142,7 +142,7 @@
       (tstamp 5C4D5A1A))
     (comp (ref Q2)
       (value MOSFET-NCH-STQ2NK60ZR-AP)
-      (footprint Silicon-Standard:TO-92)
+      (footprint RAPTOR_footprints:MOSFET)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
         (field (name Field4) TRANS-11151))
@@ -277,7 +277,7 @@
       (tstamp 5C41AD57))
     (comp (ref Q5)
       (value MOSFET-NCH-STQ2NK60ZR-AP)
-      (footprint Silicon-Standard:TO-92)
+      (footprint RAPTOR_footprints:MOSFET)
       (datasheet https://www.diodes.com/assets/Datasheets/ds11303.pdf)
       (fields
         (field (name Field4) TRANS-11151))
@@ -647,9 +647,9 @@
         (pin (num 3) (name IN) (type power_in)))))
   (libraries
     (library (logical Connector_Generic)
-      (uri "C:\\Program Files\\KiCad\\share\\kicad\\library/Connector_Generic.lib"))
+      (uri /usr/share/kicad/library/Connector_Generic.lib))
     (library (logical RAPTOR-rescue)
-      (uri "E:\\UAH\\Space Hardware Club\\RAPTOR\\Electrical\\RAPTOR\\hardware\\RAPTOR/RAPTOR-rescue.lib")))
+      (uri /home/sean/Documents/shc/RAPTOR/hardware/RAPTOR/RAPTOR-rescue.lib)))
   (nets
     (net (code 1) (name /EEPROM_BTN)
       (node (ref P4) (pin 7))
