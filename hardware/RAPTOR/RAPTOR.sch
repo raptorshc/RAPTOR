@@ -1436,18 +1436,6 @@ F 4 "XXX-00000" H 8572 4134 60  0001 R CNN "Field4"
 $EndComp
 Wire Wire Line
 	8700 3700 8700 4000
-$Comp
-L RAPTOR-rescue:CONN_03-SparkFun-Connectors J16
-U 1 1 5C785495
-P 9450 5350
-F 0 "J16" V 9200 5450 45  0000 C CNN
-F 1 "SOLC_SW_CONN" V 9100 5450 45  0000 C CNN
-F 2 "Connectors:1X03" H 9450 5750 20  0001 C CNN
-F 3 "https://omronfs.omron.com/en_US/ecb/products/pdf/en-d2fs.pdf" H 9450 5350 50  0001 C CNN
-F 4 "XXX-00000" H 9406 5681 60  0001 C CNN "Field4"
-	1    9450 5350
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	8700 4250 8700 4300
 Wire Wire Line
@@ -1461,40 +1449,14 @@ Wire Wire Line
 Wire Wire Line
 	9250 5450 9250 5700
 Connection ~ 9250 5700
-NoConn ~ 9350 5550
-$Comp
-L RAPTOR-rescue:CONN_03-SparkFun-Connectors J17
-U 1 1 5C7DB3E4
-P 10050 3950
-F 0 "J17" V 9800 4050 45  0000 C CNN
-F 1 "SOLP_SW_CONN" V 9700 4050 45  0000 C CNN
-F 2 "Connectors:1X03" H 10050 4350 20  0001 C CNN
-F 3 "https://omronfs.omron.com/en_US/ecb/products/pdf/en-d2fs.pdf" H 10050 3950 50  0001 C CNN
-F 4 "XXX-00000" H 10006 4281 60  0001 C CNN "Field4"
-	1    10050 3950
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	9950 3950 9850 3950
 Wire Wire Line
 	9950 4050 9850 4050
-NoConn ~ 9950 4150
 Wire Wire Line
 	9850 4050 9850 4300
 Wire Wire Line
 	9850 3700 9850 3950
-$Comp
-L RAPTOR-rescue:CONN_03-SparkFun-Connectors J14
-U 1 1 5C7F97C7
-P 3500 3050
-F 0 "J14" V 3250 3150 45  0000 C CNN
-F 1 "RBF_CONN" H 3400 3350 45  0000 C CNN
-F 2 "Connectors:1X03" H 3500 3450 20  0001 C CNN
-F 3 "https://omronfs.omron.com/en_US/ecb/products/pdf/en-d2fs.pdf" H 3500 3050 50  0001 C CNN
-F 4 "XXX-00000" H 3456 3381 60  0001 C CNN "Field4"
-	1    3500 3050
-	0    1    1    0   
-$EndComp
 NoConn ~ 3700 3150
 Wire Wire Line
 	3500 3150 3500 3200
@@ -1557,4 +1519,40 @@ Wire Wire Line
 	3500 5100 3500 5250
 Wire Wire Line
 	3500 5350 3500 5550
+$Comp
+L RAPTOR-rescue:CONN_02-SparkFun-Connectors J?
+U 1 1 5C787D91
+P 10050 3950
+F 0 "J?" H 9822 3905 45  0000 R CNN
+F 1 "SOLP_SW_CONN" H 9822 3989 45  0000 R CNN
+F 2 "Connectors:1X02" H 10050 4200 20  0001 C CNN
+F 3 "" H 10050 3950 50  0001 C CNN
+F 4 "XXX-00000" H 9822 4084 60  0001 R CNN "Field4"
+	1    10050 3950
+	-1   0    0    1   
+$EndComp
+$Comp
+L RAPTOR-rescue:CONN_02-SparkFun-Connectors J?
+U 1 1 5C7915D5
+P 9450 5350
+F 0 "J?" H 9222 5305 45  0000 R CNN
+F 1 "SOLC_SW_CONN" H 9222 5389 45  0000 R CNN
+F 2 "Connectors:1X02" H 9450 5600 20  0001 C CNN
+F 3 "" H 9450 5350 50  0001 C CNN
+F 4 "XXX-00000" H 9222 5484 60  0001 R CNN "Field4"
+	1    9450 5350
+	-1   0    0    1   
+$EndComp
+$Comp
+L RAPTOR-rescue:CONN_02-SparkFun-Connectors J?
+U 1 1 5C79C3FE
+P 3500 3050
+F 0 "J?" H 3272 3005 45  0000 R CNN
+F 1 "RBF_CONN" V 3250 3400 45  0000 R CNN
+F 2 "Connectors:1X02" H 3500 3300 20  0001 C CNN
+F 3 "" H 3500 3050 50  0001 C CNN
+F 4 "XXX-00000" H 3272 3184 60  0001 R CNN "Field4"
+	1    3500 3050
+	0    1    1    0   
+$EndComp
 $EndSCHEMATC
