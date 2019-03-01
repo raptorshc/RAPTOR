@@ -1,4 +1,4 @@
-(module BMP280 (layer F.Cu) (tedit 5C776BDB)
+(module BMP280 (layer F.Cu) (tedit 5C78B112)
   (descr "A footprint for the BMP280 Adafruit Breakout Board")
   (fp_text reference U1 (at 0 -17.78) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
