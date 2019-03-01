@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew "(5.0.2)-1")
+(kicad_pcb (version 20171130) (host pcbnew 5.0.2-bee76a0~70~ubuntu18.04.1)
 
   (general
     (thickness 1.6)
@@ -9,7 +9,7 @@
     (nets 62)
   )
 
-  (page A4)
+  (page USLetter)
   (title_block
     (title "RAPTOR PCB")
     (date 2019-01-23)
@@ -1682,7 +1682,7 @@
       (net 23 "Net-(J14-Pad1)") (solder_mask_margin 0.1016))
   )
 
-  (module RAPTOR_footprints:Molex-2pin (layer F.Cu) (tedit 5C77634A) (tstamp 5C90E8A7)
+  (module RAPTOR_footprints:Molex-2pin (layer F.Cu) (tedit 5C77634A) (tstamp 5C858583)
     (at 170.688 117.475)
     (descr "PLATED THROUGH HOLE")
     (tags "PLATED THROUGH HOLE")
