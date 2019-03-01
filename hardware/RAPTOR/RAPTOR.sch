@@ -410,14 +410,10 @@ F 3 "https://learn.adafruit.com/adafruit-ultimate-gps" H 1600 4400 50  0001 C CN
 	1    1500 4450
 	1    0    0    -1  
 $EndComp
-Text Label 2250 3500 0    50   ~ 0
+Text Label 2400 3750 0    50   ~ 0
 SD_TX
-Wire Wire Line
-	1900 3500 2250 3500
-Text Label 2250 3100 0    50   ~ 0
+Text Label 2400 2850 0    50   ~ 0
 SD_RX
-Wire Wire Line
-	1900 3100 2250 3100
 $Comp
 L power:GND #PWR0105
 U 1 1 5BDE53C7
@@ -1555,4 +1551,34 @@ F 4 "XXX-00000" H 3272 3184 60  0001 R CNN "Field4"
 	1    3500 3050
 	0    1    1    0   
 $EndComp
+$Comp
+L Switch:SW_Push_Open SW1
+U 1 1 5C795BE5
+P 2200 3100
+F 0 "SW1" H 2200 3315 50  0000 C CNN
+F 1 "SW_Push_Open" H 2200 3224 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm" H 2200 3300 50  0001 C CNN
+F 3 "" H 2200 3300 50  0001 C CNN
+	1    2200 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1900 3100 2000 3100
+$Comp
+L Switch:SW_Push_Open SW2
+U 1 1 5C7B1E8A
+P 2200 3500
+F 0 "SW2" H 2200 3715 50  0000 C CNN
+F 1 "SW_Push_Open" H 2200 3624 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm" H 2200 3700 50  0001 C CNN
+F 3 "" H 2200 3700 50  0001 C CNN
+	1    2200 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1900 3500 2000 3500
+Wire Wire Line
+	2400 3500 2400 3750
+Wire Wire Line
+	2400 3100 2400 2850
 $EndSCHEMATC
