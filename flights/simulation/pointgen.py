@@ -1,4 +1,3 @@
-
 '''
 Generates possible location inputs for Skynet to analyze,
 currently prints in the format <area>(distance), then gives
@@ -8,6 +7,7 @@ Author: Sean Widmier
 '''
 import math
 import random
+
 
 class PointGenerator:
     def __init__(self):
@@ -21,7 +21,7 @@ class PointGenerator:
         self.points["longs"].append(-86.640948)
         self.points["lats"].append(34.722427)  # set to huntsville's location
 
-        for i in range(1, numpoints+1):
+        for i in range(1, numpoints + 1):
             self.points["longs"].append(PointGenerator.rand_long())
             # generate a random coordinate
             self.points["lats"].append(PointGenerator.rand_lat())
@@ -63,7 +63,7 @@ class PointGenerator:
     @staticmethod
     # currently the first arg (area) has a weight of .25, the second arg (distance) an inverse weight
     def calc_weight(*args):
-        return (args[0]*.25) * args[1]**-1
+        return (args[0] * .25) * args[1] ** -1
 
     @staticmethod
     def find_vector(initial, final):
@@ -71,7 +71,7 @@ class PointGenerator:
 
     @staticmethod
     def vector_mag(lat, long):
-        return math.sqrt(lat**2 + long**2)
+        return math.sqrt(lat ** 2 + long ** 2)
 
     @staticmethod
     def rand_lat():

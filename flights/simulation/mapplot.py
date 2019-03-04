@@ -40,9 +40,11 @@ class MapPlotter():
             else:
                 plt.plot([self.coordinates["longs"][0], self.coordinates["longs"][i]],
                          [self.coordinates["lats"][0], self.coordinates["lats"][i]],
-                         color='blue', linewidth=0.5, zorder=1, transform=ccrs.Geodetic())  # plot the initial point to a location
+                         color='blue', linewidth=0.5, zorder=1,
+                         transform=ccrs.Geodetic())  # plot the initial point to a location
 
-                plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],  # scatter the location seperately
+                plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],
+                            # scatter the location seperately
                             color='blue', zorder=2, transform=ccrs.Geodetic())
 
     def plot_path(self):
@@ -51,12 +53,14 @@ class MapPlotter():
                     color='red', zorder=3, transform=ccrs.Geodetic())
 
         for i in range(1, len(self.coordinates["longs"])):
-            plt.plot([self.coordinates["longs"][i-1], self.coordinates["longs"][i]],
-                     [self.coordinates["lats"][i-1], self.coordinates["lats"][i]],
-                     color='blue', linewidth=0.5, zorder=1, transform=ccrs.Geodetic())  # plot path from the previous point to the current
+            plt.plot([self.coordinates["longs"][i - 1], self.coordinates["longs"][i]],
+                     [self.coordinates["lats"][i - 1], self.coordinates["lats"][i]],
+                     color='blue', linewidth=0.5, zorder=1,
+                     transform=ccrs.Geodetic())  # plot path from the previous point to the current
 
             # print(f'Plotting: {self.coordinates["longs"][i]}, {self.coordinates["lats"][i]}')
-            plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],  # scatter the current location seperately
+            plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],
+                        # scatter the current location seperately
                         color='blue', zorder=2, transform=ccrs.Geodetic())
 
     def show(self, filename):
@@ -65,14 +69,16 @@ class MapPlotter():
 
     @staticmethod
     def find_extent(coordinates):
-        extent = [coordinates["longs"][0], coordinates["longs"][0], coordinates["lats"][0], coordinates["lats"][0]] # x0, x1, y0, y1
+        extent = [coordinates["longs"][0], coordinates["longs"][0], coordinates["lats"][0],
+                  coordinates["lats"][0]]  # x0, x1, y0, y1
         for i in range(len(coordinates["longs"])):
-            if coordinates["longs"][i] < extent[0]: # bottom left
+            if coordinates["longs"][i] < extent[0]:  # bottom left
                 extent[0] = coordinates["longs"][i] - 0.01
-            if coordinates["longs"][i] > extent[1]: # top right
+            if coordinates["longs"][i] > extent[1]:  # top right
                 extent[1] = coordinates["longs"][i] + 0.01
-            if coordinates["lats"][i] < extent[2]: # bottom left
+            if coordinates["lats"][i] < extent[2]:  # bottom left
                 extent[2] = coordinates["lats"][i] - 0.01
-            if coordinates["lats"][i] > extent[3]: # top right
+            if coordinates["lats"][i] > extent[3]:  # top right
                 extent[3] = coordinates["lats"][i] + 0.01
+
         return extent

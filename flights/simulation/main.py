@@ -1,7 +1,6 @@
 import mapplot
 import pointgen
 
-
 # Reading an excel file using Python
 import xlrd
 
@@ -12,10 +11,12 @@ def main():
     sheet = wb.sheet_by_index(0)
 
     data = {"longs": [], "lats": []}
-    for i in range(1,sheet.nrows):
-        if (float(sheet.cell_value(i, 4)), float(sheet.cell_value(i, 5))) != (0.0,0.0): # don't include any (0.0, 0.0) points in the list
+    for i in range(1, sheet.nrows):
+        if (float(sheet.cell_value(i, 4)), float(sheet.cell_value(i, 5))) != (
+        0.0, 0.0):  # don't include any (0.0, 0.0) points in the list
             data["lats"].append(float(sheet.cell_value(i, 4)))
-            data["longs"].append(float(sheet.cell_value(i, 5))*-1) # longitude is stored in positive, needs to be negative for USA
+            data["longs"].append(
+                float(sheet.cell_value(i, 5)) * -1)  # longitude is stored in positive, needs to be negative for USA
 
     with open("generated-ouputs.txt", "w") as f:
         for i in range(5):
@@ -35,5 +36,7 @@ def main():
     mpp.show("path.png")
 
     print("Done!")
+
+
 if __name__ == "__main__":
     main()
