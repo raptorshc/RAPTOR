@@ -1,0 +1,8 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP OpenLog
+D Adafruit BMP280 Breakout https://www.adafruit.com/product/2651. Symbol adapted from BME280.
+K PROD_ID:IC-13090
+$ENDCMP
+#
+#End Doc Library
