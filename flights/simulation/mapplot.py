@@ -15,7 +15,8 @@ class MapPlotter():
         ax = plt.axes(projection=self.request.crs)
 
         # assume we're near to huntsville
-        ax.set_extent([-87.6073, -85.573, 34.1928, 35.2612])
+        extent = MapPlotter.find_extent(self.coordinates)
+        ax.set_extent(extent)
         ax.add_image(self.request, 10, interpolation='bilinear', zorder=0)
 
         gl = ax.gridlines(draw_labels=True, alpha=0.2)
@@ -24,6 +25,7 @@ class MapPlotter():
         gl.yformatter = LATITUDE_FORMATTER
 
     def plot_locations(self, best):
+        print(f'init long: {self.coordinates["longs"][0]}, init lat: {self.coordinates["lats"][0]}')
         plt.scatter(self.coordinates["longs"][0], self.coordinates["lats"][0],  # put our initial location in red
                     color='red', zorder=2, transform=ccrs.Geodetic())
 
@@ -44,18 +46,33 @@ class MapPlotter():
                             color='blue', zorder=2, transform=ccrs.Geodetic())
 
     def plot_path(self):
-        print(f"\n init long: {self.coordinates["longs"][0]}, init lat: {self.coordinates["lats"][0]}")
+        print(f'init long: {self.coordinates["longs"][0]}, init lat: {self.coordinates["lats"][0]}')
         plt.scatter(self.coordinates["longs"][0], self.coordinates["lats"][0],  # put our initial location in red
-                    color='red', zorder=2, transform=ccrs.Geodetic())
+                    color='red', zorder=3, transform=ccrs.Geodetic())
 
         for i in range(1, len(self.coordinates["longs"])):
             plt.plot([self.coordinates["longs"][i-1], self.coordinates["longs"][i]],
                      [self.coordinates["lats"][i-1], self.coordinates["lats"][i]],
                      color='blue', linewidth=0.5, zorder=1, transform=ccrs.Geodetic())  # plot path from the previous point to the current
 
+            print(f'Plotting: {self.coordinates["longs"][i]}, {self.coordinates["lats"][i]}')
             plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],  # scatter the current location seperately
                         color='blue', zorder=2, transform=ccrs.Geodetic())
 
     def show(self, filename):
         plt.savefig(filename)
         plt.show()
+
+    @staticmethod
+    def find_extent(coordinates):
+        extent = [coordinates["longs"][0], coordinates["longs"][0], coordinates["lats"][0], coordinates["lats"][0]] # x0, x1, y0, y1
+        for i in range(len(coordinates["longs"])):
+            if coordinates["longs"][i] < extent[0]: # bottom left
+                extent[0] = coordinates["longs"][i]
+            if coordinates["longs"][i] > extent[1]: # top right
+                extent[1] = coordinates["longs"][i]
+            if coordinates["lats"][i] < extent[2]: # bottom left
+                extent[2] = coordinates["lats"][i]
+            if coordinates["lats"][i] > extent[3]: # top right
+                extent[3] = coordinates["lats"][i]
+        return extent

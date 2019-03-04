@@ -9,7 +9,6 @@ Author: Sean Widmier
 import math
 import random
 
-
 class PointGenerator:
     def __init__(self):
         self.points = {"longs": [], "lats": []}
@@ -44,13 +43,13 @@ class PointGenerator:
                 PointGenerator.calc_weight(area, distance)
             ]
 
-    def __repr__(self):
+    def __str__(self):
         res = ""
         for x in self.vectors:
             # print location #, area, and distance
             res += f"{x}: <{self.vectors[x][0]:.3f}>({self.vectors[x][1]:.3f})\n"
 
-        res += f"\nExpected output: {self.find_best()}\n"
+        res += f"Expected output: {self.find_best()}\n"
         return res
 
     def find_best(self):
