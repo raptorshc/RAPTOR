@@ -24,12 +24,12 @@ def main():
             print(gen)
             f.write(gen.__str__())
 
-    # print("Generating locations map.")
-    # mpl = mapplot.MapPlotter(gen.points)
-    # mpl.plot_locations(int(gen.find_best()))
-    # mpl.show("locations.png")
+    print("Generating locations map..")
+    mpl = mapplot.MapPlotter(gen.points)
+    mpl.plot_locations(int(gen.find_best()))
+    mpl.show("locations.png")
 
-    print("Generating path map.")
+    print("Generating path map..")
     mpp = mapplot.MapPlotter(gen.points)
     mpp.plot_path()
     mpp.show("path.png")
