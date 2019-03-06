@@ -11,7 +11,7 @@ class MapPlotter():
 
         self.request = cimgt.GoogleTiles()
 
-        plt.switch_backend('Agg')
+        # plt.switch_backend('Agg')
         ax = plt.axes(projection=self.request.crs)
 
         # find extent and plot using that
@@ -42,9 +42,8 @@ class MapPlotter():
                          [self.coordinates["lats"][0], self.coordinates["lats"][i]],
                          color='blue', linewidth=0.5, zorder=1,
                          transform=ccrs.Geodetic())  # plot the initial point to a location
-
+                # scatter the location separately
                 plt.scatter(self.coordinates["longs"][i], self.coordinates["lats"][i],
-                            # scatter the location seperately
                             color='blue', zorder=2, transform=ccrs.Geodetic())
 
     def plot_path(self):
@@ -64,13 +63,14 @@ class MapPlotter():
                         color='blue', zorder=2, transform=ccrs.Geodetic())
 
     def show(self, filename):
-        plt.savefig(filename, dpi=300)
+        plt.savefig(filename, dpi=225)
         plt.show()
 
     @staticmethod
     def find_extent(coordinates):
         extent = [coordinates["longs"][0], coordinates["longs"][0], coordinates["lats"][0],
                   coordinates["lats"][0]]  # x0, x1, y0, y1
+
         for i in range(len(coordinates["longs"])):
             if coordinates["longs"][i] < extent[0]:  # bottom left
                 extent[0] = coordinates["longs"][i] - 0.01
