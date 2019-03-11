@@ -5,6 +5,7 @@
 */
 #include "pilot.h"
 #include <stdio.h>
+#include <Arduino.h>
 
 #define SRVOR_DTA 6 // Right servo
 #define SRVOL_DTA 5 // Left servo

@@ -1,4 +1,5 @@
 #include "raptor.h"
+#include <Streaming.h> // http://arduiniana.org/libraries/streaming/
 
 /* 
  * Arduino setup function, first function to be run.
@@ -13,17 +14,23 @@ Raptor::Raptor()
 
     Serial.begin(9600);
 
+    eeprom = new Prom();
     pinMode(SET_BTN, OUTPUT);
     if (!digitalRead(SET_BTN))
     {
-        read_EEPROM();
+        Serial << "Read EEPROM\n";
+        eeprom->read_state(&flight_state, &environment->bmp->baseline);
+            
+        // print retrieved data
+        Serial << "Saved flight state: " << flight_state;
+        Serial << "\nSaved baseline: " << environment->bmp->baseline << "\n";
     }
     /* Solenoids, Servos, BMP, BNO */
     startup_sequence();
 
     if (digitalRead(SET_BTN))
     {
-        write_EEPROM();
+        eeprom->write_state(flight_state, environment->bmp->baseline);
     }
 
     /* GPS */
@@ -46,7 +53,7 @@ void Raptor::launch()
     if (environment->bmp->getAltitude() > GROUND_ALT)
     { // at 50ft (15.24 meters), transition to FS1 [ASCENT]
         flight_state = 1;
-        write_EEPROM();
+        eeprom->write_state(flight_state, environment->bmp->baseline);
     }
 
     // blink the LEDs and print data at a rate of 1Hz
@@ -85,7 +92,7 @@ void Raptor::ascent()
         delay(DEPLOY_DELAY); // wait for the parafoil to deploy/inflate before we begin guidance
 
         flight_state = 2;
-        write_EEPROM();
+        eeprom->write_state(flight_state, environment->bmp->baseline);
     }
 
     // blink the LEDs and print data at a rate of 5Hz
@@ -221,35 +228,6 @@ void Raptor::startup_sequence(void)
             }
         }
     }
-}
-
-/* 
- * write_EEPROM deposits flight state and baseline pressure into the EEPROM. 
- */
-void Raptor::write_EEPROM()
-{
-    EEPROM.put(0, flight_state);                 // flight state is always at address 0
-    EEPROM.put(100, environment->bmp->baseline); // baseline pressure always at address 100
-}
-
-/* 
- * read_EEPROM retrieves flight state and baseline pressure from the EEPROM. 
- */
-void Raptor::read_EEPROM()
-{
-    Serial << "Read EEPROM\n";
-
-    // retrive flight state from address 0
-    EEPROM.get(0, flight_state);
-    if (flight_state == 1)
-        flight_state = 2; // if the read flight state is 1, transition immediately to 2 as the solenoids fail open
-
-    // retrieve baseline pressure from address 100
-    EEPROM.get(100, environment->bmp->baseline);
-
-    // print retrieved data
-    Serial << "Saved flight state: " << flight_state;
-    Serial << "\nSaved baseline: " << environment->bmp->baseline << "\n";
 }
 
 /* 

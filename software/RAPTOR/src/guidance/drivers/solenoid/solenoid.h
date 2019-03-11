@@ -6,8 +6,6 @@
 #ifndef SOLENOID_H_
 #define SOLENOID_H_
 
-#include "Arduino.h"
-
 void sol_init(void);
 void cutdown(void);
 void parafoil_deploy(void);

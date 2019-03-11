@@ -4,8 +4,6 @@
  * Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
 #include "bno.h"
-
-#include "Arduino.h"
 #include <Adafruit_BNO055.h>
 
 /*

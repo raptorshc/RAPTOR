@@ -2,8 +2,7 @@
 
 */
 #include "solenoid.h"
-
-#include "Arduino.h"
+#include <Arduino.h>
 
 #define SOLP_DTA 9 // Parafoil solenoid
 #define SOLC_DTA 8 // Cutdown solenoid

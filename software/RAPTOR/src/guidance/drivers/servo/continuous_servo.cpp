@@ -1,8 +1,9 @@
 /*
 
 */
-#include "continuous_servo.h"
 #include <Arduino.h>
+#include "continuous_servo.h"
+#include <math.h>
 
 /* Public Methods */
 /*

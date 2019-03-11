@@ -6,15 +6,12 @@
 #ifndef PILOT_h
 #define PILOT_h
 
-#define TESTPILOT
-
 #include "pathfinder.h"
 #include "../drivers/servo/continuous_servo.h"
-#include "Arduino.h"
 
 class Pilot
 {
-  public:
+public:
 	Pilot();
 
 	void wake(Coordinate current, Coordinate target);
@@ -30,7 +27,7 @@ class Pilot
 	int servoL_status(void);
 	int get_turn(void);
 
-  private:
+private:
 	float desired_heading;
 
 	int current_turn, target_turn; // uses ContinuousServo settings for 0 (left) and 1 (right), 2 is straight

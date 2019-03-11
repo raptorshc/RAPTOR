@@ -4,7 +4,6 @@
 	Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */
 #include "environment.h"
-#include <Streaming.h>
 
 /* PUBLIC METHODS */
 

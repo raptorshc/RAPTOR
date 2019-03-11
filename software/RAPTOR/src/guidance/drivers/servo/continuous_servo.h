@@ -6,7 +6,6 @@
 #ifndef CONTINUOUSSERVO_H_
 #define CONTINUOUSSERVO_H_
 
-#include "Arduino.h"
 #include <Servo.h>
 
 class ContinuousServo : public Servo
