@@ -30,6 +30,9 @@ private:
   Pilot *pilot;
   Prom *eeprom;
 
+  Solenoid *parafoil_sol;
+  Solenoid *cutdown_sol;
+
   uint8_t flight_state = 0; // current flight state
   long fly_time = 0;        // amount of time passed between flight controlling
   bool didwake = false;     // whether or not we have woken the pilot yet

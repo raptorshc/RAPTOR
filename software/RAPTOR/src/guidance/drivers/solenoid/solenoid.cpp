@@ -2,72 +2,39 @@
 
 */
 #include "solenoid.h"
-#include <Arduino.h>
 
-#define SOLP_DTA 9 // Parafoil solenoid
-#define SOLC_DTA 8 // Cutdown solenoid
-
-#define SWP_PIN A0 // Parafoil solenoid switch
-#define SWC_PIN A1 // Cutdown solenoid switch
-
-#define LEDP_DTA A2 // Parafoil solenoid indicator light
-#define LEDC_DTA A3 // Cutdown solenoid indicator light
-
-void sol_init(void)
+Solenoid::Solenoid(uint8_t data, uint8_t sw, uint8_t led)
 {
-    // out pins
-    pinMode(SOLP_DTA, OUTPUT); // Set Parafoil solenoid to output
-    pinMode(SOLC_DTA, OUTPUT); // Set Cutdown solenoid to output
+    this->dta_pin = data;
+    this->sw_pin = sw;
+    this->led_pin = led;
 
-    // switch pins
-    pinMode(SWP_PIN, INPUT); // Set Parafoil switch to input
-    pinMode(SWC_PIN, INPUT); // Set Cutdown switch to input
-
-    // led pins
-    pinMode(LEDP_DTA, OUTPUT); // Set Parafoil LED to output
-    pinMode(LEDC_DTA, OUTPUT); // Set Cutdown LED to output
-
-    digitalWrite(SOLP_DTA, HIGH); // Engage Parafoil solenoid
-    digitalWrite(SOLC_DTA, HIGH); // Engage Cutdown solenoid
-
-    digitalWrite(LEDP_DTA, LOW); // turn off parafoil solenoid led
-    digitalWrite(LEDC_DTA, LOW); // turn off cutdown solenoid led
+    // set pin directions
+    pinMode(this->dta_pin, OUTPUT); // solenoid data line
+    pinMode(this->sw_pin, INPUT);   // solenoid switch
+    pinMode(this->led_pin, OUTPUT); // led indicator
 }
 
-void cutdown(void)
+void Solenoid::open(void)
 {
-    digitalWrite(SOLC_DTA, LOW);
+    digitalWrite(this->dta_pin, LOW);
 }
 
-void parafoil_deploy(void)
+void Solenoid::close(void)
 {
-    digitalWrite(SOLP_DTA, LOW);
+    digitalWrite(this->dta_pin, HIGH);
 }
 
-bool cutdown_switch(void)
+bool Solenoid::read_switch(void)
 {
-    if (digitalRead(SWC_PIN))
+    if (digitalRead(this->sw_pin))
     {
-        digitalWrite(LEDC_DTA, HIGH);
+        digitalWrite(this->led_pin, HIGH);
         return true;
     }
     else
     {
-        digitalWrite(LEDC_DTA, LOW);
-        return false;
-    }
-}
-
-bool parafoil_switch(void)
-{
-    if (digitalRead(SWP_PIN))
-    {
-        digitalWrite(LEDP_DTA, HIGH);
-        return true;
-    }
-    else
-    {
-        digitalWrite(LEDP_DTA, LOW);
+        digitalWrite(this->led_pin, LOW);
         return false;
     }
 }

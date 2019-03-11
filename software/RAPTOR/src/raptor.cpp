@@ -20,12 +20,15 @@ Raptor::Raptor()
     {
         Serial << "Read EEPROM\n";
         eeprom->read_state(&flight_state, &environment->bmp->baseline);
-            
+
         // print retrieved data
         Serial << "Saved flight state: " << flight_state;
         Serial << "\nSaved baseline: " << environment->bmp->baseline << "\n";
     }
     /* Solenoids, Servos, BMP, BNO */
+    parafoil_sol = new Solenoid(9, A0, A2);
+    cutdown_sol = new Solenoid(8, A1, A3);
+
     startup_sequence();
 
     if (digitalRead(SET_BTN))
@@ -66,12 +69,12 @@ void Raptor::ascent()
     if (environment->bmp->getAltitude() > CUTDOWN_ALT)
     { // at the cutdown altiude perform cutdown, deploy, and transition to FS2 [DESCENT]
         // CUTDOWN
-        cutdown();
+        this->cutdown_sol->open();
 
-        if (!cutdown_switch())
+        if (!this->cutdown_sol->read_switch())
         { // we want to make sure that we have cut down
             Serial << F("\n!!!! CUTDOWN ERROR DETECTED !!!!\n");
-            cutdown(); // try cutdown again, probably won't do much
+            this->cutdown_sol->open(); // try cutdown again, probably won't do much
         }
 
         // PARAFOIL DEPLOY
@@ -81,12 +84,12 @@ void Raptor::ascent()
             print_data();
         }
 
-        parafoil_deploy();
+        this->parafoil_sol->open();
 
-        if (parafoil_switch())
+        if (!this->parafoil_sol->read_switch())
         { // make sure the parafoil has deployed
             Serial << F("\n!!!! PARAFOIL DEPLOYMENT ERROR DETECTED !!!!\n");
-            parafoil_deploy(); // try deploying parafoil again, probably won't do much
+            this->parafoil_sol->open(); // try deploying parafoil again, probably won't do much
         }
 
         delay(DEPLOY_DELAY); // wait for the parafoil to deploy/inflate before we begin guidance
@@ -175,7 +178,7 @@ void Raptor::print_data()
            << F(",") << _FLOAT(environment->bno->data.orientation.z, 4) << F(",");
 
     // cutdown switch, parafoil switch, turn status, flight state
-    Serial << cutdown_switch() << F(",") << parafoil_switch() << F(",")
+    Serial << this->cutdown_sol->read_switch() << F(",") << this->parafoil_sol->read_switch() << F(",")
            << pilot->get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
 }
 
@@ -195,9 +198,11 @@ void Raptor::startup_sequence(void)
     }
 
     // intialize solenoids, should hear them click and see the indicator LEDs turn on
-    sol_init();
-    cutdown_switch();
-    parafoil_switch();
+    parafoil_sol->close();
+    parafoil_sol->read_switch();
+
+    cutdown_sol->close();
+    parafoil_sol->read_switch();
 
     // initialize servos, if we're in flight state 0 we'll test them as well
     pilot->servo_init();

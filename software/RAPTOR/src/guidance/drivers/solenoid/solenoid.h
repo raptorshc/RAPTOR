@@ -6,10 +6,22 @@
 #ifndef SOLENOID_H_
 #define SOLENOID_H_
 
-void sol_init(void);
-void cutdown(void);
-void parafoil_deploy(void);
-bool cutdown_switch(void);
-bool parafoil_switch(void);
+#include <Arduino.h>
+
+class Solenoid
+{
+public:
+  Solenoid(uint8_t data, uint8_t sw, uint8_t led);
+
+  void open(void);
+  void close(void);
+
+  bool read_switch(void);
+
+private:
+  uint8_t dta_pin;
+  uint8_t sw_pin;
+  uint8_t led_pin;
+};
 
 #endif
