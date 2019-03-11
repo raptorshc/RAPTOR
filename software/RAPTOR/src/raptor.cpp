@@ -1,6 +1,8 @@
 #include "raptor.h"
 #include <Streaming.h> // http://arduiniana.org/libraries/streaming/
 
+#include "test/test.h"
+
 /* 
  * Arduino setup function, first function to be run.
  */
@@ -157,6 +159,30 @@ void Raptor::landed()
 }
 
 /*
+ * Keeps Raptor in state to allow testing of parafoil control using RC receiver.
+ */
+void Raptor::rc_test()
+{
+    static const uint8_t rc_pin = 7;
+    delay(5000); // wait 5 seconds before starting
+
+    while (true)
+    {
+        // TODO: test like all of these values
+        if(readRC(rc_pin) == 255) { // 0-255
+            pilot->straight();
+        }
+        else if(readRC(rc_pin) < 125) {
+            pilot->turn_left();
+        }
+        else if(readRC(rc_pin) > 125) {
+            pilot->turn_right();
+        }
+        print_data();
+    }
+}
+
+/*
  * print_data updates sensor readings then prints all relevant data to the serial pins.
  */
 void Raptor::print_data()
@@ -244,19 +270,6 @@ void Raptor::blink_led(int length)
     digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
     delay(length);
 }
-
-// /*
-//  * custom_angle returns an angle parsed from user input
-//  */
-// float custom_angle(void)
-// {
-//     Serial << "\nPlease input an angle: ";
-//     while (Serial.available() == 0)
-//         ; // wait for user input
-//     float angle = Serial.parseFloat();
-//     Serial << "\nAngle: " << angle << "\n";
-//     return angle;
-// }
 
 // /*
 //  *  interrupt each millisecond to read from the GPS.

@@ -21,6 +21,8 @@ public:
   void descent();
   void landed();
 
+  void rc_test();
+
 private:
   void startup_sequence();
   void blink_led(int length);

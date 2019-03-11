@@ -27,6 +27,11 @@ public:
 	int servoL_status(void);
 	int get_turn(void);
 
+	/* Turning Methods */
+	void turn_right();
+	void turn_left();
+	void straight();
+
 private:
 	float desired_heading;
 
@@ -36,11 +41,6 @@ private:
 	Pathfinder *p;
 
 	int find_turn(float curr_angle);
-
-	/* Turning Methods */
-	void turn_right();
-	void turn_left();
-	void straight();
 };
 
 #endif
