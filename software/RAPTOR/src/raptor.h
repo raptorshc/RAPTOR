@@ -17,21 +17,20 @@
 
 class Raptor
 {
-public:
-	Raptor();
+  public:
+    Raptor();
 
     void launch();
     void ascent();
     void descent();
     void landed();
 
-private:
+  private:
     void startup_sequence();
     void blink_led(int length);
     void write_EEPROM();
     void read_EEPROM();
     void print_data();
-
 
     Environment *environment;
     Pilot *pilot;

@@ -13,21 +13,21 @@
 class GPS
     : public Adafruit_GPS
 {
-  public:
-    GPS(SoftwareSerial &mySerial) : Adafruit_GPS(&mySerial)
-    {
-        first_gps = true;
-    }
+public:
+  GPS(SoftwareSerial &mySerial) : Adafruit_GPS(&mySerial)
+  {
+    first_gps = true;
+  }
 
-    void init(void);
+  void init(void);
 
-    void update(void);
+  void update(void);
 
-    float init_alt, agl; // initial altitude and above ground level altitude
-    bool first_gps;
+  float init_alt, agl; // initial altitude and above ground level altitude
+  bool first_gps;
 
-  private:
-    void dms_to_dec(void);
+private:
+  void dms_to_dec(void);
 };
 
 #endif

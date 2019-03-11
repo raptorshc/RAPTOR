@@ -1,5 +1,5 @@
 /*
-  this->cpp - 
+  environment.cpp - 
 	DESCRIPTION NEEDED.
 	Part of the RAPTOR project, authors: Sean Widmier, Colin Oberthur
 */

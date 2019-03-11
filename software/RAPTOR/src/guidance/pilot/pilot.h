@@ -14,7 +14,7 @@
 
 class Pilot
 {
-public:
+  public:
 	Pilot();
 
 	void wake(Coordinate current, Coordinate target);
@@ -30,7 +30,7 @@ public:
 	int servoL_status(void);
 	int get_turn(void);
 
-private:
+  private:
 	float desired_heading;
 
 	int current_turn, target_turn; // uses ContinuousServo settings for 0 (left) and 1 (right), 2 is straight
