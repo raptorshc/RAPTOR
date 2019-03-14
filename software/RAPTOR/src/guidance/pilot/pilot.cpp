@@ -163,6 +163,7 @@ void Pilot::turn_right()
         straight();
     servoR->turn();
     current_turn = ContinuousServo::RIGHT;
+    Serial.print("Turn: right.\n");
 }
 
 /*
@@ -174,6 +175,7 @@ void Pilot::turn_left()
         straight();
     servoL->turn();
     current_turn = ContinuousServo::LEFT;
+    Serial.print("Turn: left.\n");
 }
 
 /*

@@ -12,7 +12,6 @@ void loop()
 {
     #ifdef RC_TEST
         raptor->rc_test();
-        return;
     #endif
     raptor->launch();
     raptor->ascent();

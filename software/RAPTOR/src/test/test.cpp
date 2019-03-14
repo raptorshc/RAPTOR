@@ -5,7 +5,12 @@
 
 int readRC(uint8_t pin)
 {
-    return (1730 - pulseIn(pin, HIGH, 20000)) / 2.55; // TODO change based on needed output
+    float average = 0;
+    for(int i = 0; i < 10; i++){
+        float result = pulseIn(pin, HIGH, 20000);
+        average += result;
+    }
+    return average / 10;
 }
 
 /*

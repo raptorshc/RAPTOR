@@ -3,6 +3,8 @@
 
 #include "test/test.h"
 
+#define RC_TEST
+#include "guidance/drivers/servo/continuous_servo.h"
 /* 
  * Arduino setup function, first function to be run.
  */
@@ -16,6 +18,7 @@ Raptor::Raptor()
 
     Serial.begin(9600);
 
+    #ifndef RC_TEST
     eeprom = new Prom();
     pinMode(SET_BTN, OUTPUT);
     if (!digitalRead(SET_BTN))
@@ -41,8 +44,10 @@ Raptor::Raptor()
     /* GPS */
     environment = new Environment();
     environment->gps->init();
+    
 
     pilot = new Pilot();
+    #endif
 
     delay(10);
     Serial.print(F("TIME,"
@@ -69,7 +74,7 @@ void Raptor::launch()
 void Raptor::ascent()
 {
     if (environment->bmp->getAltitude() > CUTDOWN_ALT)
-    { // at the cutdown altiude perform cutdown, deploy, and transition to FS2 [DESCENT]
+    { // at the cutdown altitude perform cutdown, deploy, and transition to FS2 [DESCENT]
         // CUTDOWN
         this->cutdown_sol->open();
 
@@ -163,22 +168,44 @@ void Raptor::landed()
  */
 void Raptor::rc_test()
 {
-    static const uint8_t rc_pin = 7;
-    delay(5000); // wait 5 seconds before starting
+    static const uint8_t turn_pin = 7;
+    static const uint8_t cutdown_pin = 4;
 
+    pinMode(turn_pin, INPUT);
+    pinMode(cutdown_pin, INPUT);
+    
+    delay(1000); // wait 5 seconds before starting
+
+    Serial << "Starting RC Test!\n";
+
+    ContinuousServo *leftServo = new ContinuousServo(1, 5);
+    // ContinuousServo *leftServo = new ContinuousServo(0, );
     while (true)
     {
-        // TODO: test like all of these values
-        if(readRC(rc_pin) == 255) { // 0-255
-            pilot->straight();
+        float turn_value = readRC(turn_pin);
+        float cutdown_value = readRC(cutdown_pin);
+        
+        // Serial << "\nTurn value: " << turn_value << "\nCutdown value:" << cutdown_value << "\n";
+        if(cutdown_value > 900){ // highest pin output - left analog stick far up
+            parafoil_sol->open();
+            cutdown_sol->open();
+            Serial << "Solenoids: open.\n";
         }
-        else if(readRC(rc_pin) < 125) {
-            pilot->turn_left();
+        if(cutdown_value < 590) { // lowest pin output - left analog stick far down
+            parafoil_sol->close();
+            cutdown_sol->close();
+            Serial << "Solenoids: closed.\n";
         }
-        else if(readRC(rc_pin) > 125) {
+        if (turn_value > 940) {    // highest pin out - right analog stick far right
             pilot->turn_right();
         }
-        print_data();
+        else if(turn_value < 545) { // lowest pin out - right analog stick far left
+            pilot->turn_left();
+        }
+        else {
+            pilot->straight();
+        }
+        // print_data();
     }
 }
 
