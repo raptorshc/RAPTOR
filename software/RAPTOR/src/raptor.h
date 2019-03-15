@@ -23,12 +23,13 @@ public:
 
   void rc_test();
 
+  Environment *environment;
+
 private:
   void startup_sequence();
   void blink_led(int length);
   void print_data();
 
-  Environment *environment;
   Pilot *pilot;
   Prom *eeprom;
 

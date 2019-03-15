@@ -297,11 +297,3 @@ void Raptor::blink_led(int length)
     digitalWrite(LEDS_DTA, !digitalRead(LEDS_DTA));
     delay(length);
 }
-
-// /*
-//  *  interrupt each millisecond to read from the GPS.
-//  */
-// SIGNAL(TIMER0_COMPA_vect)
-// {
-//     environment->gps->read();
-// }

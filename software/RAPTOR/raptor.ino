@@ -18,3 +18,11 @@ void loop()
     raptor->descent();
     raptor->landed();
 }
+
+/*
+ *  interrupt each millisecond to read from the GPS.
+ */
+SIGNAL(TIMER0_COMPA_vect)
+{
+    raptor->environment->gps->read();
+}
