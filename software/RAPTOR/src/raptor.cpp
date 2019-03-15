@@ -44,10 +44,14 @@ Raptor::Raptor()
     /* GPS */
     environment = new Environment();
     environment->gps->init();
-    
+
+    #endif
 
     pilot = new Pilot();
-    #endif
+
+    parafoil_sol = new Solenoid(9, A0, A2); // TODO remove
+    cutdown_sol = new Solenoid(8, A1, A3); // TODO remove
+
 
     delay(10);
     Serial.print(F("TIME,"
@@ -178,14 +182,12 @@ void Raptor::rc_test()
 
     Serial << "Starting RC Test!\n";
 
-    ContinuousServo *leftServo = new ContinuousServo(1, 5);
-    // ContinuousServo *leftServo = new ContinuousServo(0, );
+    pilot->servo_init();
     while (true)
     {
         float turn_value = readRC(turn_pin);
         float cutdown_value = readRC(cutdown_pin);
         
-        // Serial << "\nTurn value: " << turn_value << "\nCutdown value:" << cutdown_value << "\n";
         if(cutdown_value > 900){ // highest pin output - left analog stick far up
             parafoil_sol->open();
             cutdown_sol->open();

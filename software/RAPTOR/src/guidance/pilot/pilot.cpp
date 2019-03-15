@@ -190,12 +190,12 @@ void Pilot::straight()
     if (current_turn == ContinuousServo::RIGHT)
     {
         servoR->reset();
-        Serial.print("Turn: straight.\n");
+        Serial.print("Turn: straight from right.\n");
     }
     else if(current_turn == ContinuousServo::LEFT)
     {
         servoL->reset();
-        Serial.print("Turn: straight.\n");
+        Serial.print("Turn: straight from left.\n");
     }
     current_turn = STRAIGHT;
 }

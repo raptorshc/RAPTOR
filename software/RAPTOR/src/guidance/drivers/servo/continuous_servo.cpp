@@ -24,17 +24,18 @@ void ContinuousServo::turn(bool reset /*= false*/)
 	}
 	else
 	{ // left servo
-		if (reset)
+		if (reset){
 			this->writeMicroseconds(CW); // reset will turn the servo the other way for the same amount of time
-		else
+		}
+		else{
 			this->writeMicroseconds(CCW);
+		}
 	}
 	delay(TTR);
 
 	this->writeMicroseconds(STOP); // Stop the servos once we've reached the deflection setting.
 	delay(100);
 	this->detach();
-	Serial.print("Turned servo.\n");
 }
 
 /*

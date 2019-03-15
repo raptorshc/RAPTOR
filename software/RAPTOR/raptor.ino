@@ -22,7 +22,7 @@ void loop()
 /*
  *  interrupt each millisecond to read from the GPS.
  */
-SIGNAL(TIMER0_COMPA_vect)
-{
-    raptor->environment->gps->read();
-}
+// SIGNAL(TIMER0_COMPA_vect)
+// {
+//     raptor->environment->gps->read();
+// }
