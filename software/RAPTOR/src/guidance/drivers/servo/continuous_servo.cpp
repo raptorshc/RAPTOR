@@ -18,17 +18,17 @@ void ContinuousServo::turn(bool reset /*= false*/)
 	if (servo == RIGHT)
 	{
 		if (reset)
-			this->writeMicroseconds(CCW);
+			this->writeMicroseconds(CW);
 		else
-			this->writeMicroseconds(CW); // based on the turn, we will rotate CW or CCW
+			this->writeMicroseconds(CCW); // based on the turn, we will rotate CW or CCW
 	}
 	else
 	{ // left servo
 		if (reset){
-			this->writeMicroseconds(CW); // reset will turn the servo the other way for the same amount of time
+			this->writeMicroseconds(CCW); // reset will turn the servo the other way for the same amount of time
 		}
 		else{
-			this->writeMicroseconds(CCW);
+			this->writeMicroseconds(CW);
 		}
 	}
 	delay(TTR);

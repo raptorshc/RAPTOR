@@ -188,6 +188,7 @@ void Raptor::rc_test()
         float turn_value = readRC(turn_pin);
         float cutdown_value = readRC(cutdown_pin);
         
+        // Serial << "Turn value: " << turn_value << " | Cutdown value: "  << cutdown_value << "\n";
         if(cutdown_value > 900){ // highest pin output - left analog stick far up
             parafoil_sol->open();
             cutdown_sol->open();
