@@ -34,6 +34,7 @@ void ContinuousServo::turn(bool reset /*= false*/)
 	this->writeMicroseconds(STOP); // Stop the servos once we've reached the deflection setting.
 	delay(100);
 	this->detach();
+	Serial.print("Turned servo.\n");
 }
 
 /*

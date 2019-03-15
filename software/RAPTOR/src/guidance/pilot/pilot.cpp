@@ -161,9 +161,11 @@ void Pilot::turn_right()
 {
     if (current_turn == ContinuousServo::LEFT)
         straight();
-    servoR->turn();
-    current_turn = ContinuousServo::RIGHT;
-    Serial.print("Turn: right.\n");
+    if(current_turn != ContinuousServo::RIGHT){
+        servoR->turn();
+        current_turn = ContinuousServo::RIGHT;
+        Serial.print("Turn: right.\n");
+    }
 }
 
 /*
@@ -173,9 +175,11 @@ void Pilot::turn_left()
 {
     if (current_turn == ContinuousServo::RIGHT)
         straight();
-    servoL->turn();
-    current_turn = ContinuousServo::LEFT;
-    Serial.print("Turn: left.\n");
+    if(current_turn != ContinuousServo::LEFT){
+        servoL->turn();
+        current_turn = ContinuousServo::LEFT;
+        Serial.print("Turn: left.\n");
+    }
 }
 
 /*
@@ -186,10 +190,12 @@ void Pilot::straight()
     if (current_turn == ContinuousServo::RIGHT)
     {
         servoR->reset();
+        Serial.print("Turn: straight.\n");
     }
-    else
+    else if(current_turn == ContinuousServo::LEFT)
     {
         servoL->reset();
+        Serial.print("Turn: straight.\n");
     }
     current_turn = STRAIGHT;
 }
