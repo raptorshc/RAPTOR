@@ -35,5 +35,5 @@ bool BMP::init(bool set_baseline)
  */
 float BMP::getAltitude(void)
 {
-  return readAltitude(this->baseline);
+  return readAltitude(this->baseline/100);
 }

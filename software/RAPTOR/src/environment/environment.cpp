@@ -18,8 +18,9 @@ Environment::Environment()
     this->bmp = new BMP();
 
     /* GPS */
-    SoftwareSerial *gps_serial = new SoftwareSerial(3, 2); // GPS serial comm pins
-    this->gps = new GPS(*gps_serial);
+    this->gps = new GPS(new SoftwareSerial(3, 2)); // gps serial comm pins
+
+    this->time_elapsed = 0;
 }
 
 /*
@@ -27,7 +28,6 @@ Environment::Environment()
  */
 bool Environment::init(bool set_baseline)
 {
-    this->gps->init();
     if (this->bmp->init(set_baseline) && this->bno->init())
         return true;
     else

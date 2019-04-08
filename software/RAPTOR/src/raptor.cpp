@@ -3,50 +3,49 @@
 
 #include "test/test.h"
 
-#define RC_TEST
+// #define RC_TEST
 #include "guidance/drivers/servo/continuous_servo.h"
 /* 
  * Arduino setup function, first function to be run.
  */
 Raptor::Raptor()
 {
-    *environment->time_elapsed = 0;
-
     /* Buzzer and LEDs */
     pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
     pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
 
-    Serial.begin(9600);
+    Serial.begin(115200);
 
     #ifndef RC_TEST
-    eeprom = new Prom();
-    pinMode(SET_BTN, OUTPUT);
-    if (!digitalRead(SET_BTN))
-    {
-        Serial << "Read EEPROM\n";
-        eeprom->read_state(&flight_state, &environment->bmp->baseline);
+    // eeprom = new Prom();
+    // pinMode(SET_BTN, OUTPUT);
+    // if (!digitalRead(SET_BTN))
+    // {
+    //     Serial << "Read EEPROM\n";
+    //     eeprom->read_state(&flight_state, &environment->bmp->baseline);
 
-        // print retrieved data
-        Serial << "Saved flight state: " << flight_state;
-        Serial << "\nSaved baseline: " << environment->bmp->baseline << "\n";
-    }
+    //     // print retrieved data
+    //     Serial << "Saved flight state: " << flight_state;
+    //     Serial << "\nSaved baseline: " << environment->bmp->baseline << "\n";
+    // }
     /* Solenoids, Servos, BMP, BNO */
-    parafoil_sol = new Solenoid(9, A0, A2);
-    cutdown_sol = new Solenoid(8, A1, A3);
+    // parafoil_sol = new Solenoid(9, A0, A2);
+    // cutdown_sol = new Solenoid(8, A1, A3);
 
-    startup_sequence();
+    // startup_sequence();
 
-    if (digitalRead(SET_BTN))
-    {
-        eeprom->write_state(flight_state, environment->bmp->baseline);
-    }
+    // if (digitalRead(SET_BTN))
+    // {
+    //     eeprom->write_state(flight_state, environment->bmp->baseline);
+    // }
 
     /* GPS */
     environment = new Environment();
+    // environment->init(true); // for testing pcb
     environment->gps->init();
     
 
-    pilot = new Pilot();
+    // pilot = new Pilot();
     #endif
 
     delay(10);
@@ -214,25 +213,32 @@ void Raptor::rc_test()
  */
 void Raptor::print_data()
 {
-    environment->update();
+    // environment->update();
 
     /* Let's spray the serial port with a hose of data */
 
     // time, temperature, pressure, altitude,
-    Serial << *environment->time_elapsed << F(",") << environment->bmp->readTemperature() << F(",") << environment->bmp->readPressure()
-           << F(",") << environment->bmp->getAltitude() << F(",");
+    // Serial << *environment->time_elapsed << F(",") << environment->bmp->readTemperature() << F(",") << environment->bmp->readPressure()
+    //        << F(",") << environment->bmp->getAltitude() << F(",");
 
-    // latitude, longitude, angle, (gps) altitude,
-    Serial << _FLOAT(environment->gps->latitude, 7) << F(",") << _FLOAT(environment->gps->longitude, 7)
-           << F(",") << _FLOAT(environment->gps->angle, 7) << F(",") << environment->gps->altitude << F(",");
+    // // latitude, longitude, angle, (gps) altitude,
+    // Serial << _FLOAT(environment->gps->latitude, 7) << F(",") << _FLOAT(environment->gps->longitude, 7)
+    //        << F(",") << _FLOAT(environment->gps->angle, 7) << F(",") << environment->gps->altitude << F(",");
 
-    // x orientation, y orientation, z orientation,
-    Serial << _FLOAT(environment->bno->data.orientation.x, 4) << F(",") << _FLOAT(environment->bno->data.orientation.y, 4)
-           << F(",") << _FLOAT(environment->bno->data.orientation.z, 4) << F(",");
+    // // x orientation, y orientation, z orientation,
+    // Serial << _FLOAT(environment->bno->data.orientation.x, 4) << F(",") << _FLOAT(environment->bno->data.orientation.y, 4)
+    //        << F(",") << _FLOAT(environment->bno->data.orientation.z, 4) << F(",");
 
-    // cutdown switch, parafoil switch, turn status, flight state
-    Serial << this->cutdown_sol->read_switch() << F(",") << this->parafoil_sol->read_switch() << F(",")
-           << pilot->get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
+    // // cutdown switch, parafoil switch, turn status, flight state
+    // Serial << this->cutdown_sol->read_switch() << F(",") << this->parafoil_sol->read_switch() << F(",")
+    //        << pilot->get_turn() << F(",") << flight_state << "\n"; // write everything to SD card
+
+    // Serial << "\n\ntime: " << *(environment->time_elapsed);
+    // Serial << "\ntemp: " << environment->bmp->readTemperature();
+    // Serial << "\npres: " << environment->bmp->readPressure();
+    // Serial << "\nalt: " << environment->bmp->getAltitude();
+    Serial << "I am alive\n";
+
 }
 
 /* 
