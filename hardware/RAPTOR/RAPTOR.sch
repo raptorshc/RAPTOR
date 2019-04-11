@@ -2,12 +2,12 @@ EESchema Schematic File Version 4
 LIBS:RAPTOR-cache
 EELAYER 26 0
 EELAYER END
-$Descr A4 11693 8268
+$Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 1
 Title "RAPTOR Schematic"
-Date "2019-01-18"
-Rev "PHOENIX 0.6.5"
+Date "2019-02-28"
+Rev "PHOENIX 0.7"
 Comp ""
 Comment1 ""
 Comment2 "https://github.com/seaan/RAPTOR/projects/3"
@@ -1552,10 +1552,10 @@ F 4 "XXX-00000" H 3672 3634 60  0001 R CNN "Field4"
 	0    1    1    0   
 $EndComp
 $Comp
-L Device:Jumper JP?
+L Device:Jumper JP1
 U 1 1 5C7FF78C
 P 2350 3100
-F 0 "JP?" H 2350 3364 50  0000 C CNN
+F 0 "JP1" H 2350 3364 50  0000 C CNN
 F 1 "Jumper" H 2350 3273 50  0000 C CNN
 F 2 "" H 2350 3100 50  0001 C CNN
 F 3 "~" H 2350 3100 50  0001 C CNN
@@ -1567,10 +1567,10 @@ Wire Wire Line
 Wire Wire Line
 	1900 3100 2050 3100
 $Comp
-L Device:Jumper JP?
+L Device:Jumper JP2
 U 1 1 5C83AE25
 P 2350 3500
-F 0 "JP?" H 2350 3764 50  0000 C CNN
+F 0 "JP2" H 2350 3764 50  0000 C CNN
 F 1 "Jumper" H 2350 3673 50  0000 C CNN
 F 2 "" H 2350 3500 50  0001 C CNN
 F 3 "~" H 2350 3500 50  0001 C CNN
