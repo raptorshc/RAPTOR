@@ -1,0 +1,40 @@
+STEP translation to Solid Edge
+Date: Monday,February 11,2019 01:59PM
+Source File: E:\UAH\Space Hardware Club\RAPTOR\Electrical\RAPTOR\hardware\RAPTOR\Pin Header 1x8 TH Pitch 2.54mm.stp
+Author: Unknown
+Organization: Unknown
+Source System: Unknown
+
+Hardware:
+Processor: Intel(R) Core(TM) i7-4710HQ CPU @ 2.50GHz
+Operating System: Windows 8
+Installed Memory: 11.92 GB
+
+Software Information
+Parasolid Version: 30.1.256
+PSBodyShop Version: 30.1.94
+Step Adapter Version: 4.0.40
+Solid Edge Version: 219.00.01.006 x64
+
+Step Import Options
+Import Faceted Bodies: On
+Import Check Bodies: Off
+Import Curves: On
+Import DoNotSave: On
+Import Multiple Bodies As Single Part File: On
+Import Stitch Surfaces: On
+Import Boolean Solids: On
+Make Base Feature: On
+Simplify Geometry: On
+Import Imprint Curves: On
+Import Drive: C:
+Import Stitch Surfaces: On
+Import Surfaces: On
+Import Output Path: E:\UAH\Space Hardware Club\RAPTOR\Electrical\RAPTOR\hardware\RAPTOR
+Import Enable Default Output Path: On
+Import Path: 
+
+Translating to Parasolid data types...
+Placing E:\UAH\Space Hardware Club\RAPTOR\Electrical\RAPTOR\hardware\RAPTOR\Document.par
+Translation process completed
+Total time required to translate and post process:00 : 00 : 02
