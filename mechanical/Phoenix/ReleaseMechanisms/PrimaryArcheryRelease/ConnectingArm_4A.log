@@ -1,0 +1,31 @@
+Solid Edge Translation to STL
+Date: Saturday,April 13,2019 10:01AM
+Source File:D:\Project\RAPTOR\mechanical\Phoenix\ReleaseMechanisms\PrimaryArcheryRelease\ConnectingArm_4A.par
+Output File: D:\Project\RAPTOR\mechanical\Phoenix\ReleaseMechanisms\PrimaryArcheryRelease\ConnectingArm_4A.stl
+Source System: SOLID EDGE
+
+Hardware:
+Processor: Intel(R) Core(TM) i7-4710HQ CPU @ 2.50GHz
+Operating System: Windows 8
+Memory: 7.88 GB
+
+Software Information:
+Parasolid Version: 30.1.256
+Bodyshop Version: 30.1.94
+Solid Edge Version: 219.00.01.006 x64
+
+STL Export Options:
+Output File Format:BINARY
+Export Displayed Parts:Off
+structureOption: Monolithic
+Export Units:Millimeter
+Export Tolerance Value:0.050000
+Export Tolerance Type:Custom
+Export Surface Plane Angle Value:0.523599
+
+Translation progress:
+Phase 1 of 2 Fetching Parasolid information...
+Phase 2 of 2 Translating Parasolid to foreign data types...
+Number of STL file Created : 1
+Translation process completed
+Time required to translate:00 : 00 : 02
