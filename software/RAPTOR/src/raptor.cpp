@@ -3,11 +3,15 @@
 
 // #define RC_TEST
 #include "guidance/drivers/servo/continuous_servo.h"
+
+elapsedMillis time_elapsed;
+
 /* 
  * Arduino setup function, first function to be run.
  */
 Raptor::Raptor()
 {
+    time_elapsed = 0;
     /* Buzzer and LEDs */
     pinMode(BZZ_DTA, OUTPUT);  // Set buzzer to output
     pinMode(LEDS_DTA, OUTPUT); // Set LEDs to output
@@ -119,7 +123,7 @@ void Raptor::descent()
         didwake = true;
     }
 
-    fly_time = *environment->time_elapsed;
+    fly_time = time_elapsed;
     if (fly_time > FLY_DELAY)
     {                                        // don't want to constantly call fly
         pilot->fly(environment->gps->angle); // the pilot just needs our current angle to do his calculations
@@ -181,7 +185,7 @@ void Raptor::print_data()
     Serial.println((int)environment->gps->fixquality);
 
     // time, temperature, pressure, altitude,
-    Serial << *environment->time_elapsed << F(",") << environment->bmp->readTemperature() << F(",") << environment->bmp->readPressure()
+    Serial << time_elapsed << F(",") << environment->bmp->readTemperature() << F(",") << environment->bmp->readPressure()
            << F(",") << environment->bmp->getAltitude() << F(",");
 
     // // latitude, longitude, angle, (gps) altitude,
