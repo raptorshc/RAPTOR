@@ -27,7 +27,6 @@ public:
   BMP *bmp;
   BNO *bno;
   GPS *gps;
-  elapsedMillis *time_elapsed;
 };
 
 #endif
