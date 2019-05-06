@@ -13,14 +13,17 @@
  */
 void GPS::init(void)
 {
+  Serial.println("GPS init.");
+
   this->begin(9600);
   this->sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA); // RMC (recommended minimum), GGA (fix data) + altitude
   this->sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);    // 1 Hz update rate
   this->sendCommand(PGCMD_ANTENNA);               // Request updates on antenna status
+  delay(1000);
+
   // set up timer counter for interrupt
   OCR0A = 0xAF;
   TIMSK0 |= _BV(OCIE0A);
-  Serial.print(++counter);
 }
 
 /*

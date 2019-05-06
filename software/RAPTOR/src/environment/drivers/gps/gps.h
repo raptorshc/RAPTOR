@@ -8,6 +8,7 @@
 #define GPS_H_
 
 #include <Adafruit_GPS.h>
+#include <SoftwareSerial.h>
 
 class GPS
     : public Adafruit_GPS

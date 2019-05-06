@@ -9,6 +9,6 @@
 #include <Arduino.h>
 
 int readRC(uint8_t pin);
-
+void gps_test(void);
 
 #endif

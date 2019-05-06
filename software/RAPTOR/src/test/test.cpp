@@ -2,11 +2,14 @@
 *
 */
 #include "test.h"
+#include <Adafruit_GPS.h>
+#include <SoftwareSerial.h>
 
 int readRC(uint8_t pin)
 {
     float average = 0;
-    for(int i = 0; i < 10; i++){
+    for (int i = 0; i < 10; i++)
+    {
         float result = pulseIn(pin, HIGH, 20000);
         average += result;
     }

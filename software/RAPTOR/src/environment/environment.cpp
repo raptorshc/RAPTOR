@@ -28,6 +28,8 @@ Environment::Environment()
  */
 bool Environment::init(bool set_baseline)
 {
+    this->gps->init();
+    Serial.println("Enviro Init");
     if (this->bmp->init(set_baseline) && this->bno->init())
         return true;
     else
@@ -39,7 +41,7 @@ bool Environment::init(bool set_baseline)
  */
 bool Environment::update()
 {
-    this->gps->update();
+    // this->gps->update();
     if (this->bno->update())
         return true;
     else
@@ -52,6 +54,7 @@ bool Environment::update()
  */
 float Environment::correct_alt(uint8_t flight_state)
 {
+    /*
     switch (flight_state)
     {
     case 0: // both flight state 0 and 1 are ascending
@@ -78,6 +81,7 @@ float Environment::correct_alt(uint8_t flight_state)
         else
             return (this->bmp->getAltitude() + this->gps->agl) / 2;
     }
+    */
 }
 
 /*
