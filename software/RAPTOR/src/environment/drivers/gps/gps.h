@@ -11,21 +11,21 @@
 #include <SoftwareSerial.h>
 
 class GPS
-    : public Adafruit_GPS
+   
 {
 public:
-  GPS(SoftwareSerial *mySerial) : Adafruit_GPS(mySerial)
-  {
-    first_gps = true;
-  }
+  GPS(SoftwareSerial *mySerial);
+ 
 
   void init(void);
 
   void update(void);
 
+  Adafruit_GPS *getGPS(void);
+
   float init_alt, agl; // initial altitude and above ground level altitude
   bool first_gps;
-
+  Adafruit_GPS *a_GPS;
   int counter = 0;
 
 private:

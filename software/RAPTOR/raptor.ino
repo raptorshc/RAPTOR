@@ -113,5 +113,5 @@ void loop()
 // Interrupt is called once a millisecond, looks for any new GPS data, and stores it
 SIGNAL(TIMER0_COMPA_vect)
 {
-    char c = raptor->environment->gps->read();
+    char c = raptor->environment->gps->getGPS()->read();
 }

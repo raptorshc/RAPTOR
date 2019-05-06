@@ -107,8 +107,8 @@ void Raptor::descent()
         // first set up our coordinates
         Coordinate current, target;
 
-        current.latitude = environment->gps->latitude;
-        current.longitude = environment->gps->longitude;
+        current.latitude = environment->gps->getGPS()->latitude;
+        current.longitude = environment->gps->getGPS()->longitude;
 
         target.latitude = TARGET_LAT;
         target.longitude = TARGET_LONG;
@@ -122,7 +122,7 @@ void Raptor::descent()
     fly_time = *environment->time_elapsed;
     if (fly_time > FLY_DELAY)
     {                                        // don't want to constantly call fly
-        pilot->fly(environment->gps->angle); // the pilot just needs our current angle to do his calculations
+        pilot->fly(environment->gps->getGPS()->angle); // the pilot just needs our current angle to do his calculations
         fly_time = 0;
     }
 
@@ -162,31 +162,31 @@ void Raptor::print_data()
     /* Let's spray the serial port with a hose of data */
     // gps stuff can remove
     Serial.print("\nTime: ");
-    Serial.print(environment->gps->hour, DEC);
+    Serial.print(environment->gps->getGPS()->hour, DEC);
     Serial.print(':');
-    Serial.print(environment->gps->minute, DEC);
+    Serial.print(environment->gps->getGPS()->minute, DEC);
     Serial.print(':');
-    Serial.print(environment->gps->seconds, DEC);
+    Serial.print(environment->gps->getGPS()->seconds, DEC);
     Serial.print('.');
-    Serial.println(environment->gps->milliseconds);
+    Serial.println(environment->gps->getGPS()->milliseconds);
     Serial.print("Date: ");
-    Serial.print(environment->gps->day, DEC);
+    Serial.print(environment->gps->getGPS()->day, DEC);
     Serial.print('/');
-    Serial.print(environment->gps->month, DEC);
+    Serial.print(environment->gps->getGPS()->month, DEC);
     Serial.print("/20");
-    Serial.println(environment->gps->year, DEC);
+    Serial.println(environment->gps->getGPS()->year, DEC);
     Serial.print("Fix: ");
-    Serial.print((int)environment->gps->fix);
+    Serial.print((int)environment->gps->getGPS()->fix);
     Serial.print(" quality: ");
-    Serial.println((int)environment->gps->fixquality);
+    Serial.println((int)environment->gps->getGPS()->fixquality);
 
     // time, temperature, pressure, altitude,
     Serial << *environment->time_elapsed << F(",") << environment->bmp->readTemperature() << F(",") << environment->bmp->readPressure()
            << F(",") << environment->bmp->getAltitude() << F(",");
 
     // // latitude, longitude, angle, (gps) altitude,
-    Serial << _FLOAT(environment->gps->latitude, 7) << F(",") << _FLOAT(environment->gps->longitude, 7)
-           << F(",") << _FLOAT(environment->gps->angle, 7) << F(",") << environment->gps->altitude << F(",");
+    Serial << _FLOAT(environment->gps->getGPS()->latitude, 7) << F(",") << _FLOAT(environment->gps->getGPS()->longitude, 7)
+           << F(",") << _FLOAT(environment->gps->getGPS()->angle, 7) << F(",") << environment->gps->getGPS()->altitude << F(",");
 
     // // x orientation, y orientation, z orientation,
     Serial << _FLOAT(environment->bno->data.orientation.x, 4) << F(",") << _FLOAT(environment->bno->data.orientation.y, 4)
