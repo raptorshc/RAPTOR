@@ -1,0 +1,39 @@
+STEP translation to Solid Edge
+Date: Monday,May 06,2019 01:47PM
+Source File: D:\Project\RAPTOR\mechanical\Phoenix\BoardMounts\arduino uno.STEP
+Author: A
+Organization: Unknown
+Source System: SolidWorks 2012
+
+Hardware:
+Processor: Intel(R) Core(TM) i7-4710HQ CPU @ 2.50GHz
+Operating System: Windows 8
+Installed Memory: 7.88 GB
+
+Software Information
+Parasolid Version: 30.1.256
+PSBodyShop Version: 30.1.94
+Step Adapter Version: 4.0.40
+Solid Edge Version: 219.00.01.006 x64
+
+Step Import Options
+Import Faceted Bodies: On
+Import Check Bodies: Off
+Import Curves: On
+Import DoNotSave: On
+Import Multiple Bodies As Single Part File: On
+Import Stitch Surfaces: On
+Import Boolean Solids: On
+Make Base Feature: On
+Simplify Geometry: On
+Import Imprint Curves: On
+Import Drive: C:
+Import Stitch Surfaces: On
+Import Surfaces: On
+Import Output Path: D:\Project\RAPTOR\mechanical\Phoenix\BoardMounts
+Import Enable Default Output Path: On
+Import Path: 
+
+Translating to Parasolid data types...
+Translation process completed
+Total time required to translate and post process:00 : 00 : 42
