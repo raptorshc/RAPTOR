@@ -1,0 +1,9 @@
+[submodule "software"]
+	path = software
+	url = https://github.com/raptorshc/software.git
+[submodule "hardware"]
+	path = hardware
+	url = https://github.com/raptorshc/hardware.git
+[submodule "mechanical"]
+	path = mechanical
+	url = https://github.com/raptorshc/mechanical.git
