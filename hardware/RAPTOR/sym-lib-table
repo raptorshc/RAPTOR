@@ -1,3 +1,0 @@
-(sym_lib_table
-  (lib (name RAPTOR-rescue)(type Legacy)(uri ${KIPRJMOD}/RAPTOR-rescue.lib)(options "")(descr ""))
-)
