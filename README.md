@@ -4,14 +4,8 @@
 
 The **Ram-Air Parafoil Targeted Object Return** (RAPTOR) system is an autonomous payload designed for the simplification of high-altitude balloon payload recovery.
 
-This repository contains links to the mechanical, hardware, and software submodules, as well as balloon flight data and analysis.
+This repository contains links to the mechanical, hardware, and software submodules, as well as balloon flight data and analysis. Posters, papers, and presentations made for RAPTOR are located in the 'information' folder.
 
-## VBS 2019 Poster
-
-## AIAA 2019 Paper
-
-## AIAA 2019 Presentation
-
-## NCUR 2019 Poster
+![alt text](https://lh3.googleusercontent.com/V1GHtMZzsjk9UAAr1J3S-j2433dUKlJwQ1BGuhHN0uqzOQcHgWhkU-5z4e433UWMYduOLQis8iTTU0cQpAe-ooABHyJTU2NrZq4BhDoKNtJfH1rooxc3MgYZaYgkW-LR9uflz2JSOEOSFpi3fj1UMjC1103UKi-9-YpTuWq_KtQVNe_fF1ANPPIp9roLJ_ruWSpXYh11aBJ9bbCRCcgbcV89mPFRM1tdAl-nqevVpLAgCQQhbn08bvg2K7C9auBcT1ZmF077-mcCEqChY9BGjQ8arMfTkGSwJA5MwFLNp55dsQZ2RihjNQUeM4qBm4jdexL7GkyNbU2uuQ0x0gkh2QTTLFlSoeYiCc3iYsVK4P1SGhmqqSLgLudECWW-g2QvGQwDLoACnrs9ha7-OhbxISd6ClNcFh_vEK824AICUCJcIJEFmnN3KyVut3Ezmox_v9RL4eeqW2TKSHM66Sbrb4itSQy1rPvxppH1AYZN9zyJrTedqE2IIqw8DUy4U-Gu3cF4pArN9W5G6GZNhwNBBjAy9qX5APhAGbNLMBAhjUOL2DeoJHEca9T3dwMAGu9M5uh0neaftd0bsC6ZHjKe5pQEpBXaT4nBooVnukhQ7kTIxDxKstBqtRr92Z80oIy4DUf4wE2LDaiU_vzyHOcfcpcd0QWO5O7-dp1mmeMgZ0e1PJadSbkz5oVXLmVv2D_n4veEKbhp33OyCEmvrSKSxaPvuw=w231-h346-no "VBS 2019 Poster")
 
 Highlight Album: https://photos.app.goo.gl/u5n21Q6Yy1JVBrjy5
